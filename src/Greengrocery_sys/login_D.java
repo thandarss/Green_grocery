@@ -17,7 +17,7 @@ import java.awt.Dimension;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
-public class Login_D extends JFrame {
+public class login_D extends JFrame {
 
 	private JPanel contentPane;
 	private JTextField txtName;
@@ -31,7 +31,7 @@ public class Login_D extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					Login_D frame = new Login_D();
+					login_D frame = new login_D();
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -43,7 +43,7 @@ public class Login_D extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public Login_D() {
+	public login_D() {
 		
 		setUndecorated(true);
 		setSize(300,300);
@@ -93,7 +93,7 @@ public class Login_D extends JFrame {
 				String nameString = txtName.getText();
 				String passString = txtPassword.getText();
 				
-				new Login_F().checkLogin(nameString, passString);
+				new login_F().checkLogin(nameString, passString);
 			}
 		});
 		btnNewButton.setBackground(Color.LIGHT_GRAY);
@@ -105,7 +105,7 @@ public class Login_D extends JFrame {
 		btnClose.setForeground(Color.BLACK);
 		btnClose.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				Login_D.this.setVisible(false);
+				login_D.this.setVisible(false);
 			}
 		});
 		btnClose.setFont(new Font("Tahoma", Font.BOLD, 18));

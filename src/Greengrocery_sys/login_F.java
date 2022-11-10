@@ -9,7 +9,7 @@ import javax.swing.JOptionPane;
 
 import Greengrocery_sys.Database.DbConnection;
 
-public class Login_F {
+public class login_F {
 
 	public boolean checkLogin(String name,String passString) {
 		
