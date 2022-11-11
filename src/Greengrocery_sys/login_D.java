@@ -31,8 +31,7 @@ public class login_D extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					login_D frame = new login_D();
-					frame.setVisible(true);
+					new login_D().setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -94,6 +93,9 @@ public class login_D extends JFrame {
 				String passString = txtPassword.getText();
 				
 				new login_F().checkLogin(nameString, passString);
+				new home().frame.setVisible(true);
+				login_D.this.setVisible(false);
+				
 			}
 		});
 		btnNewButton.setBackground(Color.LIGHT_GRAY);

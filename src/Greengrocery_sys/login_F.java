@@ -24,7 +24,7 @@ public class login_F {
 			ResultSet rSet = pStatement.executeQuery();
 			
 			if (rSet.next()) {
-				JOptionPane.showMessageDialog(null, "Login Succeeded!");
+				//JOptionPane.showMessageDialog(null, "Login Succeeded!");
 				return true;
 			}
 			else {
