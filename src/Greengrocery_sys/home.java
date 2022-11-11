@@ -6,6 +6,8 @@ import javax.swing.JFrame;
 import javax.swing.JButton;
 import java.awt.Font;
 import java.awt.SystemColor;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class home {
 
@@ -46,6 +48,11 @@ public class home {
 		frame.setResizable(false);
 		
 		JButton btnNewButton = new JButton("ကုန္သည္");
+		btnNewButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				new Customer().frame.setVisible(true);
+			}
+		});
 		btnNewButton.setBackground(SystemColor.info);
 		btnNewButton.setFont(new Font("Zawgyi-One", Font.BOLD, 21));
 		btnNewButton.setBounds(122, 90, 203, 81);
