@@ -13,6 +13,15 @@ public class addCustomer_F {
 	protected void addCustomer(String name, String address, String phone, String id) {
 
 		Connection connection = new DbConnection().connect();
+		
+		/*
+		 * check ID
+		 */
+		
+		
+		/*
+		 * insert new data
+		 */
 		String sqlString = "insert into customer (Name, Address, Phone, Id_customer) values ( ? , ?, ?, ?);";
 		String nameString = name;
 		String addressString = address;
