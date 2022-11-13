@@ -8,6 +8,9 @@ import java.awt.Font;
 import java.awt.SystemColor;
 import javax.swing.JTable;
 import javax.swing.WindowConstants;
+import javax.swing.table.DefaultTableModel;
+
+import com.mysql.cj.x.protobuf.MysqlxDatatypes.Array;
 
 import Greengrocery_sys.Database.DbConnection;
 import net.proteanit.sql.DbUtils;
@@ -17,16 +20,24 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Iterator;
 import java.awt.event.ActionEvent;
 import javax.swing.JScrollPane;
 import java.awt.Color;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.ImageIcon;
+import javax.swing.JTextField;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class Customer {
 
 	protected JFrame frame;
-	private JTable tbCustomer;
+	protected JTable tbCustomer;
+	private JTextField txtName;
+	private JTextField txtAddress;
+	private JTextField txtPhone;
 
 	/**
 	 * Launch the application.
@@ -49,43 +60,130 @@ public class Customer {
 	 */
 	public Customer() {
 		initialize();
+		updateTable();
 	}
 
+	/**
+	 * Retrieving database data to JTable
+	 */
+	
+	public void updateTable () {
+		Connection conn = new DbConnection().connect();
+		String sqlString = "select Id_customer, Name, Address, Phone from customer;";
+	
+		try {
+			PreparedStatement pStatement = conn.prepareStatement(sqlString);
+			ResultSet rSet = pStatement.executeQuery();
+			tbCustomer.setModel(DbUtils.resultSetToTableModel(rSet));
+			
+			//JOptionPane.showMessageDialog(null, "Updated successfully");
+		
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
 	/**
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
 		frame = new JFrame();
-		frame.setBounds(100, 100, 608, 486);
+		frame.setBounds(100, 100, 1008, 486);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		frame.setResizable(false);
-		frame.setUndecorated(true);
+		//frame.setUndecorated(true);
 		//close the Jframe_autoClose button
 		//frame.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 		
-		JButton btnNewButton = new JButton("ဝယ္သူအသစ္");
-		btnNewButton.addActionListener(new ActionListener() {
+		JButton btnAdd = new JButton("ထည့္မည္");
+		btnAdd.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				new addCustomer_D().frame.setVisible(true);
+				
+				String name = txtName.getText();
+				String address = txtAddress.getText();
+				String phone = txtPhone.getText();
+				
+				String id_customer = name.substring(name.length()-1) + address.substring(address.length()-1) + phone.substring(phone.length()-2);
+				
+				new addCustomer_F().addCustomer(name, address, phone, id_customer);
+				updateTable();
+				//new addCustomer_D().frame.setVisible(true);
 			}
 		});
-		btnNewButton.setBackground(SystemColor.info);
-		btnNewButton.setFont(new Font("Zawgyi-One", Font.BOLD, 20));
-		btnNewButton.setBounds(400, 28, 172, 47);
-		frame.getContentPane().add(btnNewButton);
 		
-		JButton btnCustomerList = new JButton("ကုန္သည္စာရင္း");
-		btnCustomerList.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				Connection conn = new DbConnection().connect();
-				String sqlString = "select Name, Address, Phone from customer;";
+		JButton btnRemoveRow = new JButton("ဖ်က္မည္");
+		
+		btnRemoveRow.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
 				
+				/*
+				 * Backup the deleted row
+				 */
+				
+				int row = tbCustomer.getSelectedRow();
+				
+				
+				System.out.println("Customer Row " + row);
+				
+																
+				if(tbCustomer.getSelectedRow() != -1) {
+					
+					String idString = tbCustomer.getModel().getValueAt(row, 0).toString();
+					System.out.println("Customer idString " + idString);
+					new addCustomerBackup().updateCus(idString);
+					new deleteCustomer().deleteCus(idString);
+					
+					DefaultTableModel model= (DefaultTableModel) tbCustomer.getModel();
+					model.removeRow(tbCustomer.getSelectedRow());
+					JOptionPane.showMessageDialog(null, "Remove row successfully!");
+					
+					updateTable();
+				}	
+				
+			}
+		});
+		btnRemoveRow.setFont(new Font("Zawgyi-One", Font.BOLD, 15));
+		btnRemoveRow.setBackground(SystemColor.info);
+		btnRemoveRow.setBounds(780, 340, 119, 40);
+		frame.getContentPane().add(btnRemoveRow);
+		btnAdd.setBackground(SystemColor.info);
+		btnAdd.setFont(new Font("Zawgyi-One", Font.BOLD, 15));
+		btnAdd.setBounds(620, 340, 125, 40);
+		frame.getContentPane().add(btnAdd);
+		
+		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setBounds(10, 86, 586, 334);
+		frame.getContentPane().add(scrollPane);
+		
+		/*
+		 * Unable the table cell editing
+		 */
+		tbCustomer = new JTable(){
+	        //private static final long serialVersionUID = 1L;
+
+	        public boolean isCellEditable(int row, int column) {                
+	                return false;               
+	        };
+	    };
+		tbCustomer.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				int row = tbCustomer.getSelectedRow();
+				String selectString = tbCustomer.getModel().getValueAt(row, 0).toString();
+				String sqlString = "select * from customer where id_customer = '" + selectString + "';";
+				
+				Connection connection = new DbConnection().connect();
 				try {
-					PreparedStatement pStatement = conn.prepareStatement(sqlString);
+					PreparedStatement pStatement = connection.prepareStatement(sqlString);
 					ResultSet rSet = pStatement.executeQuery();
 					
-					tbCustomer.setModel(DbUtils.resultSetToTableModel(rSet));
+					if (rSet.next()) {
+						txtName.setText(rSet.getString("Name"));
+						txtAddress.setText(rSet.getString("Address"));
+						txtPhone.setText(rSet.getString("Phone"));
+					}
 					
 				} catch (SQLException e) {
 					// TODO Auto-generated catch block
@@ -94,32 +192,58 @@ public class Customer {
 				
 			}
 		});
-		btnCustomerList.setFont(new Font("Zawgyi-One", Font.BOLD, 20));
-		btnCustomerList.setBackground(SystemColor.info);
-		btnCustomerList.setBounds(10, 28, 172, 47);
-		frame.getContentPane().add(btnCustomerList);
-		
-		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(10, 86, 586, 334);
-		frame.getContentPane().add(scrollPane);
-		
-		tbCustomer = new JTable();
 		scrollPane.setViewportView(tbCustomer);
 		
-		JButton btnClose = new JButton("ပိတ္မည္");
+		JButton btnClose = new JButton("X");
 		btnClose.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				frame.setVisible(false);
 			}
 		});
-		btnClose.setBackground(SystemColor.activeCaption);
-		btnClose.setFont(new Font("Zawgyi-One", Font.BOLD, 16));
-		btnClose.setBounds(459, 431, 137, 29);
+		btnClose.setBackground(Color.RED);
+		btnClose.setFont(new Font("Tahoma", Font.BOLD, 16));
+		btnClose.setBounds(939, 0, 43, 18);
 		frame.getContentPane().add(btnClose);
 		
-		JLabel lblNewLabel = new JLabel("New label");
-		lblNewLabel.setIcon(new ImageIcon("C:\\Users\\User\\eclipse-workspace\\Tomato Green Grocery\\Images\\tomato.jpg"));
-		lblNewLabel.setBounds(0, 0, 608, 475);
+		JLabel lblNewLabel = new JLabel("နာမည္    :");
+		lblNewLabel.setFont(new Font("Zawgyi-One", Font.BOLD, 20));
+		lblNewLabel.setBounds(620, 87, 98, 33);
 		frame.getContentPane().add(lblNewLabel);
+		
+		JLabel lblNewLabel_1 = new JLabel("လိပ္စာ    :");
+		lblNewLabel_1.setFont(new Font("Zawgyi-One", Font.BOLD, 20));
+		lblNewLabel_1.setBounds(620, 178, 98, 33);
+		frame.getContentPane().add(lblNewLabel_1);
+		
+		JLabel lblNewLabel_1_1 = new JLabel("ဖုန္းနံပါတ္ :");
+		lblNewLabel_1_1.setFont(new Font("Zawgyi-One", Font.BOLD, 20));
+		lblNewLabel_1_1.setBounds(620, 278, 111, 33);
+		frame.getContentPane().add(lblNewLabel_1_1);
+		
+		txtName = new JTextField();
+		txtName.setToolTipText("နာမည်ထည့်ပါ");
+		txtName.setFont(new Font("Zawgyi-One", Font.BOLD, 20));
+		txtName.setBounds(728, 86, 172, 39);
+		frame.getContentPane().add(txtName);
+		txtName.setColumns(10);
+		
+		txtAddress = new JTextField();
+		txtAddress.setToolTipText("လိပ်စာထည့်ပါ");
+		txtAddress.setFont(new Font("Zawgyi-One", Font.BOLD, 20));
+		txtAddress.setColumns(10);
+		txtAddress.setBounds(728, 178, 172, 39);
+		frame.getContentPane().add(txtAddress);
+		
+		txtPhone = new JTextField();
+		txtPhone.setToolTipText("ဖုန်းနံပါတ်ထည့်ပါ");
+		txtPhone.setFont(new Font("Zawgyi-One", Font.BOLD, 20));
+		txtPhone.setColumns(10);
+		txtPhone.setBounds(728, 272, 172, 39);
+		frame.getContentPane().add(txtPhone);
+		
+		JLabel lblNewLabel_2 = new JLabel("ကုန္သည္စာရင္း");
+		lblNewLabel_2.setFont(new Font("Zawgyi-One", Font.BOLD, 20));
+		lblNewLabel_2.setBounds(10, 11, 332, 33);
+		frame.getContentPane().add(lblNewLabel_2);
 	}
 }
