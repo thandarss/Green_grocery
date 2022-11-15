@@ -5,10 +5,13 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JButton;
 import java.awt.Font;
+import java.awt.Point;
+import java.awt.Rectangle;
 import java.awt.SystemColor;
 import javax.swing.JTable;
 import javax.swing.WindowConstants;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.text.StyledEditorKit.BoldAction;
 
 import com.mysql.cj.x.protobuf.MysqlxDatatypes.Array;
 
@@ -30,8 +33,13 @@ import javax.swing.ImageIcon;
 import javax.swing.JTextField;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
+import javax.swing.JPanel;
 
 public class Customer {
 
@@ -50,6 +58,7 @@ public class Customer {
 				try {
 					Customer window = new Customer();
 					window.frame.setVisible(true);
+					
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -86,18 +95,80 @@ public class Customer {
 		}
 	}
 	
+	/*
+	 * MouseListener
+	 */
+	public class FrameMouseListener implements MouseListener, MouseMotionListener {
+        
+        private Point pressedPoint;
+        private Rectangle frameBounds;
+        
+        @Override
+        public void mouseClicked(MouseEvent event) {
+        }
+
+        @Override
+        public void mousePressed(MouseEvent event) {
+            this.frameBounds = frame.getBounds();
+            this.pressedPoint = event.getPoint();
+        }
+
+        @Override
+        public void mouseReleased(MouseEvent event) {
+            moveJFrame(event);
+        }
+
+        @Override
+        public void mouseEntered(MouseEvent event) {
+        }
+
+        @Override
+        public void mouseExited(MouseEvent event) {
+        }
+
+        @Override
+        public void mouseDragged(MouseEvent event) {
+            moveJFrame(event);
+        }
+
+        @Override
+        public void mouseMoved(MouseEvent event) {
+        }
+        
+        private void moveJFrame(MouseEvent event) {
+            Point endPoint = event.getPoint();
+            
+            int xDiff = endPoint.x - pressedPoint.x;
+            int yDiff = endPoint.y - pressedPoint.y;
+            frameBounds.x += xDiff;
+            frameBounds.y += yDiff;
+            frame.setBounds(frameBounds);
+        }
+        
+    }
+	
+	
 	/**
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
 		frame = new JFrame();
-		frame.setBounds(100, 100, 1008, 486);
+		frame.setBounds(100, 100, 972, 450);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		frame.setResizable(false);
-		//frame.setUndecorated(true);
+		frame.setUndecorated(true);
+		frame.addMouseListener(null);
 		//close the Jframe_autoClose button
 		//frame.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
+		
+		/*
+		 * Add MouseListener of Jframe
+		 */
+		
+		FrameMouseListener listener = new FrameMouseListener();
+		frame.addMouseListener(listener);
+		frame.addMouseMotionListener(listener);
 		
 		JButton btnAdd = new JButton("ထည့္မည္");
 		btnAdd.addActionListener(new ActionListener() {
@@ -149,15 +220,15 @@ public class Customer {
 		});
 		btnRemoveRow.setFont(new Font("Zawgyi-One", Font.BOLD, 15));
 		btnRemoveRow.setBackground(SystemColor.info);
-		btnRemoveRow.setBounds(780, 340, 119, 40);
+		btnRemoveRow.setBounds(827, 313, 119, 40);
 		frame.getContentPane().add(btnRemoveRow);
 		btnAdd.setBackground(SystemColor.info);
 		btnAdd.setFont(new Font("Zawgyi-One", Font.BOLD, 15));
-		btnAdd.setBounds(620, 340, 125, 40);
+		btnAdd.setBounds(667, 313, 125, 40);
 		frame.getContentPane().add(btnAdd);
 		
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(10, 86, 586, 334);
+		scrollPane.setBounds(24, 82, 611, 334);
 		frame.getContentPane().add(scrollPane);
 		
 		/*
@@ -170,6 +241,10 @@ public class Customer {
 	                return false;               
 	        };
 	    };
+	    tbCustomer.getTableHeader().setFont(new Font("Verdana",Font.BOLD,18));
+	    tbCustomer.setOpaque(false);
+	    tbCustomer.getTableHeader().setBackground(new Color(201, 248, 194));
+		//tbCustomer.setBackground(new Color(201, 248, 194));
 		tbCustomer.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
@@ -207,22 +282,25 @@ public class Customer {
 		});
 		btnClose.setBackground(Color.RED);
 		btnClose.setFont(new Font("Tahoma", Font.BOLD, 16));
-		btnClose.setBounds(939, 0, 43, 18);
+		btnClose.setBounds(903, 0, 64, 29);
 		frame.getContentPane().add(btnClose);
 		
 		JLabel lblNewLabel = new JLabel("နာမည္    :");
+		lblNewLabel.setForeground(new Color(240, 255, 240));
 		lblNewLabel.setFont(new Font("Zawgyi-One", Font.BOLD, 20));
-		lblNewLabel.setBounds(620, 87, 98, 33);
+		lblNewLabel.setBounds(667, 60, 98, 33);
 		frame.getContentPane().add(lblNewLabel);
 		
 		JLabel lblNewLabel_1 = new JLabel("လိပ္စာ    :");
+		lblNewLabel_1.setForeground(new Color(240, 255, 240));
 		lblNewLabel_1.setFont(new Font("Zawgyi-One", Font.BOLD, 20));
-		lblNewLabel_1.setBounds(620, 178, 98, 33);
+		lblNewLabel_1.setBounds(667, 151, 98, 33);
 		frame.getContentPane().add(lblNewLabel_1);
 		
 		JLabel lblNewLabel_1_1 = new JLabel("ဖုန္းနံပါတ္ :");
+		lblNewLabel_1_1.setForeground(new Color(240, 255, 240));
 		lblNewLabel_1_1.setFont(new Font("Zawgyi-One", Font.BOLD, 20));
-		lblNewLabel_1_1.setBounds(620, 278, 111, 33);
+		lblNewLabel_1_1.setBounds(667, 251, 111, 33);
 		frame.getContentPane().add(lblNewLabel_1_1);
 		
 		/*
@@ -240,7 +318,7 @@ public class Customer {
 		});
 		txtName.setToolTipText("Enter your name");
 		txtName.setFont(new Font("Zawgyi-One", Font.BOLD, 20));
-		txtName.setBounds(728, 86, 172, 39);
+		txtName.setBounds(775, 59, 172, 39);
 		frame.getContentPane().add(txtName);
 		txtName.setColumns(10);
 		
@@ -256,7 +334,7 @@ public class Customer {
 		txtAddress.setToolTipText("Enter the address");
 		txtAddress.setFont(new Font("Zawgyi-One", Font.BOLD, 20));
 		txtAddress.setColumns(10);
-		txtAddress.setBounds(728, 178, 172, 39);
+		txtAddress.setBounds(775, 151, 172, 39);
 		frame.getContentPane().add(txtAddress);
 		
 		txtPhone = new JTextField();
@@ -271,12 +349,13 @@ public class Customer {
 		txtPhone.setToolTipText("Enter the phone number");
 		txtPhone.setFont(new Font("Zawgyi-One", Font.BOLD, 20));
 		txtPhone.setColumns(10);
-		txtPhone.setBounds(728, 272, 172, 39);
+		txtPhone.setBounds(775, 245, 172, 39);
 		frame.getContentPane().add(txtPhone);
 		
 		JLabel lblNewLabel_2 = new JLabel("ကုန္သည္စာရင္း");
+		lblNewLabel_2.setForeground(new Color(245, 245, 245));
 		lblNewLabel_2.setFont(new Font("Zawgyi-One", Font.BOLD, 20));
-		lblNewLabel_2.setBounds(10, 11, 332, 33);
+		lblNewLabel_2.setBounds(490, 26, 145, 33);
 		frame.getContentPane().add(lblNewLabel_2);
 		
 		JButton btnUpdate = new JButton("ျပင္မည္");
@@ -298,7 +377,7 @@ public class Customer {
 		});
 		btnUpdate.setFont(new Font("Zawgyi-One", Font.BOLD, 15));
 		btnUpdate.setBackground(SystemColor.info);
-		btnUpdate.setBounds(620, 396, 119, 40);
+		btnUpdate.setBounds(667, 376, 119, 40);
 		frame.getContentPane().add(btnUpdate);
 		
 		JButton btnClear = new JButton("Clear");
@@ -311,7 +390,19 @@ public class Customer {
 		});
 		btnClear.setFont(new Font("Zawgyi-One", Font.BOLD, 15));
 		btnClear.setBackground(SystemColor.info);
-		btnClear.setBounds(780, 396, 119, 40);
+		btnClear.setBounds(827, 376, 119, 40);
 		frame.getContentPane().add(btnClear);
+		
+		JLabel lblBackground = new JLabel("");
+		lblBackground.setBackground(new Color(0, 28, 0));
+		lblBackground.setOpaque(true);
+		lblBackground.setHorizontalAlignment(SwingConstants.CENTER);
+		lblBackground.setIcon(new ImageIcon("C:\\Users\\User\\git\\Green_grocery\\Images\\tomato.jpg"));
+		lblBackground.setBounds(0, 0, 967, 447);
+		frame.getContentPane().add(lblBackground);
+		
+		JPanel panel = new JPanel();
+		panel.setBounds(0, 0, 967, 447);
+		frame.getContentPane().add(panel);
 	}
 }
