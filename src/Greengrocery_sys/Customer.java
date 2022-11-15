@@ -30,6 +30,8 @@ import javax.swing.ImageIcon;
 import javax.swing.JTextField;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 public class Customer {
 
@@ -105,9 +107,9 @@ public class Customer {
 				String address = txtAddress.getText();
 				String phone = txtPhone.getText();
 				
-				String id_customer = name.substring(name.length()-1) + address.substring(address.length()-1) + phone.substring(phone.length()-2);
+				//String id_customer = name.substring(name.length()-1) + address.substring(address.length()-1) + phone.substring(phone.length()-2);
 				
-				new addCustomer_F().addCustomer(name, address, phone, id_customer);
+				new addCustomer_F().addCustomer(name, address, phone);
 				updateTable();
 				//new addCustomer_D().frame.setVisible(true);
 			}
@@ -123,22 +125,23 @@ public class Customer {
 				 */
 				
 				int row = tbCustomer.getSelectedRow();
-				
-				
-				System.out.println("Customer Row " + row);
-				
-																
+																						
 				if(tbCustomer.getSelectedRow() != -1) {
 					
 					String idString = tbCustomer.getModel().getValueAt(row, 0).toString();
-					System.out.println("Customer idString " + idString);
-					new addCustomerBackup().updateCus(idString);
-					new deleteCustomer().deleteCus(idString);
+					int id = Integer.parseInt(idString);
 					
-					DefaultTableModel model= (DefaultTableModel) tbCustomer.getModel();
-					model.removeRow(tbCustomer.getSelectedRow());
-					JOptionPane.showMessageDialog(null, "Remove row successfully!");
+					int confirm = JOptionPane.showConfirmDialog(null, "Are you sure you want to delete this?","Confirm Dialog",JOptionPane.YES_NO_OPTION);
 					
+					if(confirm == 0) {
+						new addCustomerBackup().backupCus(id);
+						new deleteCustomer().deleteCus(id);
+						
+						DefaultTableModel model= (DefaultTableModel) tbCustomer.getModel();
+						model.removeRow(tbCustomer.getSelectedRow());
+						JOptionPane.showMessageDialog(null, "Remove row successfully!");
+					}
+													
 					updateTable();
 				}	
 				
@@ -172,6 +175,8 @@ public class Customer {
 			public void mouseClicked(MouseEvent arg0) {
 				int row = tbCustomer.getSelectedRow();
 				String selectString = tbCustomer.getModel().getValueAt(row, 0).toString();
+				System.out.println("mouse selected id : " + selectString);
+								
 				String sqlString = "select * from customer where id_customer = '" + selectString + "';";
 				
 				Connection connection = new DbConnection().connect();
@@ -220,22 +225,50 @@ public class Customer {
 		lblNewLabel_1_1.setBounds(620, 278, 111, 33);
 		frame.getContentPane().add(lblNewLabel_1_1);
 		
+		/*
+		 * focus cursor into next jtextfile by enter key
+		 */
 		txtName = new JTextField();
-		txtName.setToolTipText("နာမည်ထည့်ပါ");
+		txtName.requestFocus();
+		txtName.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent arg0) {
+				if(arg0.getKeyCode() == KeyEvent.VK_ENTER) {
+					txtAddress.requestFocus();
+				}
+			}
+		});
+		txtName.setToolTipText("Enter your name");
 		txtName.setFont(new Font("Zawgyi-One", Font.BOLD, 20));
 		txtName.setBounds(728, 86, 172, 39);
 		frame.getContentPane().add(txtName);
 		txtName.setColumns(10);
 		
 		txtAddress = new JTextField();
-		txtAddress.setToolTipText("လိပ်စာထည့်ပါ");
+		txtAddress.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if(e.getKeyCode() == KeyEvent.VK_ENTER) {
+					txtPhone.requestFocus();
+				}
+			}
+		});
+		txtAddress.setToolTipText("Enter the address");
 		txtAddress.setFont(new Font("Zawgyi-One", Font.BOLD, 20));
 		txtAddress.setColumns(10);
 		txtAddress.setBounds(728, 178, 172, 39);
 		frame.getContentPane().add(txtAddress);
 		
 		txtPhone = new JTextField();
-		txtPhone.setToolTipText("ဖုန်းနံပါတ်ထည့်ပါ");
+		txtPhone.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if(e.getKeyCode() == KeyEvent.VK_ENTER) {
+					btnAdd.requestFocus();
+				}
+			}
+		});
+		txtPhone.setToolTipText("Enter the phone number");
 		txtPhone.setFont(new Font("Zawgyi-One", Font.BOLD, 20));
 		txtPhone.setColumns(10);
 		txtPhone.setBounds(728, 272, 172, 39);
@@ -245,5 +278,40 @@ public class Customer {
 		lblNewLabel_2.setFont(new Font("Zawgyi-One", Font.BOLD, 20));
 		lblNewLabel_2.setBounds(10, 11, 332, 33);
 		frame.getContentPane().add(lblNewLabel_2);
+		
+		JButton btnUpdate = new JButton("ျပင္မည္");
+		btnUpdate.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				
+				String nameString = txtName.getText();
+				String addressString = txtAddress.getText();
+				String phoneString = txtPhone.getText();
+				
+				int row = tbCustomer.getSelectedRow();
+				if(row != -1) {
+					String idString = tbCustomer.getModel().getValueAt(row, 0).toString();
+					int id = Integer.parseInt(idString);
+					new updateCustomer().updateCus(id, nameString, addressString, phoneString);
+					updateTable();
+				}
+			}
+		});
+		btnUpdate.setFont(new Font("Zawgyi-One", Font.BOLD, 15));
+		btnUpdate.setBackground(SystemColor.info);
+		btnUpdate.setBounds(620, 396, 119, 40);
+		frame.getContentPane().add(btnUpdate);
+		
+		JButton btnClear = new JButton("Clear");
+		btnClear.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				txtName.setText("");
+				txtAddress.setText("");
+				txtPhone.setText("");
+			}
+		});
+		btnClear.setFont(new Font("Zawgyi-One", Font.BOLD, 15));
+		btnClear.setBackground(SystemColor.info);
+		btnClear.setBounds(780, 396, 119, 40);
+		frame.getContentPane().add(btnClear);
 	}
 }
