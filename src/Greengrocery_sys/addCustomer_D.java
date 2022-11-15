@@ -139,11 +139,11 @@ public class addCustomer_D {
 				String address = txtAddress.getText();
 				String phone = txtPhone.getText();
 				
-				String id_customer = name.substring(name.length()-3) + phone.substring(phone.length()-2);
+				//String id_customer = name.substring(name.length()-3) + phone.substring(phone.length()-2);
 				
-				System.out.print(id_customer);
+				//System.out.print(id_customer);
 				
-				new addCustomer_F().addCustomer(name, address, phone, id_customer);
+				new addCustomer_F().addCustomer(name, address, phone);
 			}
 		});
 		btnNewButton.setFont(new Font("Zawgyi-One", Font.BOLD, 15));

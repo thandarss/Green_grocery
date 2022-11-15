@@ -11,16 +11,15 @@ import Greengrocery_sys.Database.DbConnection;
 
 public class addCustomerBackup {
 	
-	public void updateCus(String idString) {
+	public void backupCus(int id) {
 		
-		String id = idString;
 		String name=null;
 		String address=null;
 		String phone=null;
 		PreparedStatement pStatement;
 		ResultSet rSet;
 		Connection connection = new DbConnection().connect();
-		String sqlString1 =  "select * from customer where id_customer = '" + id + "';";
+		String sqlString1 =  "select * from customer where id_customer = " + id + ";";
 		
 		try {
 			pStatement = connection.prepareStatement(sqlString1);
@@ -43,7 +42,7 @@ public class addCustomerBackup {
 		
 		try {
 			pStatement2 = connection.prepareStatement(sqlString2);
-			pStatement2.setString(1, id);
+			pStatement2.setInt(1, id);
 			pStatement2.setString(2, name);
 			pStatement2.setString(3, address);
 			pStatement2.setString(4, phone);

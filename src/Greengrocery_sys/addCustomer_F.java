@@ -10,7 +10,7 @@ import Greengrocery_sys.Database.DbConnection;
 
 public class addCustomer_F {
 
-	protected void addCustomer(String name, String address, String phone, String id) {
+	protected void addCustomer(String name, String address, String phone) {
 
 		Connection connection = new DbConnection().connect();
 		
@@ -22,11 +22,10 @@ public class addCustomer_F {
 		/*
 		 * insert new data
 		 */
-		String sqlString = "insert into customer (Name, Address, Phone, Id_customer) values ( ? , ?, ?, ?);";
+		String sqlString = "insert into customer (Name, Address, Phone) values ( ? , ?, ?);";
 		String nameString = name;
 		String addressString = address;
 		String phoneString = phone;
-		String idString = id;
 		
 		PreparedStatement pStatement;
 		try {
@@ -34,7 +33,6 @@ public class addCustomer_F {
 			pStatement.setString(1, nameString);
 			pStatement.setString(2, addressString);
 			pStatement.setString(3, phoneString);
-			pStatement.setString(4, idString);
 			
 			pStatement.executeUpdate();
 			

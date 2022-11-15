@@ -10,9 +10,9 @@ import Greengrocery_sys.Database.DbConnection;
 
 public class deleteCustomer {
 	
-	public void deleteCus(String idString ) {
+	public void deleteCus(int id) {
 		Connection connection = new DbConnection().connect();
-		String sqlString = "delete from customer where Id_customer='" + idString + "';";
+		String sqlString = "delete from customer where Id_customer='" + id + "';";
 		
 		try {
 			PreparedStatement pStatement = connection.prepareStatement(sqlString);

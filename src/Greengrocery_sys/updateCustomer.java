@@ -10,21 +10,21 @@ import Greengrocery_sys.Database.DbConnection;
 
 public class updateCustomer {
  
-	public void updateCus (String id, String name, String address, String phone) {
+	public void updateCus (int id, String name, String address, String phone) {
 		
 		Connection connection = new DbConnection().connect();
-		String sqlString = "update customer set Id_customer = ? , Name = ?, Address = ?, Phone = ?;";
-		
+		String sqlString = "update customer set Name = ?, Address = ?, Phone = ? where Id_customer = " + id + ";";
+				
 		try {
 			PreparedStatement pStatement = connection.prepareStatement(sqlString);
-			pStatement.setString(1, id);
-			pStatement.setString(2, name);
-			pStatement.setString(3, address);
-			pStatement.setString(4, phone);
-			
+			pStatement.setString(1, name);
+			pStatement.setString(2, address);
+			pStatement.setString(3, phone);
+						
 			pStatement.executeUpdate();
 			
-			JOptionPane.showMessageDialog(null, "အခ်က္အလက္မ်ားျပင္ဆင္ၿပီးပါၿပီ။");
+			JOptionPane.showMessageDialog(null, "Updated Successfully");
+			//JOptionPane.showMessageDialog(null, "အခ်က္အလက္မ်ားျပင္ဆင္ၿပီးပါၿပ");
 			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
