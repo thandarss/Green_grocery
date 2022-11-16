@@ -135,7 +135,7 @@ public class login_D extends JFrame {
 		
 		JLabel lblNewLabel = new JLabel("အေကာင့္ဝင္မည္");
 		lblNewLabel.setForeground(new Color(245, 255, 250));
-		lblNewLabel.setFont(new Font("Zawgyi-One", Font.BOLD | Font.ITALIC, 25));
+		lblNewLabel.setFont(new Font("Zawgyi-One", Font.BOLD, 25));
 		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		lblNewLabel.setBounds(70, 26, 229, 41);
 		contentPane.add(lblNewLabel);

@@ -8,6 +8,9 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 import java.awt.Font;
+import java.awt.Point;
+import java.awt.Rectangle;
+
 import javax.swing.UIManager;
 import java.awt.SystemColor;
 import java.awt.Color;
@@ -21,6 +24,9 @@ import javax.swing.JTable;
 import javax.swing.JScrollPane;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 import java.awt.event.ActionEvent;
 
 public class invoice extends JFrame {
@@ -48,6 +54,68 @@ public class invoice extends JFrame {
 			}
 		});
 	}
+	
+	/*
+	 * Mouse Listener
+	 */
+	
+	public class FrameMouseListener implements MouseListener,MouseMotionListener{
+
+		private Point pressedPoint;
+		private Rectangle frameBound;
+		@Override
+		public void mouseDragged(MouseEvent e) {
+			// TODO Auto-generated method stub
+			moveFrame(e);
+		}
+
+		@Override
+		public void mouseMoved(MouseEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void mouseClicked(MouseEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void mouseEntered(MouseEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void mouseExited(MouseEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void mousePressed(MouseEvent e) {
+			// TODO Auto-generated method stub
+			this.frameBound = new invoice().getBounds();
+			this.pressedPoint = e.getPoint();
+		}
+
+		@Override
+		public void mouseReleased(MouseEvent e) {
+			// TODO Auto-generated method stub
+			moveFrame(e);
+		}
+		
+		public void moveFrame(MouseEvent e) {
+			Point endPoint = e.getPoint();
+			int xDiff = endPoint.x - pressedPoint.x;
+			int yDiff = endPoint.y - pressedPoint.y;
+			frameBound.x += xDiff;
+			frameBound.y += yDiff;
+			setBounds(frameBound);
+		}
+		
+	}
 
 	/**
 	 * Create the frame.
@@ -59,6 +127,10 @@ public class invoice extends JFrame {
 		setBounds(400, 80, 570, 636);
 		contentPane = new JPanel();
 		//contentPane.setPreferredSize(new Dimension(mainPanel.getWidth(),mainPanel.getHeight()));
+		
+		FrameMouseListener listener = new FrameMouseListener();
+		addMouseListener(listener);
+		addMouseMotionListener(listener);
 
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
@@ -119,6 +191,7 @@ public class invoice extends JFrame {
 		mainPanel.add(lblAddress_1);
 		
 		JPanel panel_1 = new JPanel();
+		panel_1.setBackground(new Color(199, 236, 183));
 		panel_1.setBounds(10, 163, 550, 443);
 		mainPanel.add(panel_1);
 		panel_1.setLayout(null);
