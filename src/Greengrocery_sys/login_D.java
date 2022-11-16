@@ -8,6 +8,8 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 import java.awt.Font;
+import java.awt.Point;
+import java.awt.Rectangle;
 import java.awt.Toolkit;
 
 import javax.swing.JTextField;
@@ -15,7 +17,11 @@ import javax.swing.JButton;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 import java.awt.event.ActionEvent;
+import javax.swing.ImageIcon;
 
 public class login_D extends JFrame {
 
@@ -38,40 +44,110 @@ public class login_D extends JFrame {
 			}
 		});
 	}
+	
+	/*
+	 * MouseListener
+	 */
+	
+	public class FrameMouseListener implements MouseListener, MouseMotionListener{
+
+		private Point pressPoint;
+		private Rectangle framebound;
+		@Override
+		public void mouseDragged(MouseEvent e) {
+			// TODO Auto-generated method stub
+			moveJFrame(e);
+		}
+
+		@Override
+		public void mouseMoved(MouseEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void mouseClicked(MouseEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void mouseEntered(MouseEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void mouseExited(MouseEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void mousePressed(MouseEvent e) {
+			// TODO Auto-generated method stub
+			this.pressPoint = e.getPoint();
+			this.framebound = new login_D().getBounds();
+			
+		}
+
+		@Override
+		public void mouseReleased(MouseEvent e) {
+			// TODO Auto-generated method stub
+			moveJFrame(e);
+			
+		}
+				
+		private void moveJFrame(MouseEvent e) {
+			Point endPoint = e.getPoint();
+			int xDiff = endPoint.x - pressPoint.x;
+			int yDiff = endPoint.y - pressPoint.y;
+			framebound.x += xDiff;
+			framebound.y += yDiff;
+			setBounds(framebound);
+		}
+		
+		
+	}
 
 	/**
 	 * Create the frame.
 	 */
 	public login_D() {
-		
+				
 		setUndecorated(true);
 		setSize(300,300);
-		//setLocationRelativeTo(null);
-		
-		//Dimension size = Toolkit.getDefaultToolkit().getScreenSize();
-		
-		//setBounds(150, 100, size.width, size.height);
-		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(400, 150, 398, 352);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 
+		/*
+		 * FrameMouseListener
+		 */
+		
+		FrameMouseListener listener = new FrameMouseListener();
+		addMouseListener(listener);
+		addMouseMotionListener(listener);
+		
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
 		JLabel lblNewLabel = new JLabel("အေကာင့္ဝင္မည္");
+		lblNewLabel.setForeground(new Color(245, 255, 250));
 		lblNewLabel.setFont(new Font("Zawgyi-One", Font.BOLD | Font.ITALIC, 25));
 		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		lblNewLabel.setBounds(70, 26, 229, 41);
 		contentPane.add(lblNewLabel);
 		
 		JLabel lblNewLabel_1 = new JLabel("နာမည္    : ");
+		lblNewLabel_1.setForeground(new Color(245, 255, 250));
 		lblNewLabel_1.setFont(new Font("Zawgyi-One", Font.BOLD, 15));
 		lblNewLabel_1.setBounds(70, 109, 86, 41);
 		contentPane.add(lblNewLabel_1);
 		
 		JLabel lblNewLabel_1_1 = new JLabel("စကားဝွက္ : ");
+		lblNewLabel_1_1.setForeground(new Color(245, 255, 250));
 		lblNewLabel_1_1.setFont(new Font("Zawgyi-One", Font.BOLD, 15));
 		lblNewLabel_1_1.setBounds(70, 185, 86, 41);
 		contentPane.add(lblNewLabel_1_1);
@@ -98,7 +174,7 @@ public class login_D extends JFrame {
 				
 			}
 		});
-		btnNewButton.setBackground(Color.LIGHT_GRAY);
+		btnNewButton.setBackground(new Color(224, 255, 255));
 		btnNewButton.setFont(new Font("Zawgyi-One", Font.BOLD, 15));
 		btnNewButton.setBounds(159, 254, 86, 38);
 		contentPane.add(btnNewButton);
@@ -114,5 +190,10 @@ public class login_D extends JFrame {
 		btnClose.setBackground(new Color(176, 0, 0));
 		btnClose.setBounds(339, 0, 59, 31);
 		contentPane.add(btnClose);
+		
+		JLabel lblNewLabel_2 = new JLabel("");
+		lblNewLabel_2.setIcon(new ImageIcon("C:\\Users\\User\\git\\Green_grocery\\Images\\tomato.jpg"));
+		lblNewLabel_2.setBounds(0, 0, 398, 352);
+		contentPane.add(lblNewLabel_2);
 	}
 }

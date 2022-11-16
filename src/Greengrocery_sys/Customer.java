@@ -153,12 +153,12 @@ public class Customer {
 	 */
 	private void initialize() {
 		frame = new JFrame();
-		frame.setBounds(100, 100, 972, 450);
+		frame.setBounds(100, 100, 965, 446);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		frame.setResizable(false);
 		frame.setUndecorated(true);
-		frame.addMouseListener(null);
+		
 		//close the Jframe_autoClose button
 		//frame.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 		
@@ -218,6 +218,17 @@ public class Customer {
 				
 			}
 		});
+		
+		JButton btnClose_1 = new JButton("-");
+		btnClose_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				frame.setExtendedState(JFrame.ICONIFIED);
+			}
+		});
+		btnClose_1.setFont(new Font("Tahoma", Font.PLAIN, 46));
+		btnClose_1.setBackground(Color.RED);
+		btnClose_1.setBounds(838, 0, 64, 29);
+		frame.getContentPane().add(btnClose_1);
 		btnRemoveRow.setFont(new Font("Zawgyi-One", Font.BOLD, 15));
 		btnRemoveRow.setBackground(SystemColor.info);
 		btnRemoveRow.setBounds(827, 313, 119, 40);
@@ -400,9 +411,5 @@ public class Customer {
 		lblBackground.setIcon(new ImageIcon("C:\\Users\\User\\git\\Green_grocery\\Images\\tomato.jpg"));
 		lblBackground.setBounds(0, 0, 967, 447);
 		frame.getContentPane().add(lblBackground);
-		
-		JPanel panel = new JPanel();
-		panel.setBounds(0, 0, 967, 447);
-		frame.getContentPane().add(panel);
 	}
 }
