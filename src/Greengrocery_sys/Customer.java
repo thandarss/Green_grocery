@@ -261,7 +261,7 @@ public class Customer {
 			public void mouseClicked(MouseEvent arg0) {
 				int row = tbCustomer.getSelectedRow();
 				String selectString = tbCustomer.getModel().getValueAt(row, 0).toString();
-				System.out.println("mouse selected id : " + selectString);
+				//System.out.println("mouse selected id : " + selectString);
 								
 				String sqlString = "select * from customer where id_customer = '" + selectString + "';";
 				

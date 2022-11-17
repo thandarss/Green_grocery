@@ -19,6 +19,9 @@ import java.awt.Dimension;
 import javax.swing.ImageIcon;
 import javax.swing.JComboBox;
 import com.toedter.calendar.JDateChooser;
+
+import Greengrocery_sys.Database.DbConnection;
+
 import javax.swing.JTextField;
 import javax.swing.JTable;
 import javax.swing.JScrollPane;
@@ -27,17 +30,25 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.awt.event.ActionEvent;
+import javax.swing.event.PopupMenuListener;
+import javax.swing.event.PopupMenuEvent;
 
 public class invoice extends JFrame {
 
 	private JPanel contentPane;
-	private JTextField textField;
+	private JTextField txtAddress;
 	private JTable table;
 	private JTextField textField_1;
 	private JTextField textField_2;
 	private JTextField textField_3;
 	private JPanel mainPanel;
+	private JComboBox cboxName;
+	Connection connection;
 
 	/**
 	 * Launch the application.
@@ -113,6 +124,27 @@ public class invoice extends JFrame {
 			frameBound.x += xDiff;
 			frameBound.y += yDiff;
 			setBounds(frameBound);
+		}
+		
+	}
+	
+	/*
+	 * Fill Name on ComboBox
+	 */
+	
+	public void fillNameBox() {
+		connection = new DbConnection().connect();
+		String sqlString = "select * from customer";
+		try {
+			PreparedStatement pStatement = connection.prepareStatement(sqlString);
+			ResultSet rSet = pStatement.executeQuery();
+			while(rSet.next()) {
+				cboxName.addItem(rSet.getString("Name"));
+			}
+						
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		
 	}
@@ -201,9 +233,34 @@ public class invoice extends JFrame {
 		lblNewLabel_3.setBounds(52, 11, 46, 33);
 		panel_1.add(lblNewLabel_3);
 		
-		JComboBox comboBox = new JComboBox();
-		comboBox.setBounds(108, 15, 140, 22);
-		panel_1.add(comboBox);
+		cboxName = new JComboBox();
+		cboxName.addPopupMenuListener(new PopupMenuListener() {
+			public void popupMenuCanceled(PopupMenuEvent arg0) {
+			}
+			public void popupMenuWillBecomeInvisible(PopupMenuEvent arg0) {
+
+				String selectedName = cboxName.getSelectedItem().toString();
+				String sqlString2 = "select * from customer where Name ='" + selectedName + "';";
+				PreparedStatement pStatement2;
+				try {
+					pStatement2 = connection.prepareStatement(sqlString2);
+					
+					ResultSet rSet2 = pStatement2.executeQuery();
+					
+					if(rSet2.next()) {
+						txtAddress.setText(rSet2.getString("Address"));
+					}
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+			}
+			public void popupMenuWillBecomeVisible(PopupMenuEvent arg0) {
+			}
+		});
+		cboxName.setBounds(108, 15, 140, 22);
+		panel_1.add(cboxName);
 		
 		JLabel lblNewLabel_3_1 = new JLabel("ေန႔စ​ြဲ :");
 		lblNewLabel_3_1.setFont(new Font("Zawgyi-One", Font.PLAIN, 12));
@@ -219,10 +276,10 @@ public class invoice extends JFrame {
 		lblNewLabel_3_2.setBounds(52, 48, 46, 33);
 		panel_1.add(lblNewLabel_3_2);
 		
-		textField = new JTextField();
-		textField.setBounds(108, 53, 377, 20);
-		panel_1.add(textField);
-		textField.setColumns(10);
+		txtAddress = new JTextField();
+		txtAddress.setBounds(108, 53, 377, 20);
+		panel_1.add(txtAddress);
+		txtAddress.setColumns(10);
 		
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setBounds(10, 84, 530, 236);
@@ -279,5 +336,7 @@ public class invoice extends JFrame {
 		lblImage.setIcon(new ImageIcon("C:\\Users\\User\\eclipse-workspace\\Tomato Green Grocery\\Images\\tomato.jpg"));
 		lblImage.setBounds(0, 0, 570, 625);
 		mainPanel.add(lblImage);
+		
+		fillNameBox();
 	}
 }
