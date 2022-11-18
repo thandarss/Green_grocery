@@ -21,6 +21,7 @@ import javax.swing.JComboBox;
 import com.toedter.calendar.JDateChooser;
 
 import Greengrocery_sys.Database.DbConnection;
+import net.proteanit.sql.DbUtils;
 
 import javax.swing.JTextField;
 import javax.swing.JTable;
@@ -42,7 +43,7 @@ public class invoice extends JFrame {
 
 	private JPanel contentPane;
 	private JTextField txtAddress;
-	private JTable table;
+	private JTable tbInvoice;
 	private JTextField textField_1;
 	private JTextField textField_2;
 	private JTextField textField_3;
@@ -64,6 +65,24 @@ public class invoice extends JFrame {
 				}
 			}
 		});
+	}
+	
+	/*
+	 * Add database data into 
+	 */
+	public void updateTable() {
+		Connection connection = new DbConnection().connect();
+		String sqlString = "select Type, Buckets, Box, Viss, Price, Total from invoice;";
+		
+		try {
+			PreparedStatement pStatement = connection.prepareStatement(sqlString);
+			ResultSet rSet = pStatement.executeQuery();
+			tbInvoice.setModel(DbUtils.resultSetToTableModel(rSet));
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	/*
@@ -285,8 +304,8 @@ public class invoice extends JFrame {
 		scrollPane.setBounds(10, 84, 530, 236);
 		panel_1.add(scrollPane);
 		
-		table = new JTable();
-		scrollPane.setViewportView(table);
+		tbInvoice = new JTable();
+		scrollPane.setViewportView(tbInvoice);
 		
 		JLabel lblNewLabel_3_3 = new JLabel("စုစုေပါင္း :");
 		lblNewLabel_3_3.setFont(new Font("Zawgyi-One", Font.PLAIN, 12));
@@ -336,7 +355,7 @@ public class invoice extends JFrame {
 		lblImage.setIcon(new ImageIcon("C:\\Users\\User\\eclipse-workspace\\Tomato Green Grocery\\Images\\tomato.jpg"));
 		lblImage.setBounds(0, 0, 570, 625);
 		mainPanel.add(lblImage);
-		
+		updateTable();		
 		fillNameBox();
 	}
 }
