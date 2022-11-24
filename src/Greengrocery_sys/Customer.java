@@ -197,7 +197,7 @@ public class Customer {
 				
 				int row = tbCustomer.getSelectedRow();
 																						
-				if(tbCustomer.getSelectedRow() != -1) {
+				if(row != -1) {
 					
 					String idString = tbCustomer.getModel().getValueAt(row, 0).toString();
 					int id = Integer.parseInt(idString);

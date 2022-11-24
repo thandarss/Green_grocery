@@ -26,6 +26,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import javax.swing.JComboBox;
 
 public class product_D extends JFrame {
 
@@ -71,7 +72,7 @@ public class product_D extends JFrame {
 	 */
 	public product_D() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 828, 437);
+		setBounds(100, 100, 958, 481);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 
@@ -79,7 +80,7 @@ public class product_D extends JFrame {
 		contentPane.setLayout(null);
 
 		scrollPane = new JScrollPane();
-		scrollPane.setBounds(10, 69, 481, 318);
+		scrollPane.setBounds(10, 66, 609, 348);
 		contentPane.add(scrollPane);
 		
 		tbProduct = new JTable() {
@@ -119,7 +120,7 @@ public class product_D extends JFrame {
 		
 		JLabel lblTitle = new JLabel("အသီးစာရင္း");
 		lblTitle.setFont(new Font("Zawgyi-One", Font.BOLD, 20));
-		lblTitle.setBounds(371, 11, 118, 44);
+		lblTitle.setBounds(10, 11, 118, 44);
 		contentPane.add(lblTitle);
 		
 		txtType = new JTextField();
@@ -133,28 +134,28 @@ public class product_D extends JFrame {
 			}
 		});
 		txtType.setFont(new Font("Zawgyi-One", Font.BOLD, 15));
-		txtType.setBounds(662, 79, 140, 27);
+		txtType.setBounds(792, 48, 140, 27);
 		contentPane.add(txtType);
 		txtType.setColumns(10);
 		
-		JLabel lblTitle_1 = new JLabel("အမ်ိဳးအစား      :");
+		JLabel lblTitle_1 = new JLabel("အမ်ိဳးအစား      ");
 		lblTitle_1.setFont(new Font("Zawgyi-One", Font.BOLD, 16));
-		lblTitle_1.setBounds(501, 69, 151, 44);
+		lblTitle_1.setBounds(629, 39, 131, 44);
 		contentPane.add(lblTitle_1);
 		
-		JLabel lblTitle_1_1 = new JLabel("ေတာင္းေစ်း       :");
+		JLabel lblTitle_1_1 = new JLabel("ေတာင္းေစ်း       ");
 		lblTitle_1_1.setFont(new Font("Zawgyi-One", Font.BOLD, 15));
-		lblTitle_1_1.setBounds(501, 124, 151, 44);
+		lblTitle_1_1.setBounds(631, 151, 151, 44);
 		contentPane.add(lblTitle_1_1);
 		
-		JLabel lblTitle_1_1_1 = new JLabel("ပိႆာေစ်း       :");
+		JLabel lblTitle_1_1_1 = new JLabel("ပိႆာေစ်း       ");
 		lblTitle_1_1_1.setFont(new Font("Zawgyi-One", Font.BOLD, 16));
-		lblTitle_1_1_1.setBounds(501, 179, 151, 44);
+		lblTitle_1_1_1.setBounds(631, 206, 129, 44);
 		contentPane.add(lblTitle_1_1_1);
 		
-		JLabel lblTitle_1_1_1_1 = new JLabel("ေသတၱာေစ်း     :");
+		JLabel lblTitle_1_1_1_1 = new JLabel("ေသတၱာေစ်း     ");
 		lblTitle_1_1_1_1.setFont(new Font("Zawgyi-One", Font.BOLD, 16));
-		lblTitle_1_1_1_1.setBounds(501, 234, 151, 44);
+		lblTitle_1_1_1_1.setBounds(631, 261, 129, 44);
 		contentPane.add(lblTitle_1_1_1_1);
 		
 		txtBucket = new JTextField();
@@ -168,7 +169,7 @@ public class product_D extends JFrame {
 		});
 		txtBucket.setFont(new Font("Times New Roman", Font.BOLD, 16));
 		txtBucket.setColumns(10);
-		txtBucket.setBounds(662, 133, 140, 27);
+		txtBucket.setBounds(792, 160, 140, 27);
 		contentPane.add(txtBucket);
 		
 		txtViss = new JTextField();
@@ -182,7 +183,7 @@ public class product_D extends JFrame {
 		});
 		txtViss.setFont(new Font("Times New Roman", Font.BOLD, 16));
 		txtViss.setColumns(10);
-		txtViss.setBounds(662, 188, 140, 27);
+		txtViss.setBounds(792, 215, 140, 27);
 		contentPane.add(txtViss);
 		
 		txtBox = new JTextField();
@@ -196,7 +197,7 @@ public class product_D extends JFrame {
 		});
 		txtBox.setFont(new Font("Times New Roman", Font.BOLD, 16));
 		txtBox.setColumns(10);
-		txtBox.setBounds(662, 243, 140, 27);
+		txtBox.setBounds(792, 270, 140, 27);
 		contentPane.add(txtBox);
 		
 		JButton btnAdd = new JButton("ထည့္မည္");
@@ -212,12 +213,16 @@ public class product_D extends JFrame {
 			}
 		});
 		btnAdd.setFont(new Font("Zawgyi-One", Font.BOLD, 14));
-		btnAdd.setBounds(511, 306, 129, 34);
+		btnAdd.setBounds(641, 333, 129, 34);
 		contentPane.add(btnAdd);
 		
 		JButton btnRemove = new JButton("ဖ်က္မည္");
+		btnRemove.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+			}
+		});
 		btnRemove.setFont(new Font("Zawgyi-One", Font.BOLD, 14));
-		btnRemove.setBounds(673, 306, 129, 34);
+		btnRemove.setBounds(803, 333, 129, 34);
 		contentPane.add(btnRemove);
 		
 		JButton btnUpdate = new JButton("ျပင္မည္");
@@ -239,13 +244,38 @@ public class product_D extends JFrame {
 			}
 		});
 		btnUpdate.setFont(new Font("Zawgyi-One", Font.BOLD, 14));
-		btnUpdate.setBounds(511, 353, 129, 34);
+		btnUpdate.setBounds(641, 380, 129, 34);
 		contentPane.add(btnUpdate);
 		
 		JButton btnClear = new JButton("Clear");
+		btnClear.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				txtType.setText("");
+				txtBucket.setText("");
+				txtViss.setText("");
+				txtBox.setText("");
+			}
+		});
 		btnClear.setFont(new Font("Zawgyi-One", Font.BOLD, 14));
-		btnClear.setBounds(673, 353, 129, 34);
+		btnClear.setBounds(803, 380, 129, 34);
 		contentPane.add(btnClear);
+		
+		JLabel lblTitle_1_2 = new JLabel("အ႐ြယ္စား       ");
+		lblTitle_1_2.setFont(new Font("Zawgyi-One", Font.BOLD, 16));
+		lblTitle_1_2.setBounds(631, 96, 129, 44);
+		contentPane.add(lblTitle_1_2);
+		
+		/*
+		 * add item on JcomboBox
+		 */
+		String item[]= {"ထူးရွယ္", "ေအာက္ခံသီး", "အလတ္သီး"};
+		JComboBox cBoxSize; 
+		cBoxSize = new JComboBox(item);
+		cBoxSize.setFont(new Font("Zawgyi-One", Font.BOLD, 16));
+		cBoxSize.setBounds(792, 106, 140, 27);
+		
+		
+		contentPane.add(cBoxSize);
 		
 		updateTable();
 	}
