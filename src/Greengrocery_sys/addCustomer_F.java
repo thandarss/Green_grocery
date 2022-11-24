@@ -15,11 +15,6 @@ public class addCustomer_F {
 		Connection connection = new DbConnection().connect();
 		
 		/*
-		 * check ID
-		 */
-		
-		
-		/*
 		 * insert new data
 		 */
 		String sqlString = "insert into customer (Name, Address, Phone) values ( ? , ?, ?);";
