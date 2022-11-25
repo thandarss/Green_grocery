@@ -29,6 +29,7 @@ import javax.swing.JScrollPane;
 import java.awt.Color;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.security.auth.Refreshable;
 import javax.swing.ImageIcon;
 import javax.swing.JTextField;
 import java.awt.event.MouseAdapter;
@@ -71,14 +72,14 @@ public class Customer {
 	 */
 	public Customer() {
 		initialize();
-		updateTable();
+		refreshCustomer();
 	}
 
 	/**
-	 * Retrieving database data to JTable
+	 * refresh the customer table
 	 */
 	
-	public void updateTable () {
+	public void refreshCustomer () {
 		Connection conn = new DbConnection().connect();
 		String sqlString = "select Id_customer, Name, Address, Phone from customer;";
 	
@@ -171,6 +172,7 @@ public class Customer {
 		frame.addMouseMotionListener(listener);
 		
 		JButton btnAdd = new JButton("ထည့္မည္");
+		btnAdd.setForeground(new Color(128, 64, 0));
 		btnAdd.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
@@ -181,12 +183,13 @@ public class Customer {
 				//String id_customer = name.substring(name.length()-1) + address.substring(address.length()-1) + phone.substring(phone.length()-2);
 				
 				new addCustomer_F().addCustomer(name, address, phone);
-				updateTable();
+				refreshCustomer();
 				//new addCustomer_D().frame.setVisible(true);
 			}
 		});
 		
 		JButton btnRemoveRow = new JButton("ဖ်က္မည္");
+		btnRemoveRow.setForeground(new Color(128, 64, 0));
 		
 		btnRemoveRow.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -213,7 +216,7 @@ public class Customer {
 						JOptionPane.showMessageDialog(null, "Remove row successfully!");
 					}
 													
-					updateTable();
+					refreshCustomer();
 				}	
 				
 			}
@@ -230,10 +233,10 @@ public class Customer {
 		btnClose_1.setBounds(838, 0, 64, 29);
 		frame.getContentPane().add(btnClose_1);
 		btnRemoveRow.setFont(new Font("Zawgyi-One", Font.BOLD, 15));
-		btnRemoveRow.setBackground(SystemColor.info);
+		btnRemoveRow.setBackground(new Color(255, 234, 213));
 		btnRemoveRow.setBounds(827, 313, 119, 40);
 		frame.getContentPane().add(btnRemoveRow);
-		btnAdd.setBackground(SystemColor.info);
+		btnAdd.setBackground(new Color(255, 234, 213));
 		btnAdd.setFont(new Font("Zawgyi-One", Font.BOLD, 15));
 		btnAdd.setBounds(667, 313, 125, 40);
 		frame.getContentPane().add(btnAdd);
@@ -252,9 +255,11 @@ public class Customer {
 	                return false;               
 	        };
 	    };
+		tbCustomer.setBackground(new Color(255, 250, 244));
 	    tbCustomer.getTableHeader().setFont(new Font("Verdana",Font.BOLD,18));
 	    tbCustomer.setOpaque(false);
-	    tbCustomer.getTableHeader().setBackground(new Color(201, 248, 194));
+	    tbCustomer.getTableHeader().setBackground(new Color(128, 64, 0));
+	    tbCustomer.getTableHeader().setForeground(Color.WHITE);
 		//tbCustomer.setBackground(new Color(201, 248, 194));
 		tbCustomer.addMouseListener(new MouseAdapter() {
 			@Override
@@ -318,6 +323,7 @@ public class Customer {
 		 * focus cursor into next jtextfile by enter key
 		 */
 		txtName = new JTextField();
+		txtName.setBackground(new Color(255, 250, 244));
 		txtName.requestFocus();
 		txtName.addKeyListener(new KeyAdapter() {
 			@Override
@@ -334,6 +340,7 @@ public class Customer {
 		txtName.setColumns(10);
 		
 		txtAddress = new JTextField();
+		txtAddress.setBackground(new Color(255, 250, 244));
 		txtAddress.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent e) {
@@ -349,6 +356,7 @@ public class Customer {
 		frame.getContentPane().add(txtAddress);
 		
 		txtPhone = new JTextField();
+		txtPhone.setBackground(new Color(255, 250, 244));
 		txtPhone.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent e) {
@@ -370,6 +378,7 @@ public class Customer {
 		frame.getContentPane().add(lblNewLabel_2);
 		
 		JButton btnUpdate = new JButton("ျပင္မည္");
+		btnUpdate.setForeground(new Color(128, 64, 0));
 		btnUpdate.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				
@@ -382,16 +391,17 @@ public class Customer {
 					String idString = tbCustomer.getModel().getValueAt(row, 0).toString();
 					int id = Integer.parseInt(idString);
 					new updateCustomer().updateCus(id, nameString, addressString, phoneString);
-					updateTable();
+					refreshCustomer();
 				}
 			}
 		});
 		btnUpdate.setFont(new Font("Zawgyi-One", Font.BOLD, 15));
-		btnUpdate.setBackground(SystemColor.info);
+		btnUpdate.setBackground(new Color(255, 234, 213));
 		btnUpdate.setBounds(667, 376, 119, 40);
 		frame.getContentPane().add(btnUpdate);
 		
 		JButton btnClear = new JButton("Clear");
+		btnClear.setForeground(new Color(128, 64, 0));
 		btnClear.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				txtName.setText("");
@@ -400,7 +410,7 @@ public class Customer {
 			}
 		});
 		btnClear.setFont(new Font("Zawgyi-One", Font.BOLD, 15));
-		btnClear.setBackground(SystemColor.info);
+		btnClear.setBackground(new Color(255, 234, 213));
 		btnClear.setBounds(827, 376, 119, 40);
 		frame.getContentPane().add(btnClear);
 		
