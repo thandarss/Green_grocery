@@ -12,12 +12,15 @@ import net.proteanit.sql.DbUtils;
 
 import javax.swing.JTable;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import java.awt.Font;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Date;
+
 import javax.swing.JScrollPane;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
@@ -27,16 +30,18 @@ import java.awt.event.MouseEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import javax.swing.JComboBox;
+import com.toedter.calendar.JDateChooser;
 
 public class product_D extends JFrame {
 
 	private JPanel contentPane;
 	private JTable tbProduct;
-	private JTextField txtType;
 	private JScrollPane scrollPane;
 	private JTextField txtBucket;
 	private JTextField txtViss;
 	private JTextField txtBox;
+	private JComboBox cBoxSize; 
+	private JDateChooser dateChooser;
 
 	/**
 	 * Launch the application.
@@ -72,7 +77,7 @@ public class product_D extends JFrame {
 	 */
 	public product_D() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 958, 481);
+		setBounds(100, 100, 1223, 485);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 
@@ -80,7 +85,7 @@ public class product_D extends JFrame {
 		contentPane.setLayout(null);
 
 		scrollPane = new JScrollPane();
-		scrollPane.setBounds(10, 66, 609, 348);
+		scrollPane.setBounds(10, 66, 840, 348);
 		contentPane.add(scrollPane);
 		
 		tbProduct = new JTable() {
@@ -106,7 +111,7 @@ public class product_D extends JFrame {
 						ResultSet rSet = pStatement.executeQuery();
 						
 						if(rSet.next()) {
-						txtType.setText(rSet.getString("Type"));
+						cBoxSize.setSelectedItem(rSet.getString("Type"));
 						txtBucket.setText(rSet.getString("Bucket_Price"));
 						txtViss.setText(rSet.getString("Viss_Price"));
 						txtBox.setText(rSet.getString("Box_Price"));
@@ -123,39 +128,19 @@ public class product_D extends JFrame {
 		lblTitle.setBounds(10, 11, 118, 44);
 		contentPane.add(lblTitle);
 		
-		txtType = new JTextField();
-		txtType.requestFocus();
-		txtType.addKeyListener(new KeyAdapter() {
-			@Override
-			public void keyPressed(KeyEvent arg0) {
-				if(arg0.getKeyCode() == KeyEvent.VK_ENTER) {
-					txtBucket.requestFocus();
-				}
-			}
-		});
-		txtType.setFont(new Font("Zawgyi-One", Font.BOLD, 15));
-		txtType.setBounds(792, 48, 140, 27);
-		contentPane.add(txtType);
-		txtType.setColumns(10);
-		
-		JLabel lblTitle_1 = new JLabel("အမ်ိဳးအစား      ");
-		lblTitle_1.setFont(new Font("Zawgyi-One", Font.BOLD, 16));
-		lblTitle_1.setBounds(629, 39, 131, 44);
-		contentPane.add(lblTitle_1);
-		
 		JLabel lblTitle_1_1 = new JLabel("ေတာင္းေစ်း       ");
 		lblTitle_1_1.setFont(new Font("Zawgyi-One", Font.BOLD, 15));
-		lblTitle_1_1.setBounds(631, 151, 151, 44);
+		lblTitle_1_1.setBounds(894, 133, 151, 44);
 		contentPane.add(lblTitle_1_1);
 		
 		JLabel lblTitle_1_1_1 = new JLabel("ပိႆာေစ်း       ");
 		lblTitle_1_1_1.setFont(new Font("Zawgyi-One", Font.BOLD, 16));
-		lblTitle_1_1_1.setBounds(631, 206, 129, 44);
+		lblTitle_1_1_1.setBounds(894, 206, 129, 44);
 		contentPane.add(lblTitle_1_1_1);
 		
 		JLabel lblTitle_1_1_1_1 = new JLabel("ေသတၱာေစ်း     ");
 		lblTitle_1_1_1_1.setFont(new Font("Zawgyi-One", Font.BOLD, 16));
-		lblTitle_1_1_1_1.setBounds(631, 261, 129, 44);
+		lblTitle_1_1_1_1.setBounds(894, 278, 129, 44);
 		contentPane.add(lblTitle_1_1_1_1);
 		
 		txtBucket = new JTextField();
@@ -169,7 +154,7 @@ public class product_D extends JFrame {
 		});
 		txtBucket.setFont(new Font("Times New Roman", Font.BOLD, 16));
 		txtBucket.setColumns(10);
-		txtBucket.setBounds(792, 160, 140, 27);
+		txtBucket.setBounds(1057, 141, 140, 27);
 		contentPane.add(txtBucket);
 		
 		txtViss = new JTextField();
@@ -183,7 +168,7 @@ public class product_D extends JFrame {
 		});
 		txtViss.setFont(new Font("Times New Roman", Font.BOLD, 16));
 		txtViss.setColumns(10);
-		txtViss.setBounds(792, 215, 140, 27);
+		txtViss.setBounds(1057, 214, 140, 27);
 		contentPane.add(txtViss);
 		
 		txtBox = new JTextField();
@@ -191,44 +176,61 @@ public class product_D extends JFrame {
 			@Override
 			public void keyPressed(KeyEvent e) {
 				if(e.getKeyCode() == KeyEvent.VK_ENTER) {
-					txtType.requestFocus();
+					txtBucket.requestFocus();
 				}
 			}
 		});
 		txtBox.setFont(new Font("Times New Roman", Font.BOLD, 16));
 		txtBox.setColumns(10);
-		txtBox.setBounds(792, 270, 140, 27);
+		txtBox.setBounds(1057, 286, 140, 27);
 		contentPane.add(txtBox);
 		
 		JButton btnAdd = new JButton("ထည့္မည္");
 		btnAdd.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				String typeString = txtType.getText();
+				String typeString= cBoxSize.getSelectedItem().toString();
 				int bucketPrice = Integer.parseInt(txtBucket.getText());
 				int vissPrice = Integer.parseInt(txtViss.getText());
 				int boxPrice = Integer.parseInt(txtBox.getText());
 				
-				new addProduct_F().addProduct(typeString, bucketPrice, vissPrice, boxPrice);
+				/*
+				 * Get Today Date from DateChooser
+				 */
+				String dateString = ((JTextField)dateChooser.getDateEditor().getUiComponent()).getText();
+				
+				System.out.print("Date chooser " + dateString);
+				new addProduct_F().addProduct(typeString, bucketPrice, vissPrice, boxPrice, dateString);
 				updateTable();
 			}
 		});
 		btnAdd.setFont(new Font("Zawgyi-One", Font.BOLD, 14));
-		btnAdd.setBounds(641, 333, 129, 34);
+		btnAdd.setBounds(894, 333, 129, 34);
 		contentPane.add(btnAdd);
 		
 		JButton btnRemove = new JButton("ဖ်က္မည္");
 		btnRemove.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				int row = tbProduct.getSelectedRow();
+				if(row != -1) {
+					String idString = tbProduct.getModel().getValueAt(row, 0).toString();
+					int id = Integer.parseInt(idString);
+					
+					int confirm = JOptionPane.showConfirmDialog(null, "Are you sure you want to delete this?", "Confirm Dialog", JOptionPane.YES_NO_OPTION);
+					if(confirm == 0) {
+						new deleteProduct_F().deleteProduct(id);
+					}
+					updateTable();
+				}
 			}
 		});
 		btnRemove.setFont(new Font("Zawgyi-One", Font.BOLD, 14));
-		btnRemove.setBounds(803, 333, 129, 34);
+		btnRemove.setBounds(1068, 333, 129, 34);
 		contentPane.add(btnRemove);
 		
 		JButton btnUpdate = new JButton("ျပင္မည္");
 		btnUpdate.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				String typeString = txtType.getText();
+				String typeString = cBoxSize.getSelectedItem().toString();
 				int bucketPrice = Integer.parseInt(txtBucket.getText());
 				int vissPrice = Integer.parseInt(txtViss.getText());
 				int boxPrice = Integer.parseInt(txtBox.getText());
@@ -244,38 +246,43 @@ public class product_D extends JFrame {
 			}
 		});
 		btnUpdate.setFont(new Font("Zawgyi-One", Font.BOLD, 14));
-		btnUpdate.setBounds(641, 380, 129, 34);
+		btnUpdate.setBounds(894, 380, 129, 34);
 		contentPane.add(btnUpdate);
 		
 		JButton btnClear = new JButton("Clear");
 		btnClear.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				txtType.setText("");
+				
 				txtBucket.setText("");
 				txtViss.setText("");
 				txtBox.setText("");
 			}
 		});
 		btnClear.setFont(new Font("Zawgyi-One", Font.BOLD, 14));
-		btnClear.setBounds(803, 380, 129, 34);
+		btnClear.setBounds(1068, 380, 129, 34);
 		contentPane.add(btnClear);
 		
 		JLabel lblTitle_1_2 = new JLabel("အ႐ြယ္စား       ");
 		lblTitle_1_2.setFont(new Font("Zawgyi-One", Font.BOLD, 16));
-		lblTitle_1_2.setBounds(631, 96, 129, 44);
+		lblTitle_1_2.setBounds(896, 66, 129, 44);
 		contentPane.add(lblTitle_1_2);
 		
 		/*
 		 * add item on JcomboBox
 		 */
 		String item[]= {"ထူးရွယ္", "ေအာက္ခံသီး", "အလတ္သီး"};
-		JComboBox cBoxSize; 
 		cBoxSize = new JComboBox(item);
 		cBoxSize.setFont(new Font("Zawgyi-One", Font.BOLD, 16));
-		cBoxSize.setBounds(792, 106, 140, 27);
+		cBoxSize.setBounds(1057, 75, 140, 27);
 		
 		
 		contentPane.add(cBoxSize);
+		
+		dateChooser = new JDateChooser();
+		Date date = new Date();
+		dateChooser.setDate(date);		
+		dateChooser.setBounds(656, 11, 194, 44);
+		contentPane.add(dateChooser);
 		
 		updateTable();
 	}
