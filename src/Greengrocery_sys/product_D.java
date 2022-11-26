@@ -308,7 +308,6 @@ public class product_D extends JFrame {
 				int bucketPrice = Integer.parseInt(txtBucket.getText());
 				int vissPrice = Integer.parseInt(txtViss.getText());
 				int boxPrice = Integer.parseInt(txtBox.getText());
-				
 				/*
 				 * Get Today Date from DateChooser
 				 */
