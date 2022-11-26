@@ -31,17 +31,20 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import javax.swing.event.PopupMenuListener;
+import javax.swing.event.PopupMenuEvent;
 
 public class Order_D extends JFrame {
 
 	private JPanel contentPane;
-	private JTextField txtBucketPrice;
-	private JTextField txtBoxPrice;
-	private JTextField txtRentPeople;
-	private JTextField txtVissPrice;
+	private JTextField txtBucketNum;
+	private JTextField txtBoxNum;
+	private JTextField txtlabor;
+	private JTextField txtVissNum;
 	private JTable tbOrder;
-	private JComboBox cboxName;
+	private JComboBox cboxName, cboxType;
 	protected int customerId, productId;
+	protected String nameString,typeString;
 	Connection connection;
 
 	/**
@@ -60,13 +63,57 @@ public class Order_D extends JFrame {
 		});
 	}
 	
+
+	/*
+	 * get Customer ID from customer table
+	 */
+	
+	public void getCustomerID() {
+		//get Customer Id
+		
+		nameString = cboxName.getSelectedItem().toString();
+		connection = new DbConnection().connect();
+		String sqlString = "select Id_customer from customer where Name = '" + nameString + "';";
+		try {
+			PreparedStatement pStatement = connection.prepareStatement(sqlString);
+			ResultSet rSet = pStatement.executeQuery();
+			
+			customerId = rSet.getInt("Id_customer");
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
+	
 	/*
 	 *refresh table 
 	 */
 	
 	public void refreshTable() {
+		
 		connection = new DbConnection().connect();
-		String sqlString = "select Id_Invoice, Type, Bucket, Box, Viss, Price, Total, Date from customer_order;";
+									
+		String sqlString2 = "select Id_Invoice, Type, Bucket, Box, Viss, Price, Total, Date from customer_order;";
+		try {
+			PreparedStatement pStatement1 = connection.prepareStatement(sqlString2);
+			ResultSet rSet = pStatement1.executeQuery();
+			tbOrder.setModel(DbUtils.resultSetToTableModel(rSet));
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	/*
+	 * Show Selected Customer Data
+	 */
+	
+	public void selectCustomer() {
+		connection = new DbConnection().connect();
+		
+		String sqlString = "select Id_Invoice, Type, Bucket, Box, Viss, Price, Total, Date from customer_order where Id_customer = '" + customerId + "';";
+		
 		try {
 			PreparedStatement pStatement = connection.prepareStatement(sqlString);
 			ResultSet rSet = pStatement.executeQuery();
@@ -75,6 +122,8 @@ public class Order_D extends JFrame {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
+		
 	}
 	
 	/*
@@ -88,9 +137,29 @@ public class Order_D extends JFrame {
 			PreparedStatement pStatement = connection.prepareStatement(sqlString);
 			ResultSet rSet = pStatement.executeQuery();
 			
-			if(rSet.next()) {
-				cboxName.addItem(rSet.getString("Name"));
-				cboxName.addItem("All");
+			cboxName.addItem("All");
+			
+			while(rSet.next()) {
+				cboxName.addItem(rSet.getString("Name"));				
+			}
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	public void fillTypeBox() {
+
+		connection = new DbConnection().connect();
+		String sqString = "select * from product_price";
+		
+		try {
+			PreparedStatement pStatement = connection.prepareStatement(sqString);
+			ResultSet rSet = pStatement.executeQuery();
+			
+			while(rSet.next()) {
+				cboxType.addItem(rSet.getString("Type"));
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -110,119 +179,129 @@ public class Order_D extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
-		JLabel lblNewLabel = new JLabel("နာမည္");
-		lblNewLabel.setFont(new Font("Zawgyi-One", Font.BOLD, 21));
-		lblNewLabel.setBounds(862, 37, 98, 34);
+		JLabel lblNewLabel = new JLabel("ဝယ္သူ");
+		lblNewLabel.setFont(new Font("Zawgyi-One", Font.BOLD, 18));
+		lblNewLabel.setBounds(861, 14, 98, 34);
 		contentPane.add(lblNewLabel);
 		
 		cboxName = new JComboBox();
-		cboxName.setBounds(944, 39, 185, 34);
+		cboxName.addPopupMenuListener(new PopupMenuListener() {
+			public void popupMenuCanceled(PopupMenuEvent arg0) {
+			}
+			public void popupMenuWillBecomeInvisible(PopupMenuEvent arg0) {
+				selectCustomer();
+			}
+			public void popupMenuWillBecomeVisible(PopupMenuEvent arg0) {
+			}
+		});
+		cboxName.setFont(new Font("Zawgyi-One", Font.BOLD, 17));
+		cboxName.setBounds(964, 16, 165, 34);
 		contentPane.add(cboxName);
 		
-		JLabel lblNewLabel_1 = new JLabel("ေတာင္းေစ်း");
+		JLabel lblNewLabel_1 = new JLabel("ေတာင္း");
 		lblNewLabel_1.setFont(new Font("Zawgyi-One", Font.BOLD, 17));
-		lblNewLabel_1.setBounds(894, 105, 98, 34);
+		lblNewLabel_1.setBounds(883, 150, 76, 34);
 		contentPane.add(lblNewLabel_1);
 		
-		JLabel lblNewLabel_1_1 = new JLabel("ေသတၱာေစ်း");
+		JLabel lblNewLabel_1_1 = new JLabel("ေသတၱာ");
 		lblNewLabel_1_1.setFont(new Font("Zawgyi-One", Font.BOLD, 17));
-		lblNewLabel_1_1.setBounds(894, 168, 116, 34);
+		lblNewLabel_1_1.setBounds(1022, 150, 67, 34);
 		contentPane.add(lblNewLabel_1_1);
 		
-		JLabel lblNewLabel_1_1_1 = new JLabel("ပိႆာေစ်း");
+		JLabel lblNewLabel_1_1_1 = new JLabel("ပိႆာ");
 		lblNewLabel_1_1_1.setFont(new Font("Zawgyi-One", Font.BOLD, 17));
-		lblNewLabel_1_1_1.setBounds(894, 237, 116, 34);
+		lblNewLabel_1_1_1.setBounds(883, 246, 67, 34);
 		contentPane.add(lblNewLabel_1_1_1);
 		
-		JLabel lblNewLabel_1_1_1_1 = new JLabel("လုပ္အားခ");
+		JLabel lblNewLabel_1_1_1_1 = new JLabel("လုပ္အား");
 		lblNewLabel_1_1_1_1.setFont(new Font("Zawgyi-One", Font.BOLD, 17));
-		lblNewLabel_1_1_1_1.setBounds(894, 310, 76, 34);
+		lblNewLabel_1_1_1_1.setBounds(1024, 246, 76, 34);
 		contentPane.add(lblNewLabel_1_1_1_1);
 		
-		txtBucketPrice = new JTextField();
-		txtBucketPrice.addKeyListener(new KeyAdapter() {
+		txtBucketNum = new JTextField();
+		txtBucketNum.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent arg0) {
 				
 				char c = arg0.getKeyChar();
 				if(Character.isLetter(c)) {
 					JOptionPane.showMessageDialog(null, "Please enter the NUMBER (1,2,3,...) only.", "Warning!",JOptionPane.INFORMATION_MESSAGE);
-					txtBucketPrice.setText("");
+					txtBucketNum.setText("");
 				}
 				else {
-					txtBucketPrice.setEditable(true);
+					txtBucketNum.setEditable(true);
 					if(arg0.getKeyCode() == KeyEvent.VK_ENTER) {
-						txtBoxPrice.requestFocus();
+						txtBoxNum.requestFocus();
 					}
 				}
 			}
 		});
-		txtBucketPrice.setBounds(996, 107, 116, 31);
-		contentPane.add(txtBucketPrice);
-		txtBucketPrice.setColumns(10);
+		txtBucketNum.setBounds(883, 195, 58, 31);
+		contentPane.add(txtBucketNum);
+		txtBucketNum.setColumns(10);
 		
-		txtBoxPrice = new JTextField();
-		txtBoxPrice.addKeyListener(new KeyAdapter() {
+		txtBoxNum = new JTextField();
+		txtBoxNum.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent e) {
 				char c = e.getKeyChar();
 				if(Character.isLetter(c)) {
 					JOptionPane.showMessageDialog(null, "Please enter the NUMBER (1,2,3,...) only.","Warning!",JOptionPane.INFORMATION_MESSAGE);
-					txtBoxPrice.setText("");
+					txtBoxNum.setText("");
 				}
 				else {
-					txtBoxPrice.setEditable(true);
+					txtBoxNum.setEditable(true);
 					if(e.getKeyCode() == KeyEvent.VK_ENTER) {
-						txtVissPrice.requestFocus();
+						txtVissNum.requestFocus();
 					}
 				}
 			}
 		});
-		txtBoxPrice.setColumns(10);
-		txtBoxPrice.setBounds(996, 168, 116, 34);
-		contentPane.add(txtBoxPrice);
+		txtBoxNum.setColumns(10);
+		txtBoxNum.setBounds(1022, 195, 58, 31);
+		contentPane.add(txtBoxNum);
 		
-		txtRentPeople = new JTextField();
-		txtRentPeople.addKeyListener(new KeyAdapter() {
+		txtlabor = new JTextField();
+		txtlabor.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent e) {
 				char c = e.getKeyChar();
 				if(Character.isLetter(c)) {
 					JOptionPane.showMessageDialog(null, "Please enter NUMBER (1,2,3,...) only.","Warning!",JOptionPane.INFORMATION_MESSAGE);
-					txtRentPeople.setText("");;
+					txtlabor.setText("");;
 				}
 				else {
-					txtRentPeople.setEditable(true);
+					txtlabor.setEditable(true);
 					if(e.getKeyCode() == KeyEvent.VK_ENTER) {
-						txtBucketPrice.requestFocus();
+						txtBucketNum.requestFocus();
 					}
 				}
 			}
 		});
-		txtRentPeople.setColumns(10);
-		txtRentPeople.setBounds(996, 307, 116, 40);
-		contentPane.add(txtRentPeople);
+		txtlabor.setColumns(10);
+		txtlabor.setBounds(1022, 291, 58, 31);
+		contentPane.add(txtlabor);
 		
-		txtVissPrice = new JTextField();
-		txtVissPrice.addKeyListener(new KeyAdapter() {
+		txtVissNum = new JTextField();
+		txtVissNum.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent e) {
 				char c = e.getKeyChar();
 				if(Character.isLetter(c)) {
 					JOptionPane.showMessageDialog(null, "Please enter NUMBER (1,2,3,...) only.","Warning!",JOptionPane.INFORMATION_MESSAGE);
-					txtVissPrice.setText("");
+					txtVissNum.setText("");
 				}
 				else {
-					txtVissPrice.setEditable(true);
+					txtVissNum.setEditable(true);
 					if(e.getKeyCode() == KeyEvent.VK_ENTER) {
-						txtRentPeople.requestFocus();
+						txtlabor.requestFocus();
 					}
 				}
 			}
 		});
-		txtVissPrice.setColumns(10);
-		txtVissPrice.setBounds(996, 234, 116, 40);
-		contentPane.add(txtVissPrice);
+		txtVissNum.setColumns(10);
+		txtVissNum.setBounds(883, 291, 58, 31);
+		contentPane.add(txtVissNum);
 		
 		JDateChooser dateChooser = new JDateChooser();
 		dateChooser.setBounds(685, 16, 149, 40);
@@ -246,36 +325,55 @@ public class Order_D extends JFrame {
 		JButton btnAdd = new JButton("ထည့္မည္");
 		btnAdd.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				String nameString = cboxName.getSelectedItem().toString();
+				int bucketNum = Integer.parseInt(txtBucketNum.getText());
+				int boxNum = Integer.parseInt(txtBoxNum.getText());
+				double vissNum = Double.parseDouble(txtVissNum.getText());
+				int labor = Integer.parseInt(txtlabor.getText());
+				
+				
+				//String sqlString2 = "select Id_product from product_price where "
 			}
 		});
 		btnAdd.setForeground(new Color(128, 64, 0));
 		btnAdd.setFont(new Font("Zawgyi-One", Font.BOLD, 15));
 		btnAdd.setBackground(new Color(254, 251, 245));
-		btnAdd.setBounds(894, 371, 98, 34);
+		btnAdd.setBounds(861, 346, 98, 34);
 		contentPane.add(btnAdd);
 		
 		JButton btnRemove = new JButton("ဖ်က္မည္");
 		btnRemove.setForeground(new Color(128, 64, 0));
 		btnRemove.setFont(new Font("Zawgyi-One", Font.BOLD, 15));
 		btnRemove.setBackground(new Color(254, 251, 245));
-		btnRemove.setBounds(1025, 371, 92, 34);
+		btnRemove.setBounds(1005, 346, 92, 34);
 		contentPane.add(btnRemove);
 		
 		JButton btnUpdate = new JButton("ျပင္မည္");
 		btnUpdate.setForeground(new Color(128, 64, 0));
 		btnUpdate.setFont(new Font("Zawgyi-One", Font.BOLD, 15));
 		btnUpdate.setBackground(new Color(254, 251, 245));
-		btnUpdate.setBounds(894, 423, 98, 34);
+		btnUpdate.setBounds(861, 401, 98, 34);
 		contentPane.add(btnUpdate);
 		
 		JButton btnClear = new JButton("Clear");
 		btnClear.setForeground(new Color(128, 64, 0));
 		btnClear.setFont(new Font("Zawgyi-One", Font.BOLD, 15));
 		btnClear.setBackground(new Color(254, 251, 245));
-		btnClear.setBounds(1025, 423, 92, 34);
+		btnClear.setBounds(1005, 401, 92, 34);
 		contentPane.add(btnClear);
+		
+		JLabel lblNewLabel_3 = new JLabel("အမ်ိဳးအစား");
+		lblNewLabel_3.setFont(new Font("Zawgyi-One", Font.BOLD, 17));
+		lblNewLabel_3.setBounds(861, 78, 98, 34);
+		contentPane.add(lblNewLabel_3);
+		
+		cboxType = new JComboBox();
+		cboxType.setFont(new Font("Zawgyi-One", Font.BOLD, 17));
+		cboxType.setBounds(964, 78, 165, 34);
+		contentPane.add(cboxType);
 		
 		refreshTable();
 		fillNameBox();
+		fillTypeBox();
 	}
 }
