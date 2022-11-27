@@ -39,7 +39,6 @@ public class Order_D extends JFrame {
 	private JPanel contentPane;
 	private JTextField txtBucketNum;
 	private JTextField txtBoxNum;
-	private JTextField txtlabor;
 	private JTextField txtVissNum;
 	private JTable tbOrder;
 	private JComboBox cboxName, cboxType;
@@ -109,7 +108,7 @@ public class Order_D extends JFrame {
 	 * Show Selected Customer Data
 	 */
 	
-	public void selectCustomer() {
+	public void selectedCusOrder() {
 		connection = new DbConnection().connect();
 		
 		String sqlString = "select Id_Invoice, Type, Bucket, Box, Viss, Price, Total, Date from customer_order where Id_customer = '" + customerId + "';";
@@ -189,7 +188,7 @@ public class Order_D extends JFrame {
 			public void popupMenuCanceled(PopupMenuEvent arg0) {
 			}
 			public void popupMenuWillBecomeInvisible(PopupMenuEvent arg0) {
-				selectCustomer();
+				selectedCusOrder();
 			}
 			public void popupMenuWillBecomeVisible(PopupMenuEvent arg0) {
 			}
@@ -212,11 +211,6 @@ public class Order_D extends JFrame {
 		lblNewLabel_1_1_1.setFont(new Font("Zawgyi-One", Font.BOLD, 17));
 		lblNewLabel_1_1_1.setBounds(883, 246, 67, 34);
 		contentPane.add(lblNewLabel_1_1_1);
-		
-		JLabel lblNewLabel_1_1_1_1 = new JLabel("လုပ္အား");
-		lblNewLabel_1_1_1_1.setFont(new Font("Zawgyi-One", Font.BOLD, 17));
-		lblNewLabel_1_1_1_1.setBounds(1024, 246, 76, 34);
-		contentPane.add(lblNewLabel_1_1_1_1);
 		
 		txtBucketNum = new JTextField();
 		txtBucketNum.addKeyListener(new KeyAdapter() {
@@ -261,27 +255,6 @@ public class Order_D extends JFrame {
 		txtBoxNum.setBounds(1022, 195, 58, 31);
 		contentPane.add(txtBoxNum);
 		
-		txtlabor = new JTextField();
-		txtlabor.addKeyListener(new KeyAdapter() {
-			@Override
-			public void keyPressed(KeyEvent e) {
-				char c = e.getKeyChar();
-				if(Character.isLetter(c)) {
-					JOptionPane.showMessageDialog(null, "Please enter NUMBER (1,2,3,...) only.","Warning!",JOptionPane.INFORMATION_MESSAGE);
-					txtlabor.setText("");;
-				}
-				else {
-					txtlabor.setEditable(true);
-					if(e.getKeyCode() == KeyEvent.VK_ENTER) {
-						txtBucketNum.requestFocus();
-					}
-				}
-			}
-		});
-		txtlabor.setColumns(10);
-		txtlabor.setBounds(1022, 291, 58, 31);
-		contentPane.add(txtlabor);
-		
 		txtVissNum = new JTextField();
 		txtVissNum.addKeyListener(new KeyAdapter() {
 			@Override
@@ -294,7 +267,7 @@ public class Order_D extends JFrame {
 				else {
 					txtVissNum.setEditable(true);
 					if(e.getKeyCode() == KeyEvent.VK_ENTER) {
-						txtlabor.requestFocus();
+						txtBucketNum.requestFocus();
 					}
 				}
 			}
@@ -325,11 +298,15 @@ public class Order_D extends JFrame {
 		JButton btnAdd = new JButton("ထည့္မည္");
 		btnAdd.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				String nameString = cboxName.getSelectedItem().toString();
+				nameString = cboxName.getSelectedItem().toString();
+				typeString = cboxType.getSelectedItem().toString();
 				int bucketNum = Integer.parseInt(txtBucketNum.getText());
 				int boxNum = Integer.parseInt(txtBoxNum.getText());
 				double vissNum = Double.parseDouble(txtVissNum.getText());
-				int labor = Integer.parseInt(txtlabor.getText());
+				//int labor = Integer.parseInt(txtlabor.getText());
+				
+				//new addOrder_F().addOrder(typeString, bucketNum, boxNum, vissNum, labor);
+				
 				
 				
 				//String sqlString2 = "select Id_product from product_price where "

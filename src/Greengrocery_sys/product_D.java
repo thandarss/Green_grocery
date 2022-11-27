@@ -50,6 +50,7 @@ public class product_D extends JFrame {
 	private JTextField txtBox;
 	private JComboBox cBoxSize; 
 	private JDateChooser dateChooser;
+	private JTextField txtCardPrice;
 
 	/**
 	 * Launch the application.
@@ -179,6 +180,27 @@ public class product_D extends JFrame {
 				product_D.this.setExtendedState(JFrame.ICONIFIED);
 			}
 		});
+		
+		txtCardPrice = new JTextField();
+		txtCardPrice.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if(e.getKeyCode() == KeyEvent.VK_ENTER) {
+					txtBucket.requestFocus();
+				}
+			}
+		});
+		txtCardPrice.setFont(new Font("Times New Roman", Font.BOLD, 16));
+		txtCardPrice.setColumns(10);
+		txtCardPrice.setBackground(new Color(254, 251, 245));
+		txtCardPrice.setBounds(1057, 279, 140, 27);
+		contentPane.add(txtCardPrice);
+		
+		JLabel lblTitle_1_1_1_1_1 = new JLabel("ကဒ္ေစ်း");
+		lblTitle_1_1_1_1_1.setForeground(SystemColor.info);
+		lblTitle_1_1_1_1_1.setFont(new Font("Zawgyi-One", Font.BOLD, 16));
+		lblTitle_1_1_1_1_1.setBounds(1078, 224, 90, 44);
+		contentPane.add(lblTitle_1_1_1_1_1);
 		btnClose_1.setFont(new Font("Tahoma", Font.BOLD, 23));
 		btnClose_1.setBackground(new Color(214, 54, 31));
 		btnClose_1.setBounds(1119, 0, 44, 34);
@@ -222,6 +244,7 @@ public class product_D extends JFrame {
 						txtBucket.setText(rSet.getString("Bucket_Price"));
 						txtViss.setText(rSet.getString("Viss_Price"));
 						txtBox.setText(rSet.getString("Box_Price"));
+						txtCardPrice.setText(rSet.getString("Card_Price"));
 						}
 					} catch (SQLException e) {
 						// TODO Auto-generated catch block
@@ -230,28 +253,28 @@ public class product_D extends JFrame {
 			}
 		});
 		
-		JLabel lblTitle = new JLabel("အသီးစာရင္း");
+		JLabel lblTitle = new JLabel("အေရာင္းစာရင္း");
 		lblTitle.setForeground(Color.WHITE);
 		lblTitle.setFont(new Font("Zawgyi-One", Font.BOLD, 20));
-		lblTitle.setBounds(32, 11, 118, 44);
+		lblTitle.setBounds(32, 11, 151, 44);
 		contentPane.add(lblTitle);
 		
 		JLabel lblTitle_1_1 = new JLabel("ေတာင္းေစ်း       ");
 		lblTitle_1_1.setForeground(SystemColor.info);
 		lblTitle_1_1.setFont(new Font("Zawgyi-One", Font.BOLD, 15));
-		lblTitle_1_1.setBounds(894, 133, 151, 44);
+		lblTitle_1_1.setBounds(896, 121, 151, 44);
 		contentPane.add(lblTitle_1_1);
 		
 		JLabel lblTitle_1_1_1 = new JLabel("ပိႆာေစ်း       ");
 		lblTitle_1_1_1.setForeground(SystemColor.info);
 		lblTitle_1_1_1.setFont(new Font("Zawgyi-One", Font.BOLD, 16));
-		lblTitle_1_1_1.setBounds(894, 206, 129, 44);
+		lblTitle_1_1_1.setBounds(1078, 121, 129, 44);
 		contentPane.add(lblTitle_1_1_1);
 		
 		JLabel lblTitle_1_1_1_1 = new JLabel("ေသတၱာေစ်း     ");
 		lblTitle_1_1_1_1.setForeground(SystemColor.info);
 		lblTitle_1_1_1_1.setFont(new Font("Zawgyi-One", Font.BOLD, 16));
-		lblTitle_1_1_1_1.setBounds(894, 278, 129, 44);
+		lblTitle_1_1_1_1.setBounds(894, 224, 129, 44);
 		contentPane.add(lblTitle_1_1_1_1);
 		
 		txtBucket = new JTextField();
@@ -260,13 +283,13 @@ public class product_D extends JFrame {
 			@Override
 			public void keyPressed(KeyEvent e) {
 				if(e.getKeyCode() == KeyEvent.VK_ENTER) {
-					txtViss.requestFocus();
+					txtBox.requestFocus();
 				}
 			}
 		});
 		txtBucket.setFont(new Font("Times New Roman", Font.BOLD, 16));
 		txtBucket.setColumns(10);
-		txtBucket.setBounds(1057, 141, 140, 27);
+		txtBucket.setBounds(873, 168, 140, 27);
 		contentPane.add(txtBucket);
 		
 		txtViss = new JTextField();
@@ -275,13 +298,13 @@ public class product_D extends JFrame {
 			@Override
 			public void keyPressed(KeyEvent e) {
 				if(e.getKeyCode() == KeyEvent.VK_ENTER) {
-					txtBox.requestFocus();
+					txtCardPrice.requestFocus();
 				}
 			}
 		});
 		txtViss.setFont(new Font("Times New Roman", Font.BOLD, 16));
 		txtViss.setColumns(10);
-		txtViss.setBounds(1057, 214, 140, 27);
+		txtViss.setBounds(1057, 168, 140, 27);
 		contentPane.add(txtViss);
 		
 		txtBox = new JTextField();
@@ -290,13 +313,13 @@ public class product_D extends JFrame {
 			@Override
 			public void keyPressed(KeyEvent e) {
 				if(e.getKeyCode() == KeyEvent.VK_ENTER) {
-					txtBucket.requestFocus();
+					txtViss.requestFocus();
 				}
 			}
 		});
 		txtBox.setFont(new Font("Times New Roman", Font.BOLD, 16));
 		txtBox.setColumns(10);
-		txtBox.setBounds(1057, 286, 140, 27);
+		txtBox.setBounds(873, 279, 140, 27);
 		contentPane.add(txtBox);
 		
 		JButton btnAdd = new JButton("ထည့္မည္");
@@ -308,18 +331,19 @@ public class product_D extends JFrame {
 				int bucketPrice = Integer.parseInt(txtBucket.getText());
 				int vissPrice = Integer.parseInt(txtViss.getText());
 				int boxPrice = Integer.parseInt(txtBox.getText());
+				int cardPrice = Integer.parseInt(txtCardPrice.getText());
 				/*
 				 * Get Today Date from DateChooser
 				 */
 				String dateString = ((JTextField)dateChooser.getDateEditor().getUiComponent()).getText();
 				
 				System.out.print("Date chooser " + dateString);
-				new addProduct_F().addProduct(typeString, bucketPrice, vissPrice, boxPrice, dateString);
+				new addProduct_F().addProduct(typeString, bucketPrice, vissPrice, boxPrice, cardPrice, dateString);
 				refreshTable();
 			}
 		});
 		btnAdd.setFont(new Font("Zawgyi-One", Font.BOLD, 15));
-		btnAdd.setBounds(894, 356, 129, 34);
+		btnAdd.setBounds(884, 356, 118, 34);
 		contentPane.add(btnAdd);
 		
 		JButton btnRemove = new JButton("ဖ်က္မည္");
@@ -341,7 +365,7 @@ public class product_D extends JFrame {
 			}
 		});
 		btnRemove.setFont(new Font("Zawgyi-One", Font.BOLD, 15));
-		btnRemove.setBounds(1068, 356, 129, 34);
+		btnRemove.setBounds(1068, 356, 118, 34);
 		contentPane.add(btnRemove);
 		
 		JButton btnUpdate = new JButton("ျပင္မည္");
@@ -353,19 +377,20 @@ public class product_D extends JFrame {
 				int bucketPrice = Integer.parseInt(txtBucket.getText());
 				int vissPrice = Integer.parseInt(txtViss.getText());
 				int boxPrice = Integer.parseInt(txtBox.getText());
+				int cardPrice = Integer.parseInt(txtCardPrice.getText());
 				
 				int r = tbProduct.getSelectedRow();
 				if(r != -1) {
 					String idString = tbProduct.getModel().getValueAt(r, 0).toString();
 					int id = Integer.parseInt(idString);
 					
-					new updateProduct_F().updateProduct(id, typeString, bucketPrice, vissPrice, boxPrice);
+					new updateProduct_F().updateProduct(id, typeString, bucketPrice, vissPrice, boxPrice,cardPrice);
 					refreshTable();
 				}
 			}
 		});
 		btnUpdate.setFont(new Font("Zawgyi-One", Font.BOLD, 15));
-		btnUpdate.setBounds(894, 424, 129, 34);
+		btnUpdate.setBounds(884, 424, 118, 34);
 		contentPane.add(btnUpdate);
 		
 		JButton btnClear = new JButton("Clear");
@@ -377,10 +402,11 @@ public class product_D extends JFrame {
 				txtBucket.setText("");
 				txtViss.setText("");
 				txtBox.setText("");
+				txtCardPrice.setText("");
 			}
 		});
 		btnClear.setFont(new Font("Zawgyi-One", Font.BOLD, 15));
-		btnClear.setBounds(1068, 424, 129, 34);
+		btnClear.setBounds(1068, 424, 118, 34);
 		contentPane.add(btnClear);
 		
 		JLabel lblTitle_1_2 = new JLabel("အမ်ိဳးအစား");
@@ -392,7 +418,7 @@ public class product_D extends JFrame {
 		/*
 		 * add item on JcomboBox
 		 */
-		String item[]= {"ထူးရွယ္", "ေအာက္ခံသီး", "အလတ္သီး"};
+		String item[]= {"ထူးရွယ္", "ေအာက္ခံသီး", "အလတ္သီး", "အလုပ္သမားခ"};
 		cBoxSize = new JComboBox(item);
 		cBoxSize.setBackground(new Color(253, 248, 236));
 		cBoxSize.setFont(new Font("Zawgyi-One", Font.BOLD, 16));
