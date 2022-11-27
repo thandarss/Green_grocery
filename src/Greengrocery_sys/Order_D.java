@@ -33,6 +33,9 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import javax.swing.event.PopupMenuListener;
 import javax.swing.event.PopupMenuEvent;
+import javax.swing.DefaultComboBoxModel;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
 
 public class Order_D extends JFrame {
 
@@ -45,6 +48,7 @@ public class Order_D extends JFrame {
 	protected int customerId, productId;
 	protected String nameString,typeString;
 	Connection connection;
+	private JTextField txtCardNum;
 
 	/**
 	 * Launch the application.
@@ -60,29 +64,6 @@ public class Order_D extends JFrame {
 				}
 			}
 		});
-	}
-	
-
-	/*
-	 * get Customer ID from customer table
-	 */
-	
-	public void getCustomerID() {
-		//get Customer Id
-		
-		nameString = cboxName.getSelectedItem().toString();
-		connection = new DbConnection().connect();
-		String sqlString = "select Id_customer from customer where Name = '" + nameString + "';";
-		try {
-			PreparedStatement pStatement = connection.prepareStatement(sqlString);
-			ResultSet rSet = pStatement.executeQuery();
-			
-			customerId = rSet.getInt("Id_customer");
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
 	}
 	
 	/*
@@ -111,18 +92,38 @@ public class Order_D extends JFrame {
 	public void selectedCusOrder() {
 		connection = new DbConnection().connect();
 		
-		String sqlString = "select Id_Invoice, Type, Bucket, Box, Viss, Price, Total, Date from customer_order where Id_customer = '" + customerId + "';";
+		nameString = cboxName.getSelectedItem().toString();
 		
-		try {
-			PreparedStatement pStatement = connection.prepareStatement(sqlString);
-			ResultSet rSet = pStatement.executeQuery();
-			tbOrder.setModel(DbUtils.resultSetToTableModel(rSet));
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		if(nameString.equals("All")) {
+			refreshTable();
 		}
 		
-		
+		else {
+			String sqlString = "select Id_customer from customer where Name = '" + nameString + "';";
+			try {
+				PreparedStatement pStatement = connection.prepareStatement(sqlString);
+				ResultSet rSet = pStatement.executeQuery();
+				
+				if (rSet.next()) {
+					customerId = rSet.getInt("Id_customer");
+					System.out.println(customerId + " selected ID");
+				}
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			String sqlString1 = "select Id_Invoice, Type, Bucket, Box, Viss, Price, Total, Date from customer_order where Id_customer = '" + customerId + "';";
+			
+			try {
+				PreparedStatement pStatement = connection.prepareStatement(sqlString1);
+				ResultSet rSet = pStatement.executeQuery();
+				tbOrder.setModel(DbUtils.resultSetToTableModel(rSet));
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}	
+		}
 	}
 	
 	/*
@@ -204,15 +205,22 @@ public class Order_D extends JFrame {
 		
 		JLabel lblNewLabel_1_1 = new JLabel("ေသတၱာ");
 		lblNewLabel_1_1.setFont(new Font("Zawgyi-One", Font.BOLD, 17));
-		lblNewLabel_1_1.setBounds(1022, 150, 67, 34);
+		lblNewLabel_1_1.setBounds(883, 246, 67, 34);
 		contentPane.add(lblNewLabel_1_1);
 		
 		JLabel lblNewLabel_1_1_1 = new JLabel("ပိႆာ");
 		lblNewLabel_1_1_1.setFont(new Font("Zawgyi-One", Font.BOLD, 17));
-		lblNewLabel_1_1_1.setBounds(883, 246, 67, 34);
+		lblNewLabel_1_1_1.setBounds(1022, 150, 67, 34);
 		contentPane.add(lblNewLabel_1_1_1);
 		
 		txtBucketNum = new JTextField();
+		txtBucketNum.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusGained(FocusEvent arg0) {
+				txtBucketNum.setText("");
+			}
+		});
+		txtBucketNum.setText("0");
 		txtBucketNum.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent arg0) {
@@ -235,6 +243,13 @@ public class Order_D extends JFrame {
 		txtBucketNum.setColumns(10);
 		
 		txtBoxNum = new JTextField();
+		txtBoxNum.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusGained(FocusEvent e) {
+				txtBoxNum.setText("");
+			}
+		});
+		txtBoxNum.setText("0");
 		txtBoxNum.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent e) {
@@ -252,10 +267,17 @@ public class Order_D extends JFrame {
 			}
 		});
 		txtBoxNum.setColumns(10);
-		txtBoxNum.setBounds(1022, 195, 58, 31);
+		txtBoxNum.setBounds(883, 291, 58, 31);
 		contentPane.add(txtBoxNum);
 		
 		txtVissNum = new JTextField();
+		txtVissNum.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusGained(FocusEvent e) {
+				txtVissNum.setText("");
+			}
+		});
+		txtVissNum.setText("0.00");
 		txtVissNum.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent e) {
@@ -267,14 +289,43 @@ public class Order_D extends JFrame {
 				else {
 					txtVissNum.setEditable(true);
 					if(e.getKeyCode() == KeyEvent.VK_ENTER) {
-						txtBucketNum.requestFocus();
+						txtCardNum.requestFocus();
 					}
 				}
 			}
 		});
 		txtVissNum.setColumns(10);
-		txtVissNum.setBounds(883, 291, 58, 31);
+		txtVissNum.setBounds(1022, 195, 58, 31);
 		contentPane.add(txtVissNum);
+		
+		txtCardNum = new JTextField();
+		txtCardNum.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusGained(FocusEvent e) {
+				txtCardNum.setText("");
+			}
+		});
+		txtCardNum.setText("0");
+		txtCardNum.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent arg0) {
+				char c = arg0.getKeyChar();
+				if(Character.isLetter(c)) {
+					JOptionPane.showMessageDialog(null, "Please enter NUMBER (123,...) only.", "Warning!", JOptionPane.INFORMATION_MESSAGE);
+					txtCardNum.setText("");
+				}
+				else {
+					txtCardNum.setEditable(true);
+					if(arg0.getKeyCode() == KeyEvent.VK_ENTER) {
+						txtBucketNum.requestFocus();
+					}
+				}
+			}
+		});
+		txtCardNum.setColumns(10);
+		txtCardNum.setBounds(1022, 291, 58, 31);
+		contentPane.add(txtCardNum);
+		
 		
 		JDateChooser dateChooser = new JDateChooser();
 		dateChooser.setBounds(685, 16, 149, 40);
@@ -293,6 +344,10 @@ public class Order_D extends JFrame {
 		contentPane.add(scrollPane);
 		
 		tbOrder = new JTable();
+		tbOrder.setFont(new Font("Zawgyi-One", Font.PLAIN, 13));
+		tbOrder.getTableHeader().setFont(new Font("Verdana", Font.BOLD,14));
+		tbOrder.setRowHeight(30);
+		
 		scrollPane.setViewportView(tbOrder);
 		
 		JButton btnAdd = new JButton("ထည့္မည္");
@@ -303,13 +358,11 @@ public class Order_D extends JFrame {
 				int bucketNum = Integer.parseInt(txtBucketNum.getText());
 				int boxNum = Integer.parseInt(txtBoxNum.getText());
 				double vissNum = Double.parseDouble(txtVissNum.getText());
-				//int labor = Integer.parseInt(txtlabor.getText());
+				int cardNum = Integer.parseInt(txtCardNum.getText());
+				String dateString = ((JTextField)dateChooser.getDateEditor().getUiComponent()).getText();
 				
-				//new addOrder_F().addOrder(typeString, bucketNum, boxNum, vissNum, labor);
-				
-				
-				
-				//String sqlString2 = "select Id_product from product_price where "
+				new addOrder_F().addOrder(nameString,typeString, bucketNum, boxNum, vissNum, cardNum, dateString);
+				refreshTable();
 			}
 		});
 		btnAdd.setForeground(new Color(128, 64, 0));
@@ -333,6 +386,16 @@ public class Order_D extends JFrame {
 		contentPane.add(btnUpdate);
 		
 		JButton btnClear = new JButton("Clear");
+		btnClear.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				txtBucketNum.setText("0");
+				txtBoxNum.setText("0");
+				txtCardNum.setText("0");
+				txtVissNum.setText("0.00");
+				cboxName.setSelectedIndex(0);
+				cboxType.setSelectedIndex(0);
+			}
+		});
 		btnClear.setForeground(new Color(128, 64, 0));
 		btnClear.setFont(new Font("Zawgyi-One", Font.BOLD, 15));
 		btnClear.setBackground(new Color(254, 251, 245));
@@ -344,9 +407,14 @@ public class Order_D extends JFrame {
 		lblNewLabel_3.setBounds(861, 78, 98, 34);
 		contentPane.add(lblNewLabel_3);
 		
+		JLabel lblNewLabel_1_1_1_1 = new JLabel("ကဒ္");
+		lblNewLabel_1_1_1_1.setFont(new Font("Zawgyi-One", Font.BOLD, 17));
+		lblNewLabel_1_1_1_1.setBounds(1022, 246, 67, 34);
+		contentPane.add(lblNewLabel_1_1_1_1);
+		
 		cboxType = new JComboBox();
-		cboxType.setFont(new Font("Zawgyi-One", Font.BOLD, 17));
-		cboxType.setBounds(964, 78, 165, 34);
+		cboxType.setFont(new Font("Zawgyi-One", Font.PLAIN, 17));
+		cboxType.setBounds(964, 81, 165, 34);
 		contentPane.add(cboxType);
 		
 		refreshTable();
