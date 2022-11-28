@@ -151,7 +151,9 @@ public class Order_D extends JFrame {
 		}
 	}
 	
-	public void fillTypeBox() {
+	/*
+	 * public void fillTypeBox() {
+	 
 
 		connection = new DbConnection().connect();
 		String sqString = "select * from product_price";
@@ -167,7 +169,7 @@ public class Order_D extends JFrame {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-	}
+	}*/
 
 	/**
 	 * Create the frame.
@@ -200,9 +202,9 @@ public class Order_D extends JFrame {
 		cboxName.setBounds(964, 16, 165, 34);
 		contentPane.add(cboxName);
 		
-		JLabel lblNewLabel_1 = new JLabel("ေတာင္း");
+		JLabel lblNewLabel_1 = new JLabel("ေတာင္း/ျခင္း‌");
 		lblNewLabel_1.setFont(new Font("Zawgyi-One", Font.BOLD, 17));
-		lblNewLabel_1.setBounds(883, 150, 76, 34);
+		lblNewLabel_1.setBounds(872, 150, 98, 34);
 		contentPane.add(lblNewLabel_1);
 		
 		JLabel lblNewLabel_1_1 = new JLabel("ေသတၱာ");
@@ -212,10 +214,11 @@ public class Order_D extends JFrame {
 		
 		JLabel lblNewLabel_1_1_1 = new JLabel("ပိႆာ");
 		lblNewLabel_1_1_1.setFont(new Font("Zawgyi-One", Font.BOLD, 17));
-		lblNewLabel_1_1_1.setBounds(1022, 150, 67, 34);
+		lblNewLabel_1_1_1.setBounds(1022, 246, 67, 34);
 		contentPane.add(lblNewLabel_1_1_1);
 		
 		txtBucketNum = new JTextField();
+		txtBucketNum.setFont(new Font("Times New Roman", Font.BOLD, 15));
 		txtBucketNum.addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusGained(FocusEvent arg0) {
@@ -245,6 +248,7 @@ public class Order_D extends JFrame {
 		txtBucketNum.setColumns(10);
 		
 		txtBoxNum = new JTextField();
+		txtBoxNum.setFont(new Font("Times New Roman", Font.BOLD, 15));
 		txtBoxNum.addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusGained(FocusEvent e) {
@@ -273,6 +277,7 @@ public class Order_D extends JFrame {
 		contentPane.add(txtBoxNum);
 		
 		txtVissNum = new JTextField();
+		txtVissNum.setFont(new Font("Times New Roman", Font.BOLD, 15));
 		txtVissNum.addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusGained(FocusEvent e) {
@@ -291,16 +296,17 @@ public class Order_D extends JFrame {
 				else {
 					txtVissNum.setEditable(true);
 					if(e.getKeyCode() == KeyEvent.VK_ENTER) {
-						txtCardNum.requestFocus();
+						txtBucketNum.requestFocus();
 					}
 				}
 			}
 		});
 		txtVissNum.setColumns(10);
-		txtVissNum.setBounds(1022, 195, 58, 31);
+		txtVissNum.setBounds(1022, 291, 58, 31);
 		contentPane.add(txtVissNum);
 		
 		txtCardNum = new JTextField();
+		txtCardNum.setFont(new Font("Times New Roman", Font.BOLD, 15));
 		txtCardNum.addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusGained(FocusEvent e) {
@@ -319,13 +325,13 @@ public class Order_D extends JFrame {
 				else {
 					txtCardNum.setEditable(true);
 					if(arg0.getKeyCode() == KeyEvent.VK_ENTER) {
-						txtBucketNum.requestFocus();
+						txtVissNum.requestFocus();
 					}
 				}
 			}
 		});
 		txtCardNum.setColumns(10);
-		txtCardNum.setBounds(1022, 291, 58, 31);
+		txtCardNum.setBounds(1022, 195, 58, 31);
 		contentPane.add(txtCardNum);
 		
 		
@@ -437,16 +443,17 @@ public class Order_D extends JFrame {
 		
 		JLabel lblNewLabel_1_1_1_1 = new JLabel("ကဒ္");
 		lblNewLabel_1_1_1_1.setFont(new Font("Zawgyi-One", Font.BOLD, 17));
-		lblNewLabel_1_1_1_1.setBounds(1022, 246, 67, 34);
+		lblNewLabel_1_1_1_1.setBounds(1022, 150, 67, 34);
 		contentPane.add(lblNewLabel_1_1_1_1);
 		
-		cboxType = new JComboBox();
+		String item[]= {"ထူးရွယ္", "ေအာက္ခံသီး", "အလတ္သီး", "အလုပ္သမားခ"};
+		cboxType = new JComboBox(item);
 		cboxType.setFont(new Font("Zawgyi-One", Font.PLAIN, 17));
 		cboxType.setBounds(964, 81, 165, 34);
 		contentPane.add(cboxType);
 		
 		refreshTable();
 		fillNameBox();
-		fillTypeBox();
+		//fillTypeBox();
 	}
 }

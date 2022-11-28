@@ -200,10 +200,22 @@ public class product_D extends JFrame {
 					JOptionPane.showMessageDialog(null, "Please enter the NUMBER (1,2,3,...) only.", "Warning!",JOptionPane.INFORMATION_MESSAGE);
 				}
 				if(e.getKeyCode() == KeyEvent.VK_ENTER) {
-					txtBucketPrice.requestFocus();
+					txtVissPrice.requestFocus();
 				}
 			}
 		});
+		
+		JButton btnUpdate_1 = new JButton("ဖ်က္မည္");
+		btnUpdate_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				
+			}
+		});
+		btnUpdate_1.setForeground(new Color(128, 64, 0));
+		btnUpdate_1.setFont(new Font("Zawgyi-One", Font.BOLD, 15));
+		btnUpdate_1.setBackground(new Color(254, 251, 245));
+		btnUpdate_1.setBounds(1050, 356, 118, 34);
+		contentPane.add(btnUpdate_1);
 		txtCardPrice.setFont(new Font("Times New Roman", Font.BOLD, 16));
 		txtCardPrice.setColumns(10);
 		txtCardPrice.setBackground(new Color(254, 251, 245));
@@ -213,7 +225,7 @@ public class product_D extends JFrame {
 		JLabel lblTitle_1_1_1_1_1 = new JLabel("ကဒ္ေစ်း");
 		lblTitle_1_1_1_1_1.setForeground(SystemColor.info);
 		lblTitle_1_1_1_1_1.setFont(new Font("Zawgyi-One", Font.BOLD, 16));
-		lblTitle_1_1_1_1_1.setBounds(1078, 121, 90, 44);
+		lblTitle_1_1_1_1_1.setBounds(1066, 121, 90, 44);
 		contentPane.add(lblTitle_1_1_1_1_1);
 		btnClose_1.setFont(new Font("Tahoma", Font.BOLD, 23));
 		btnClose_1.setBackground(new Color(214, 54, 31));
@@ -274,16 +286,16 @@ public class product_D extends JFrame {
 		lblTitle.setBounds(32, 11, 151, 44);
 		contentPane.add(lblTitle);
 		
-		JLabel lblTitle_1_1 = new JLabel("ေတာင္းေစ်း       ");
+		JLabel lblTitle_1_1 = new JLabel("ေတာင္း/ျခင္း‌ေဈး");
 		lblTitle_1_1.setForeground(SystemColor.info);
 		lblTitle_1_1.setFont(new Font("Zawgyi-One", Font.BOLD, 15));
-		lblTitle_1_1.setBounds(896, 121, 151, 44);
+		lblTitle_1_1.setBounds(884, 121, 111, 44);
 		contentPane.add(lblTitle_1_1);
 		
 		JLabel lblTitle_1_1_1 = new JLabel("ပိႆာေစ်း       ");
 		lblTitle_1_1_1.setForeground(SystemColor.info);
 		lblTitle_1_1_1.setFont(new Font("Zawgyi-One", Font.BOLD, 16));
-		lblTitle_1_1_1.setBounds(1078, 224, 129, 44);
+		lblTitle_1_1_1.setBounds(1061, 224, 90, 44);
 		contentPane.add(lblTitle_1_1_1);
 		
 		JLabel lblTitle_1_1_1_1 = new JLabel("ေသတၱာေစ်း     ");
@@ -338,7 +350,7 @@ public class product_D extends JFrame {
 				}
 				
 				if(e.getKeyCode() == KeyEvent.VK_ENTER) {
-					txtCardPrice.requestFocus();
+					txtBucketPrice.requestFocus();
 				}
 			}
 		});
@@ -419,7 +431,7 @@ public class product_D extends JFrame {
 			}
 		});
 		btnUpdate.setFont(new Font("Zawgyi-One", Font.BOLD, 15));
-		btnUpdate.setBounds(1050, 356, 118, 34);
+		btnUpdate.setBounds(884, 424, 118, 34);
 		contentPane.add(btnUpdate);
 		
 		JButton btnClear = new JButton("Clear");
@@ -436,7 +448,7 @@ public class product_D extends JFrame {
 			}
 		});
 		btnClear.setFont(new Font("Zawgyi-One", Font.BOLD, 15));
-		btnClear.setBounds(968, 424, 118, 34);
+		btnClear.setBounds(1050, 424, 118, 34);
 		contentPane.add(btnClear);
 		
 		JLabel lblTitle_1_2 = new JLabel("အမ်ိဳးအစား");
