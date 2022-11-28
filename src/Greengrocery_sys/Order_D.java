@@ -36,6 +36,8 @@ import javax.swing.event.PopupMenuEvent;
 import javax.swing.DefaultComboBoxModel;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class Order_D extends JFrame {
 
@@ -74,7 +76,7 @@ public class Order_D extends JFrame {
 		
 		connection = new DbConnection().connect();
 									
-		String sqlString2 = "select Id_Invoice, Type, Bucket, Box, Viss, Price, Total, Date from customer_order;";
+		String sqlString2 = "select Id_order, Type, Bucket, Box, Card, Viss, Price, Total, Date from customer_order;";
 		try {
 			PreparedStatement pStatement1 = connection.prepareStatement(sqlString2);
 			ResultSet rSet = pStatement1.executeQuery();
@@ -113,7 +115,7 @@ public class Order_D extends JFrame {
 				e.printStackTrace();
 			}
 			
-			String sqlString1 = "select Id_Invoice, Type, Bucket, Box, Viss, Price, Total, Date from customer_order where Id_customer = '" + customerId + "';";
+			String sqlString1 = "select Id_order, Type, Bucket, Box, Viss, Price, Total, Date from customer_order where Id_customer = '" + customerId + "';";
 			
 			try {
 				PreparedStatement pStatement = connection.prepareStatement(sqlString1);
@@ -344,6 +346,32 @@ public class Order_D extends JFrame {
 		contentPane.add(scrollPane);
 		
 		tbOrder = new JTable();
+		tbOrder.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				int row = tbOrder.getSelectedRow();
+				String rowString = tbOrder.getModel().getValueAt(row, 0).toString();
+				int id = Integer.parseInt(rowString);
+				
+				String sqlString = "select * from customer_order where Id_order = "+ id + ";";
+				connection = new DbConnection().connect();
+				try {
+					PreparedStatement pStatement = connection.prepareStatement(sqlString);
+					ResultSet rSet = pStatement.executeQuery();
+					
+					if(rSet.next()) {
+						cboxType.setSelectedItem(rSet.getString("Type"));
+						txtBoxNum.setText(rSet.getString("Bucket"));
+						txtBucketNum.setText(rSet.getString("Box"));
+						txtVissNum.setText(rSet.getString("Viss"));
+						txtCardNum.setText(rSet.getString("Card"));
+					}
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		});
 		tbOrder.setFont(new Font("Zawgyi-One", Font.PLAIN, 13));
 		tbOrder.getTableHeader().setFont(new Font("Verdana", Font.BOLD,14));
 		tbOrder.setRowHeight(30);

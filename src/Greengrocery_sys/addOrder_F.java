@@ -21,10 +21,11 @@ public class addOrder_F {
 		int boxNum = box;
 		double vissNum = viss;
 		String orderdate = date;
-		int customerId = 0, productId =0, vissPrice = 0, totalPrice = 0;		
+		int customerId = 0, productId =0, vissPrice = 0;
+		double totalPrice = 0;		
 
 		/*
-		 * get customer ID
+		 * get customer ID, product ID, vissPrice
 		 */
 		Connection connection = new DbConnection().connect();
 		String sqlString = "select Id_customer from customer where Name = '" + nameString + "';";
@@ -58,6 +59,29 @@ public class addOrder_F {
 		 * calculate total price
 		 * Total = vissPrice * viss (0.85)
 		 */
+		
+		int vissInt = (int) vissNum;
+		DecimalFormat decim = new DecimalFormat("0.00");
+		
+		double vissDouble = Double.parseDouble(decim.format(vissInt));
+		
+		//get decimal approximate value
+		String vissString = String.format("%.1f", vissNum);
+		vissString = vissString.substring(vissString.indexOf(".")+1);
+		
+		int lastVissNum = Integer.parseInt(vissString);
+		
+		//compare the decimal to get the approximate value
+		
+		if(lastVissNum >= 5 && lastVissNum < 9)
+			vissDouble += 0.5;
+		
+		else if(lastVissNum >= 9) {
+			vissDouble += 1;
+		}
+		
+		//calculate total
+		totalPrice = vissPrice * vissDouble;
 			
 		String sqlString2 = "insert into customer_order (Type, Bucket, Box, Viss, Price, Total, Date, Id_customer, Id_product) values (?, ?, ?, ?, ?, ?, ?, ?, ?) ;";
 		try {
