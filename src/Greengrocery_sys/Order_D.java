@@ -13,10 +13,14 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import javax.swing.JComboBox;
 import javax.swing.JTextField;
+import javax.swing.RowFilter;
+
 import java.awt.Color;
 import com.toedter.calendar.JDateChooser;
 
@@ -34,6 +38,7 @@ import java.awt.event.KeyEvent;
 import javax.swing.event.PopupMenuListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
+import javax.swing.table.TableRowSorter;
 import javax.swing.event.PopupMenuEvent;
 import javax.swing.DefaultComboBoxModel;
 import java.awt.event.FocusAdapter;
@@ -108,7 +113,7 @@ public class Order_D extends JFrame {
 	
 	/*
 	 * Show Selected Customer Data
-	 */
+	 
 	
 	public void selectedCusOrder() {
 		connection = new DbConnection().connect();
@@ -145,7 +150,7 @@ public class Order_D extends JFrame {
 				e.printStackTrace();
 			}	
 		}
-	}
+	}*/
 	
 	/*
 	 * Fill ComboBox Name
@@ -190,6 +195,16 @@ public class Order_D extends JFrame {
 		}
 	}*/
 
+	/*
+	 * filter the data by Date
+	 */
+	
+	public void filter(String query) {
+		TableRowSorter<DefaultTableModel> rowSorter = new TableRowSorter<DefaultTableModel>();
+		tbOrder.setRowSorter(rowSorter);
+		
+		rowSorter.setRowFilter(RowFilter.regexFilter(query));
+	}
 	/**
 	 * Create the frame.
 	 */
@@ -346,6 +361,42 @@ public class Order_D extends JFrame {
 		
 		
 		JDateChooser dateChooser = new JDateChooser();
+		dateChooser.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyReleased(KeyEvent evt) {
+				
+				String dateString = ((JTextField)dateChooser.getDateEditor().getUiComponent()).getText();
+				filter(dateString);
+				connection = new DbConnection().connect();
+				
+				
+					
+				String sqlString1 = "select * from customer_order where Date = '"+ dateString + "';";
+					
+					try {
+						PreparedStatement pStatement = connection.prepareStatement(sqlString1);
+						ResultSet rSet = pStatement.executeQuery();
+						tbOrder.setModel(DbUtils.resultSetToTableModel(rSet));
+						
+						TableColumnModel columnModel = tbOrder.getColumnModel();
+						
+						tbOrder.removeColumn(columnModel.getColumn(10));
+						tbOrder.removeColumn(columnModel.getColumn(9));
+						tbOrder.removeColumn(columnModel.getColumn(0));
+					} catch (SQLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+			}
+			@Override
+			public void keyPressed(KeyEvent arg0) {
+				if(arg0.getKeyCode() == KeyEvent.VK_ENTER) {
+				String dateString = ((JTextField)dateChooser.getDateEditor().getUiComponent()).getText();
+				filter(dateString);
+				}
+			}
+		});
+		
 		dateChooser.setBounds(685, 9, 149, 40);
 		Date date = new Date();
 		dateChooser.setDate(date);
@@ -368,7 +419,7 @@ public class Order_D extends JFrame {
 				int row = tbOrder.getSelectedRow();
 				String rowString = tbOrder.getModel().getValueAt(row, 0).toString();
 				int id = Integer.parseInt(rowString);
-				
+								
 				String cusIdString = tbOrder.getModel().getValueAt(row, 9).toString(); 
 				customerId = Integer.parseInt(cusIdString);
 				
@@ -384,7 +435,7 @@ public class Order_D extends JFrame {
 						txtBoxNum.setText(rSet.getString("Bucket"));
 						txtBucketNum.setText(rSet.getString("Box"));
 						txtVissNum.setText(rSet.getString("Viss"));
-						txtCardNum.setText(rSet.getString("Card"));		
+						txtCardNum.setText(rSet.getString("Card"));	
 					}
 					
 					PreparedStatement pStatement2 = connection.prepareStatement(sqlString2);
@@ -392,6 +443,17 @@ public class Order_D extends JFrame {
 					
 					if(rSet2.next()) {
 						cboxName.setSelectedItem(rSet2.getString("Name"));
+					}
+					
+					//set date to Jdatechooser
+					
+					DefaultTableModel model = (DefaultTableModel)tbOrder.getModel();
+					try {
+						Date date = new SimpleDateFormat("MMM d, yyyy").parse((String)model.getValueAt(row, 8));
+						dateChooser.setDate(date);
+					} catch (ParseException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
 					}
 				} catch (SQLException e) {
 					// TODO Auto-generated catch block
