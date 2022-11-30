@@ -11,6 +11,7 @@ import java.awt.SystemColor;
 import javax.swing.JTable;
 import javax.swing.WindowConstants;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumnModel;
 import javax.swing.text.StyledEditorKit.BoldAction;
 
 import com.mysql.cj.x.protobuf.MysqlxDatatypes.Array;
@@ -87,6 +88,9 @@ public class Customer {
 			PreparedStatement pStatement = conn.prepareStatement(sqlString);
 			ResultSet rSet = pStatement.executeQuery();
 			tbCustomer.setModel(DbUtils.resultSetToTableModel(rSet));
+			
+			TableColumnModel columnModel = tbCustomer.getColumnModel();
+			tbCustomer.removeColumn(columnModel.getColumn(0));
 			
 			//JOptionPane.showMessageDialog(null, "Updated successfully");
 		
@@ -208,7 +212,7 @@ public class Customer {
 					int confirm = JOptionPane.showConfirmDialog(null, "Are you sure you want to delete this?","Confirm Dialog",JOptionPane.YES_NO_OPTION);
 					
 					if(confirm == 0) {
-						new addCustomerBackup().backupCus(id);
+						new addCustomer_Backup().backupCus(id);
 						new deleteCustomer().deleteCus(id);
 						
 						DefaultTableModel model= (DefaultTableModel) tbCustomer.getModel();

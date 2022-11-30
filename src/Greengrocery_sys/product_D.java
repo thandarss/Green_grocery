@@ -5,6 +5,7 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import javax.swing.table.TableColumnModel;
 
 import Greengrocery_sys.Database.DbConnection;
 import javafx.scene.input.KeyCode;
@@ -21,7 +22,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Date;
 
 import javax.swing.JScrollPane;
 import javax.swing.JButton;
@@ -51,7 +51,6 @@ public class product_D extends JFrame {
 	private JTextField txtVissPrice;
 	private JTextField txtBoxPrice;
 	private JComboBox cBoxSize; 
-	private JDateChooser dateChooser;
 	private JTextField txtCardPrice;
 
 	/**
@@ -142,6 +141,9 @@ public class product_D extends JFrame {
 			PreparedStatement pStatement = connection.prepareStatement(sqlString);
 			ResultSet rSet = pStatement.executeQuery();
 			tbProduct.setModel(DbUtils.resultSetToTableModel(rSet));
+			
+			TableColumnModel columnModel = tbProduct.getColumnModel();
+			tbProduct.removeColumn(columnModel.getColumn(0));
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -208,7 +210,19 @@ public class product_D extends JFrame {
 		JButton btnUpdate_1 = new JButton("ဖ်က္မည္");
 		btnUpdate_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				int row = tbProduct.getSelectedRow();
 				
+				if(row != -1) {
+					String idString = tbProduct.getModel().getValueAt(row, 0).toString();
+					int id = Integer.parseInt(idString);
+					
+					int confirm = JOptionPane.showConfirmDialog(null, "Are you sure you want to delete this row?","Confirm Dialog",JOptionPane.YES_NO_OPTION);
+					if(confirm == 0) {
+						new deleteProduct_F().deleteProduct(id);
+					}
+					
+					refreshTable();
+				}
 			}
 		});
 		btnUpdate_1.setForeground(new Color(128, 64, 0));
@@ -283,7 +297,7 @@ public class product_D extends JFrame {
 		JLabel lblTitle = new JLabel("အေရာင္းစာရင္း");
 		lblTitle.setForeground(Color.WHITE);
 		lblTitle.setFont(new Font("Zawgyi-One", Font.BOLD, 20));
-		lblTitle.setBounds(32, 11, 151, 44);
+		lblTitle.setBounds(699, 11, 151, 44);
 		contentPane.add(lblTitle);
 		
 		JLabel lblTitle_1_1 = new JLabel("ေတာင္း/ျခင္း‌ေဈး");
@@ -397,11 +411,12 @@ public class product_D extends JFrame {
 				int cardPrice = Integer.parseInt(txtCardPrice.getText());
 				/*
 				 * Get Today Date from DateChooser
-				 */
+				 
 				String dateString = ((JTextField)dateChooser.getDateEditor().getUiComponent()).getText();
 				
 				System.out.print("Date chooser " + dateString);
-				new addProduct_F().addProduct(typeString, bucketPrice, vissPrice, boxPrice, cardPrice, dateString);
+				*/
+				new addProduct_F().addProduct(typeString, bucketPrice, vissPrice, boxPrice, cardPrice);
 				refreshTable();
 			}
 		});
@@ -468,19 +483,7 @@ public class product_D extends JFrame {
 		
 		
 		contentPane.add(cBoxSize);
-		
-		dateChooser = new JDateChooser();
-		dateChooser.setBackground(new Color(254, 251, 245));
-		/*
-		 * set today date
-		 */
-		Date date = new Date();
-		dateChooser.setDate(date);		
-		
-		dateChooser.setFont(new Font("Zawgyi-one",Font.BOLD,15));
-		dateChooser.setBounds(656, 11, 194, 44);
-		contentPane.add(dateChooser);
-		
+				
 		JLabel lblNewLabel = new JLabel("");
 		lblNewLabel.setOpaque(true);
 		lblNewLabel.setBackground(new Color(0, 28, 0));

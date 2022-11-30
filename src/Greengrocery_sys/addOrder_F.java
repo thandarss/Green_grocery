@@ -1,11 +1,13 @@
 package Greengrocery_sys;
 
+import java.awt.Font;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.DecimalFormat;
 
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
 import org.omg.CosNaming._BindingIteratorImplBase;
@@ -22,7 +24,7 @@ public class addOrder_F {
 		double vissNum = viss;
 		String orderdate = date;
 		int customerId = 0, productId =0, vissPrice = 0;
-		double totalPrice = 0;		
+		double totalPrice = 0;
 
 		/*
 		 * get customer ID, product ID, vissPrice
@@ -39,6 +41,12 @@ public class addOrder_F {
 				customerId = rSet.getInt("Id_customer");
 			
 				System.out.println(customerId+ " rset customer ID");
+			}
+			else {
+				String warningString = "စာရင္းသြင္းရန္ ဝယ္သူကိုေ႐ြးခ်ယ္ပါ!!";
+				JLabel textJLabel = new JLabel(warningString);
+				textJLabel.setFont(new Font("Zawgyi-one", Font.BOLD, 20));
+				JOptionPane.showMessageDialog(null,textJLabel,"Warning to choose customer",JOptionPane.PLAIN_MESSAGE);
 			}
 			
 			PreparedStatement pStatement1 = connection.prepareStatement(sqlString1);

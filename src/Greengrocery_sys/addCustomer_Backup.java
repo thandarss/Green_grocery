@@ -9,7 +9,7 @@ import javax.swing.JOptionPane;
 
 import Greengrocery_sys.Database.DbConnection;
 
-public class addCustomerBackup {
+public class addCustomer_Backup {
 	
 	public void backupCus(int id) {
 		
