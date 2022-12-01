@@ -95,7 +95,7 @@ public class updateOrder_F {
 		//calculate total
 		totalPrice = vissPrice * vissDouble;
 		String sqlString2 = "update customer_order set Type = ?, Bucket =?, Box =?, "
-				+ "Card = ?, Viss=?, Price=?, Total=?, Date=?, Id_customer=?, Id_product=? where Id_order = " + orderId +";";
+				+ "Card = ?, Viss=?, Price=?, Total=?, Date=?, Id_customer=?, Id_product=?, Customer=? where Id_order = " + orderId +";";
 		
 		try {
 			PreparedStatement pStatement = connection.prepareStatement(sqlString2);
@@ -109,6 +109,7 @@ public class updateOrder_F {
 			pStatement.setString(8, dateString);
 			pStatement.setInt(9, customerId);
 			pStatement.setInt(10, productId);
+			pStatement.setString(11, nameString);
 			
 			int result = pStatement.executeUpdate();
 			

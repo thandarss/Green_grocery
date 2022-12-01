@@ -45,6 +45,7 @@ import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.SystemColor;
 
 public class Order_D extends JFrame {
 
@@ -53,7 +54,7 @@ public class Order_D extends JFrame {
 	private JTextField txtBoxNum;
 	private JTextField txtVissNum;
 	private JTable tbOrder;
-	private JComboBox cboxName, cboxType;
+	private JComboBox cboxName, cboxType, cboxNameSearch;
 	protected int customerId, productId;
 	protected String nameString,typeString;
 	Connection connection;
@@ -99,8 +100,8 @@ public class Order_D extends JFrame {
 			tbOrder.setModel(DbUtils.resultSetToTableModel(rSet));
 			TableColumnModel columnModel = tbOrder.getColumnModel();
 			
+			tbOrder.removeColumn(columnModel.getColumn(11));
 			tbOrder.removeColumn(columnModel.getColumn(10));
-			tbOrder.removeColumn(columnModel.getColumn(9));
 			tbOrder.removeColumn(columnModel.getColumn(0));
 			
 			//System.out.println("Column Model: " + columnModel.getColumnIndex("Id_product"));
@@ -111,46 +112,6 @@ public class Order_D extends JFrame {
 		}
 	}
 	
-	/*
-	 * Show Selected Customer Data
-	 
-	
-	public void selectedCusOrder() {
-		connection = new DbConnection().connect();
-		
-		nameString = cboxName.getSelectedItem().toString();
-		
-		if(nameString.equals("All")) {
-			refreshTable();
-		}
-		
-		else {
-			String sqlString = "select Id_customer from customer where Name = '" + nameString + "';";
-			try {
-				PreparedStatement pStatement = connection.prepareStatement(sqlString);
-				ResultSet rSet = pStatement.executeQuery();
-				
-				if (rSet.next()) {
-					customerId = rSet.getInt("Id_customer");
-					System.out.println(customerId + " selected ID");
-				}
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			
-			String sqlString1 = "select Id_order, Type, Bucket, Box, Viss, Price, Total, Date from customer_order where Id_customer = '" + customerId + "';";
-			
-			try {
-				PreparedStatement pStatement = connection.prepareStatement(sqlString1);
-				ResultSet rSet = pStatement.executeQuery();
-				tbOrder.setModel(DbUtils.resultSetToTableModel(rSet));
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}	
-		}
-	}*/
 	
 	/*
 	 * Fill ComboBox Name
@@ -163,10 +124,11 @@ public class Order_D extends JFrame {
 			PreparedStatement pStatement = connection.prepareStatement(sqlString);
 			ResultSet rSet = pStatement.executeQuery();
 			
-			cboxName.addItem("All");
+			cboxNameSearch.addItem("All");
 			
 			while(rSet.next()) {
-				cboxName.addItem(rSet.getString("Name"));				
+				cboxName.addItem(rSet.getString("Name"));	
+				cboxNameSearch.addItem(rSet.getString("Name"));
 			}
 			
 		} catch (SQLException e) {
@@ -360,44 +322,8 @@ public class Order_D extends JFrame {
 		contentPane.add(txtCardNum);
 		
 		
-		JDateChooser dateChooser = new JDateChooser();
-		dateChooser.addKeyListener(new KeyAdapter() {
-			@Override
-			public void keyReleased(KeyEvent evt) {
-				
-				String dateString = ((JTextField)dateChooser.getDateEditor().getUiComponent()).getText();
-				filter(dateString);
-				connection = new DbConnection().connect();
-				
-				
-					
-				String sqlString1 = "select * from customer_order where Date = '"+ dateString + "';";
-					
-					try {
-						PreparedStatement pStatement = connection.prepareStatement(sqlString1);
-						ResultSet rSet = pStatement.executeQuery();
-						tbOrder.setModel(DbUtils.resultSetToTableModel(rSet));
-						
-						TableColumnModel columnModel = tbOrder.getColumnModel();
-						
-						tbOrder.removeColumn(columnModel.getColumn(10));
-						tbOrder.removeColumn(columnModel.getColumn(9));
-						tbOrder.removeColumn(columnModel.getColumn(0));
-					} catch (SQLException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-			}
-			@Override
-			public void keyPressed(KeyEvent arg0) {
-				if(arg0.getKeyCode() == KeyEvent.VK_ENTER) {
-				String dateString = ((JTextField)dateChooser.getDateEditor().getUiComponent()).getText();
-				filter(dateString);
-				}
-			}
-		});
-		
-		dateChooser.setBounds(685, 9, 149, 40);
+		JDateChooser dateChooser = new JDateChooser();			
+		dateChooser.setBounds(584, 11, 149, 40);
 		Date date = new Date();
 		dateChooser.setDate(date);
 		dateChooser.setFont(new Font("Zawgyi-one",Font.BOLD,17));
@@ -420,7 +346,7 @@ public class Order_D extends JFrame {
 				String rowString = tbOrder.getModel().getValueAt(row, 0).toString();
 				int id = Integer.parseInt(rowString);
 								
-				String cusIdString = tbOrder.getModel().getValueAt(row, 9).toString(); 
+				String cusIdString = tbOrder.getModel().getValueAt(row, 10).toString(); 
 				customerId = Integer.parseInt(cusIdString);
 				
 				String sqlString = "select * from customer_order where Id_order = "+ id + ";";
@@ -449,7 +375,7 @@ public class Order_D extends JFrame {
 					
 					DefaultTableModel model = (DefaultTableModel)tbOrder.getModel();
 					try {
-						Date date = new SimpleDateFormat("MMM d, yyyy").parse((String)model.getValueAt(row, 8));
+						Date date = new SimpleDateFormat("MMM d, yyyy").parse((String)model.getValueAt(row, 9));
 						dateChooser.setDate(date);
 					} catch (ParseException e) {
 						// TODO Auto-generated catch block
@@ -495,14 +421,17 @@ public class Order_D extends JFrame {
 				
 				if(row != -1) {
 					String idString = tbOrder.getModel().getValueAt(row, 0).toString();
-					String typeString = tbOrder.getModel().getValueAt(row, 1).toString();
-					String bucketString = tbOrder.getModel().getValueAt(row, 2).toString();
-					String boxString = tbOrder.getModel().getValueAt(row, 3).toString();
-					String cardString = tbOrder.getModel().getValueAt(row, 4).toString();
-					String vissString = tbOrder.getModel().getValueAt(row, 5).toString();
-					String priceString = tbOrder.getModel().getValueAt(row, 6).toString();
-					String totalString = tbOrder.getModel().getValueAt(row, 7).toString();
-					String dateString = tbOrder.getModel().getValueAt(row, 8).toString();
+					String namString = tbOrder.getModel().getValueAt(row, 1).toString();
+					String typeString = tbOrder.getModel().getValueAt(row, 2).toString();
+					String bucketString = tbOrder.getModel().getValueAt(row, 3).toString();
+					String boxString = tbOrder.getModel().getValueAt(row, 4).toString();
+					String cardString = tbOrder.getModel().getValueAt(row, 5).toString();
+					String vissString = tbOrder.getModel().getValueAt(row, 6).toString();
+					String priceString = tbOrder.getModel().getValueAt(row, 7).toString();
+					String totalString = tbOrder.getModel().getValueAt(row, 8).toString();
+					String dateString = tbOrder.getModel().getValueAt(row, 9).toString();
+					String customerIdString = tbOrder.getModel().getValueAt(row, 10).toString();
+					String productIdString = tbOrder.getModel().getValueAt(row, 11).toString();
 					
 					int id = Integer.parseInt(idString);
 					int bucket = Integer.parseInt(bucketString);
@@ -511,12 +440,15 @@ public class Order_D extends JFrame {
 					double viss = Double.parseDouble(vissString);
 					int price = Integer.parseInt(priceString);
 					double total = Double.parseDouble(totalString);
+					int customerId = Integer.parseInt(customerIdString);
+					int productId = Integer.parseInt(productIdString);
 					
 					int confirm = JOptionPane.showConfirmDialog(null, "Are you sure you want to delete this?","Confirm Dialog",JOptionPane.YES_NO_OPTION);
 					
 					if(confirm == 0 ) {
-						//new addOrder_Backup().addOrderBackup(id, typeString, dateString);
-						//new deleteOrder_F().deleteOrder(id);
+						new addOrder_Backup().addOrderBackup(id, namString, typeString, bucket, box, card, viss, price, total, dateString, customerId, productId);
+						new deleteOrder_F().deleteOrder(id);;
+						refreshTable();
 					}
 				}
 			}
@@ -533,8 +465,8 @@ public class Order_D extends JFrame {
 				
 				int row = tbOrder.getSelectedRow();
 				String idString = tbOrder.getModel().getValueAt(row, 0).toString();
-				String cusIdString = tbOrder.getModel().getValueAt(row, 9).toString();
-				String proIdString = tbOrder.getModel().getValueAt(row, 10).toString();
+				String cusIdString = tbOrder.getModel().getValueAt(row, 10).toString();
+				String proIdString = tbOrder.getModel().getValueAt(row, 11).toString();
 				
 				int orderId = Integer.parseInt(idString);
 				customerId = Integer.parseInt(cusIdString);
@@ -589,6 +521,79 @@ public class Order_D extends JFrame {
 		cboxType.setFont(new Font("Zawgyi-One", Font.PLAIN, 17));
 		cboxType.setBounds(964, 81, 165, 34);
 		contentPane.add(cboxType);
+		
+		JButton btnSearch = new JButton("Search");
+		btnSearch.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				String dateString = ((JTextField)dateChooser.getDateEditor().getUiComponent()).getText();
+				
+				System.out.println(dateString);
+				//filter(dateString);
+				connection = new DbConnection().connect();
+				
+				
+					
+				String sqlString1 = "select * from customer_order where Date = '"+ dateString + "';";
+					
+					try {
+						PreparedStatement pStatement = connection.prepareStatement(sqlString1);
+						ResultSet rSet = pStatement.executeQuery();
+						tbOrder.setModel(DbUtils.resultSetToTableModel(rSet));
+						
+						TableColumnModel columnModel = tbOrder.getColumnModel();
+						
+						tbOrder.removeColumn(columnModel.getColumn(11));
+						tbOrder.removeColumn(columnModel.getColumn(10));
+						tbOrder.removeColumn(columnModel.getColumn(0));
+					} catch (SQLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+			}
+		});
+		btnSearch.setFont(new Font("Times New Roman", Font.PLAIN, 15));
+		btnSearch.setBackground(SystemColor.info);
+		btnSearch.setBounds(751, 15, 83, 33);
+		contentPane.add(btnSearch);
+		
+		cboxNameSearch = new JComboBox();
+		cboxNameSearch.addPopupMenuListener(new PopupMenuListener() {
+			public void popupMenuCanceled(PopupMenuEvent e) {
+			}
+			public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {
+				String nameString = cboxNameSearch.getSelectedItem().toString();
+				String sqlString = "select * from customer_order where Customer = '" + nameString + "';";
+				
+				if(nameString.equals("All")) {
+					refreshTable();
+				}
+				
+				else {
+					try {
+						PreparedStatement pStatement = connection.prepareStatement(sqlString);
+						ResultSet rSet = pStatement.executeQuery();
+						
+						tbOrder.setModel(DbUtils.resultSetToTableModel(rSet));
+						TableColumnModel columnModel = tbOrder.getColumnModel();
+						
+						tbOrder.removeColumn(columnModel.getColumn(11));
+						tbOrder.removeColumn(columnModel.getColumn(10));
+						tbOrder.removeColumn(columnModel.getColumn(0));
+						
+					} catch (SQLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}	
+				}
+				
+			}
+			public void popupMenuWillBecomeVisible(PopupMenuEvent e) {
+			}
+		});
+		
+		cboxNameSearch.setFont(new Font("Zawgyi-One", Font.BOLD, 17));
+		cboxNameSearch.setBounds(151, 11, 165, 34);
+		contentPane.add(cboxNameSearch);
 		
 		refreshTable();
 		fillNameBox();

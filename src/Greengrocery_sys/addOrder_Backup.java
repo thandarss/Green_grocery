@@ -13,9 +13,10 @@ import org.omg.CosNaming._BindingIteratorImplBase;
 import Greengrocery_sys.Database.DbConnection;
 
 public class addOrder_Backup {
-	public void addOrderBackup(int id, String type, int bucket, int box, int card, double viss, int price, double total, String date) {
+	public void addOrderBackup(int id, String name, String type, int bucket, int box, int card, double viss, int price, double total, String date, int Id_customer, int Id_product) {
 		
 		int orderId = id;
+		String nameString = name;
 		String typeString = type;
 		int bucketNum = bucket;
 		int boxNum = box;
@@ -24,13 +25,12 @@ public class addOrder_Backup {
 		int vissPrice = price;
 		double totalPrice = total;
 		String orderdate = date;
-		int customerId = 0; 
-		int productId =0; 
-		System.out.println("retrieved from order type : " + typeString + " , " + orderdate);
+		int customerId = Id_customer; 
+		int productId = Id_product; 
 		
 		Connection connection = new DbConnection().connect();
 			
-		String sqlString2 = "insert into customer_order (Id_order, Type, Bucket, Box, Card, Viss, Price, Total, Date, Id_customer, Id_product) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ;";
+		String sqlString2 = "insert into customer_order_backup (Id_order, Type, Bucket, Box, Card, Viss, Price, Total, Date, Id_customer, Id_product, Customer) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ;";
 		try {
 			PreparedStatement pStatement = connection.prepareStatement(sqlString2);
 			pStatement.setInt(1, orderId);
@@ -44,11 +44,10 @@ public class addOrder_Backup {
 			pStatement.setString(9, orderdate);
 			pStatement.setInt(10, customerId);
 			pStatement.setInt(11, productId);
+			pStatement.setString(12, nameString);
 			
 			pStatement.executeUpdate();
-			
-			System.out.println("get from backup order type : " + typeString);
-			
+						
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

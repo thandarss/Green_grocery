@@ -91,7 +91,7 @@ public class addOrder_F {
 		//calculate total
 		totalPrice = vissPrice * vissDouble;
 			
-		String sqlString2 = "insert into customer_order (Type, Bucket, Box, Viss, Price, Total, Date, Id_customer, Id_product) values (?, ?, ?, ?, ?, ?, ?, ?, ?) ;";
+		String sqlString2 = "insert into customer_order (Type, Bucket, Box, Viss, Price, Total, Date, Id_customer, Id_product, Customer) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ;";
 		try {
 			PreparedStatement pStatement = connection.prepareStatement(sqlString2);
 			pStatement.setString(1, typeString);
@@ -103,6 +103,7 @@ public class addOrder_F {
 			pStatement.setString(7, orderdate);
 			pStatement.setInt(8, customerId);
 			pStatement.setInt(9, productId);
+			pStatement.setString(10, nameString);
 			
 			pStatement.executeUpdate();
 			
