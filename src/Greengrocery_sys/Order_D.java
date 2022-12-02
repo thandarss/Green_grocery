@@ -9,6 +9,8 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
 import java.awt.Font;
+import java.awt.Point;
+import java.awt.Rectangle;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -45,7 +47,11 @@ import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
+import java.security.KeyStore.PrivateKeyEntry;
 import java.awt.SystemColor;
+import javax.swing.ImageIcon;
 
 public class Order_D extends JFrame {
 
@@ -159,7 +165,7 @@ public class Order_D extends JFrame {
 
 	/*
 	 * filter the data by Date
-	 */
+	
 	
 	public void filter(String query) {
 		TableRowSorter<DefaultTableModel> rowSorter = new TableRowSorter<DefaultTableModel>();
@@ -167,10 +173,76 @@ public class Order_D extends JFrame {
 		
 		rowSorter.setRowFilter(RowFilter.regexFilter(query));
 	}
+	 */
+	
+	/*
+	 * frame mouse listener
+	 */
+	
+	public class frameMouseListener implements MouseListener, MouseMotionListener{
+
+		private Point pressedPoint;
+		private Rectangle framebounds;
+		@Override
+		public void mouseDragged(MouseEvent arg0) {
+			// TODO Auto-generated method stub
+			mouseFrame(arg0);
+		}
+
+		@Override
+		public void mouseMoved(MouseEvent arg0) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void mouseClicked(MouseEvent arg0) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void mouseEntered(MouseEvent arg0) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void mouseExited(MouseEvent arg0) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void mousePressed(MouseEvent arg0) {
+			// TODO Auto-generated method stub
+			this.pressedPoint = arg0.getPoint();
+			this.framebounds = new Order_D().getBounds();
+		}
+
+		@Override
+		public void mouseReleased(MouseEvent arg0) {
+			// TODO Auto-generated method stub
+			mouseFrame(arg0);
+			
+		}
+		
+		public void mouseFrame(MouseEvent e) {
+			Point endPoint = e.getPoint();
+			int xDiff = endPoint.x - pressedPoint.x;
+			int yDiff = endPoint.y - pressedPoint.y;
+			framebounds.x += xDiff;
+			framebounds.y += yDiff;
+			setBounds(framebounds);
+		}
+		
+	}
+	
 	/**
 	 * Create the frame.
 	 */
 	public Order_D() {
+		setUndecorated(true);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1155, 525);
 		contentPane = new JPanel();
@@ -179,29 +251,59 @@ public class Order_D extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
+		frameMouseListener listener = new frameMouseListener();
+		addMouseListener(listener);
+		addMouseMotionListener(listener);
+		
+		JButton btnMinimize = new JButton("-");
+		btnMinimize.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Order_D.this.setExtendedState(JFrame.ICONIFIED);
+			}
+		});
+		btnMinimize.setFont(new Font("Times New Roman", Font.BOLD, 25));
+		btnMinimize.setBackground(Color.RED);
+		btnMinimize.setBounds(1054, 0, 43, 31);
+		contentPane.add(btnMinimize);
+		
+		JButton btnClose = new JButton("X");
+		btnClose.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				Order_D.this.setVisible(false);
+			}
+		});
+		btnClose.setFont(new Font("Times New Roman", Font.BOLD, 13));
+		btnClose.setBackground(Color.RED);
+		btnClose.setBounds(1096, 0, 43, 31);
+		contentPane.add(btnClose);
+		
 		JLabel lblNewLabel = new JLabel("ဝယ္သူ");
+		lblNewLabel.setForeground(SystemColor.info);
 		lblNewLabel.setFont(new Font("Zawgyi-One", Font.BOLD, 18));
-		lblNewLabel.setBounds(880, 15, 70, 34);
+		lblNewLabel.setBounds(879, 51, 70, 34);
 		contentPane.add(lblNewLabel);
 		
 		cboxName = new JComboBox();
 		cboxName.setFont(new Font("Zawgyi-One", Font.BOLD, 17));
-		cboxName.setBounds(964, 16, 165, 34);
+		cboxName.setBounds(963, 52, 165, 34);
 		contentPane.add(cboxName);
 		
 		JLabel lblNewLabel_1 = new JLabel("ေတာင္း/ျခင္း‌");
+		lblNewLabel_1.setForeground(SystemColor.info);
 		lblNewLabel_1.setFont(new Font("Zawgyi-One", Font.BOLD, 17));
-		lblNewLabel_1.setBounds(872, 150, 98, 34);
+		lblNewLabel_1.setBounds(871, 186, 98, 34);
 		contentPane.add(lblNewLabel_1);
 		
 		JLabel lblNewLabel_1_1 = new JLabel("ေသတၱာ");
+		lblNewLabel_1_1.setForeground(SystemColor.info);
 		lblNewLabel_1_1.setFont(new Font("Zawgyi-One", Font.BOLD, 17));
-		lblNewLabel_1_1.setBounds(883, 246, 67, 34);
+		lblNewLabel_1_1.setBounds(882, 282, 67, 34);
 		contentPane.add(lblNewLabel_1_1);
 		
 		JLabel lblNewLabel_1_1_1 = new JLabel("ပိႆာ");
+		lblNewLabel_1_1_1.setForeground(SystemColor.info);
 		lblNewLabel_1_1_1.setFont(new Font("Zawgyi-One", Font.BOLD, 17));
-		lblNewLabel_1_1_1.setBounds(1022, 246, 67, 34);
+		lblNewLabel_1_1_1.setBounds(1021, 282, 67, 34);
 		contentPane.add(lblNewLabel_1_1_1);
 		
 		txtBucketNum = new JTextField();
@@ -230,7 +332,7 @@ public class Order_D extends JFrame {
 				}
 			}
 		});
-		txtBucketNum.setBounds(883, 195, 58, 31);
+		txtBucketNum.setBounds(882, 231, 58, 31);
 		contentPane.add(txtBucketNum);
 		txtBucketNum.setColumns(10);
 		
@@ -260,7 +362,7 @@ public class Order_D extends JFrame {
 			}
 		});
 		txtBoxNum.setColumns(10);
-		txtBoxNum.setBounds(883, 291, 58, 31);
+		txtBoxNum.setBounds(882, 327, 58, 31);
 		contentPane.add(txtBoxNum);
 		
 		txtVissNum = new JTextField();
@@ -289,7 +391,7 @@ public class Order_D extends JFrame {
 			}
 		});
 		txtVissNum.setColumns(10);
-		txtVissNum.setBounds(1022, 291, 58, 31);
+		txtVissNum.setBounds(1021, 327, 58, 31);
 		contentPane.add(txtVissNum);
 		
 		txtCardNum = new JTextField();
@@ -318,7 +420,7 @@ public class Order_D extends JFrame {
 			}
 		});
 		txtCardNum.setColumns(10);
-		txtCardNum.setBounds(1022, 195, 58, 31);
+		txtCardNum.setBounds(1021, 231, 58, 31);
 		contentPane.add(txtCardNum);
 		
 		
@@ -330,6 +432,7 @@ public class Order_D extends JFrame {
 		contentPane.add(dateChooser);
 		
 		JLabel lblNewLabel_2 = new JLabel("ေအာ္ဒါစာရင္း");
+		lblNewLabel_2.setForeground(SystemColor.info);
 		lblNewLabel_2.setFont(new Font("Zawgyi-One", Font.BOLD, 21));
 		lblNewLabel_2.setBounds(10, 11, 131, 34);
 		contentPane.add(lblNewLabel_2);
@@ -411,7 +514,7 @@ public class Order_D extends JFrame {
 		btnAdd.setForeground(new Color(128, 64, 0));
 		btnAdd.setFont(new Font("Zawgyi-One", Font.BOLD, 15));
 		btnAdd.setBackground(new Color(254, 251, 245));
-		btnAdd.setBounds(861, 346, 98, 34);
+		btnAdd.setBounds(860, 382, 98, 34);
 		contentPane.add(btnAdd);
 		
 		JButton btnRemove = new JButton("ဖ်က္မည္");
@@ -456,7 +559,7 @@ public class Order_D extends JFrame {
 		btnRemove.setForeground(new Color(128, 64, 0));
 		btnRemove.setFont(new Font("Zawgyi-One", Font.BOLD, 15));
 		btnRemove.setBackground(new Color(254, 251, 245));
-		btnRemove.setBounds(1005, 346, 92, 34);
+		btnRemove.setBounds(1004, 382, 92, 34);
 		contentPane.add(btnRemove);
 		
 		JButton btnUpdate = new JButton("ျပင္မည္");
@@ -486,7 +589,7 @@ public class Order_D extends JFrame {
 		btnUpdate.setForeground(new Color(128, 64, 0));
 		btnUpdate.setFont(new Font("Zawgyi-One", Font.BOLD, 15));
 		btnUpdate.setBackground(new Color(254, 251, 245));
-		btnUpdate.setBounds(861, 401, 98, 34);
+		btnUpdate.setBounds(860, 437, 98, 34);
 		contentPane.add(btnUpdate);
 		
 		JButton btnClear = new JButton("Clear");
@@ -503,23 +606,25 @@ public class Order_D extends JFrame {
 		btnClear.setForeground(new Color(128, 64, 0));
 		btnClear.setFont(new Font("Zawgyi-One", Font.BOLD, 15));
 		btnClear.setBackground(new Color(254, 251, 245));
-		btnClear.setBounds(1005, 401, 92, 34);
+		btnClear.setBounds(1004, 437, 92, 34);
 		contentPane.add(btnClear);
 		
 		JLabel lblNewLabel_3 = new JLabel("အမ်ိဳးအစား");
+		lblNewLabel_3.setForeground(SystemColor.info);
 		lblNewLabel_3.setFont(new Font("Zawgyi-One", Font.BOLD, 17));
-		lblNewLabel_3.setBounds(861, 78, 98, 34);
+		lblNewLabel_3.setBounds(860, 114, 98, 34);
 		contentPane.add(lblNewLabel_3);
 		
 		JLabel lblNewLabel_1_1_1_1 = new JLabel("ကဒ္");
+		lblNewLabel_1_1_1_1.setForeground(SystemColor.info);
 		lblNewLabel_1_1_1_1.setFont(new Font("Zawgyi-One", Font.BOLD, 17));
-		lblNewLabel_1_1_1_1.setBounds(1022, 150, 67, 34);
+		lblNewLabel_1_1_1_1.setBounds(1021, 186, 67, 34);
 		contentPane.add(lblNewLabel_1_1_1_1);
 		
 		String item[]= {"ထူးရွယ္", "ေအာက္ခံသီး", "အလတ္သီး", "အလုပ္သမားခ"};
 		cboxType = new JComboBox(item);
 		cboxType.setFont(new Font("Zawgyi-One", Font.PLAIN, 17));
-		cboxType.setBounds(964, 81, 165, 34);
+		cboxType.setBounds(963, 117, 165, 34);
 		contentPane.add(cboxType);
 		
 		JButton btnSearch = new JButton("Search");
@@ -594,6 +699,14 @@ public class Order_D extends JFrame {
 		cboxNameSearch.setFont(new Font("Zawgyi-One", Font.BOLD, 17));
 		cboxNameSearch.setBounds(151, 11, 165, 34);
 		contentPane.add(cboxNameSearch);
+		
+		JLabel lblNewLabel_4 = new JLabel("");
+		lblNewLabel_4.setOpaque(true);
+		lblNewLabel_4.setHorizontalAlignment(SwingConstants.CENTER);
+		lblNewLabel_4.setIcon(new ImageIcon("C:\\Users\\User\\git\\Green_grocery\\Images\\tomato.jpg"));
+		lblNewLabel_4.setBounds(0, 0, 1139, 486);
+		lblNewLabel_4.setBackground(new Color(0,28,0));
+		contentPane.add(lblNewLabel_4);
 		
 		refreshTable();
 		fillNameBox();
