@@ -499,17 +499,48 @@ public class Order_D extends JFrame {
 		JButton btnAdd = new JButton("ထည့္မည္");
 		btnAdd.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				
+				String bucketString, boxString, cardString, vissString;
+				int bucketNum, boxNum, cardNum;
+				double vissNum;
+				
 				nameString = cboxName.getSelectedItem().toString();
 				typeString = cboxType.getSelectedItem().toString();
-				int bucketNum = Integer.parseInt(txtBucketNum.getText());
-				int boxNum = Integer.parseInt(txtBoxNum.getText());
-				double vissNum = Double.parseDouble(txtVissNum.getText());
-				int cardNum = Integer.parseInt(txtCardNum.getText());
+				bucketString = txtBucketNum.getText();
+				boxString = txtBoxNum.getText();
+				cardString = txtCardNum.getText();
+				vissString = txtVissNum.getText();
+				
+				
 				String dateString = ((JTextField)dateChooser.getDateEditor().getUiComponent()).getText();
 				
-				new addOrder_F().addOrder(nameString,typeString, bucketNum, boxNum, vissNum, cardNum, dateString);
-				refreshTable();
-			}
+					if (bucketString.equals("")) {
+						bucketNum = 0;
+					}
+					else {
+						bucketNum = Integer.parseInt(txtBucketNum.getText());
+					}
+					if(boxString.isEmpty()) {
+						boxNum = 0;
+					}
+					else {
+						boxNum = Integer.parseInt(txtBoxNum.getText());
+					}
+					if(vissString.isEmpty()) {
+						vissNum = 0;
+					}
+					else {
+						vissNum = Double.parseDouble(txtVissNum.getText());
+					}
+					if(cardString.isEmpty()) {
+						cardNum = 0;
+					}
+					else {
+						cardNum = Integer.parseInt(txtCardNum.getText());
+					}					
+					new addOrder_F().addOrder(nameString,typeString, bucketNum, boxNum, vissNum, cardNum, dateString);
+					refreshTable();
+				}
 		});
 		btnAdd.setForeground(new Color(128, 64, 0));
 		btnAdd.setFont(new Font("Zawgyi-One", Font.BOLD, 15));

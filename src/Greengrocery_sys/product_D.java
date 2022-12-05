@@ -294,10 +294,10 @@ public class product_D extends JFrame {
 			}
 		});
 		
-		JLabel lblTitle = new JLabel("အေရာင္းစာရင္း");
+		JLabel lblTitle = new JLabel("အေရာင္းေစ်း စာရင္း");
 		lblTitle.setForeground(Color.WHITE);
 		lblTitle.setFont(new Font("Zawgyi-One", Font.BOLD, 20));
-		lblTitle.setBounds(699, 11, 151, 44);
+		lblTitle.setBounds(659, 11, 191, 44);
 		contentPane.add(lblTitle);
 		
 		JLabel lblTitle_1_1 = new JLabel("ေတာင္း/ျခင္း‌ေဈး");

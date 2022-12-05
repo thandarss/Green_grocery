@@ -107,9 +107,11 @@ public class addOrder_F {
 			
 			pStatement.executeUpdate();
 			
-			JOptionPane.showMessageDialog(null, "Added order successfully!");
+			String showString = nameString + "အတြက္ Order အသစ္ထည့္ၿပီးပါၿပီ!!";
+			JLabel textJLabel = new JLabel(showString);
+			textJLabel.setFont(new Font("Zawgyi-One", Font.PLAIN,22));
+			JOptionPane.showMessageDialog(null,textJLabel,"Adding Order", JOptionPane.PLAIN_MESSAGE);
 			
-			System.out.println(productId + " " + vissPrice + " rset1 product ID");
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

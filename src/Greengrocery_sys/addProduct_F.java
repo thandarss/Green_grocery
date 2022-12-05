@@ -1,9 +1,11 @@
 package Greengrocery_sys;
 
+import java.awt.Font;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
 import Greengrocery_sys.Database.DbConnection;
@@ -29,7 +31,11 @@ public class addProduct_F {
 			//pStatement.setString(6, dateString);
 			pStatement.executeUpdate();
 			
-			JOptionPane.showMessageDialog(null, "New Product added successfully!");
+			String textString = "အေရာင္းေစ်းအသစ္ ထည့္သြင္းၿပီးပါၿပီ။";
+			JLabel textJLabel = new JLabel(textString);
+			textJLabel.setFont(new Font("Zawgyi-One",Font.PLAIN, 22));
+			
+			JOptionPane.showMessageDialog(null, textJLabel, "Adding Product",JOptionPane.PLAIN_MESSAGE);
 			
 			//if(result>0)
 		} catch (SQLException e) {

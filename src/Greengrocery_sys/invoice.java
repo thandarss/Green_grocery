@@ -31,24 +31,37 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Date;
 import java.awt.event.ActionEvent;
 import javax.swing.event.PopupMenuListener;
+import javax.swing.table.TableColumn;
+import javax.swing.table.TableColumnModel;
 import javax.swing.event.PopupMenuEvent;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
+import javax.swing.table.DefaultTableModel;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 public class invoice extends JFrame {
 
 	private JPanel contentPane;
 	private JTextField txtAddress;
 	private JTable tbInvoice;
-	private JTextField textField_1;
-	private JTextField textField_2;
-	private JTextField textField_3;
+	private JTextField txtTotal;
+	private JTextField txtPrepay;
+	private JTextField txtDebut;
 	private JPanel mainPanel;
 	private JComboBox cboxName;
+	private BigDecimal total = BigDecimal.ZERO;
+	private BigDecimal totalBigDecimal;
+	private ArrayList list;
 	Connection connection;
 
 	/**
@@ -68,16 +81,82 @@ public class invoice extends JFrame {
 	}
 	
 	/*
+	 * Calculate debut
+	 */
+	public void setDebut() {
+		
+			String prepayString = txtPrepay.getText();
+			int prepay = Integer.parseInt(prepayString);
+			
+			String totalString = txtTotal.getText();
+			double total = Double.parseDouble(totalString);
+			
+			double debut = total - prepay;
+			txtDebut.setText(String.valueOf(debut));
+				
+	}
+	
+	/*
+	 * Calculate total
+	 */ 
+	public void setTotal() {
+		//calculate total value
+		
+		int row = tbInvoice.getModel().getRowCount();
+		TableColumnModel columnModel = tbInvoice.getColumnModel();
+		int column = columnModel.getColumnIndex("Total");
+		
+		list = new ArrayList();
+						
+		for(int i=0; i<row; i++) {
+			
+			list.add(tbInvoice.getModel().getValueAt(i, column));
+		}
+		
+		for(int j=0; j<list.size(); j++ ) {
+			totalBigDecimal = (BigDecimal) list.get(j);
+			total = total.add(totalBigDecimal);
+
+		}
+		txtTotal.setText(total.toString());
+		
+		//reset big decimal array value
+		totalBigDecimal = BigDecimal.ZERO;
+		total = BigDecimal.ZERO;
+		
+		list.clear();
+	}
+	
+	/*
 	 * Add database data into 
 	 */
-	public void updateTable() {
+	public void refreshTable() {
 		Connection connection = new DbConnection().connect();
-		String sqlString = "select Type, Buckets, Box, Viss, Price, Total from invoice;";
+		String nameString = cboxName.getSelectedItem().toString();
+		String sqlString = "select Date, Type, Bucket, Box, Card, Viss, Price, Total from customer_order where Customer = '" + nameString + "';";
 		
 		try {
 			PreparedStatement pStatement = connection.prepareStatement(sqlString);
 			ResultSet rSet = pStatement.executeQuery();
 			tbInvoice.setModel(DbUtils.resultSetToTableModel(rSet));
+			
+			TableColumnModel columnModel = tbInvoice.getColumnModel();
+			TableColumn tbcolumn, tbcolumn1, tbcolumn2, tbcolumn3, tbColumn4, tbColumn5, tbColumn6;
+			tbcolumn = columnModel.getColumn(0);
+			tbcolumn1 = columnModel.getColumn(1);
+			tbcolumn2 = columnModel.getColumn(2);
+			tbcolumn3 = columnModel.getColumn(3);
+			tbColumn4 = columnModel.getColumn(4);
+			tbColumn5 = columnModel.getColumn(5);
+			tbColumn6 = columnModel.getColumn(6);
+			
+			tbcolumn.setPreferredWidth(70);
+			tbcolumn1.setPreferredWidth(60);
+			tbcolumn2.setPreferredWidth(30);
+			tbcolumn3.setPreferredWidth(30);
+			tbColumn4.setPreferredWidth(30);
+			tbColumn5.setPreferredWidth(60);
+			tbColumn6.setPreferredWidth(60);
 			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -157,6 +236,7 @@ public class invoice extends JFrame {
 		try {
 			PreparedStatement pStatement = connection.prepareStatement(sqlString);
 			ResultSet rSet = pStatement.executeQuery();
+			cboxName.addItem("Choose customer");
 			while(rSet.next()) {
 				cboxName.addItem(rSet.getString("Name"));
 			}
@@ -253,6 +333,7 @@ public class invoice extends JFrame {
 		panel_1.add(lblNewLabel_3);
 		
 		cboxName = new JComboBox();
+		cboxName.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		cboxName.addPopupMenuListener(new PopupMenuListener() {
 			public void popupMenuCanceled(PopupMenuEvent arg0) {
 			}
@@ -269,11 +350,18 @@ public class invoice extends JFrame {
 					if(rSet2.next()) {
 						txtAddress.setText(rSet2.getString("Address"));
 					}
+					else {
+						txtAddress.setText("");
+					}
+					
+					refreshTable();
 				} catch (SQLException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				
+				setTotal();
+				setDebut();
 			}
 			public void popupMenuWillBecomeVisible(PopupMenuEvent arg0) {
 			}
@@ -288,6 +376,9 @@ public class invoice extends JFrame {
 		
 		JDateChooser dateChooser = new JDateChooser();
 		dateChooser.setBounds(336, 11, 149, 29);
+		Date date = new Date();
+		dateChooser.setDate(date);
+		dateChooser.setFont(new Font("Zawgyi-one",Font.BOLD,15));
 		panel_1.add(dateChooser);
 		
 		JLabel lblNewLabel_3_2 = new JLabel("လိပ္စာ :");
@@ -305,6 +396,16 @@ public class invoice extends JFrame {
 		panel_1.add(scrollPane);
 		
 		tbInvoice = new JTable();
+		tbInvoice.setModel(new DefaultTableModel(
+			new Object[][] {
+			},
+			new String[] {
+				"Date", "Type", "Bucket", "Box", "Card", "Viss", "Price", "Total"
+			}
+		));
+		tbInvoice.getTableHeader().setFont(new Font("Zawgyi-One",Font.PLAIN,10));
+		tbInvoice.setFont(new Font("Zawgyi-One", Font.PLAIN, 13));
+		tbInvoice.setRowHeight(30);
 		scrollPane.setViewportView(tbInvoice);
 		
 		JLabel lblNewLabel_3_3 = new JLabel("စုစုေပါင္း :");
@@ -312,25 +413,48 @@ public class invoice extends JFrame {
 		lblNewLabel_3_3.setBounds(342, 337, 56, 33);
 		panel_1.add(lblNewLabel_3_3);
 		
-		textField_1 = new JTextField();
-		textField_1.setBounds(408, 342, 132, 20);
-		panel_1.add(textField_1);
-		textField_1.setColumns(10);
+		txtTotal = new JTextField();
+		txtTotal.setText("0");
+		txtTotal.setFont(new Font("Times New Roman", Font.BOLD, 15));
+		txtTotal.setBounds(408, 342, 132, 20);
+		txtTotal.setEditable(false);
+		panel_1.add(txtTotal);
+		txtTotal.setColumns(10);
 		
 		JLabel lblNewLabel_3_3_1 = new JLabel("စရံေင​ြ :");
 		lblNewLabel_3_3_1.setFont(new Font("Zawgyi-One", Font.PLAIN, 12));
 		lblNewLabel_3_3_1.setBounds(352, 364, 46, 33);
 		panel_1.add(lblNewLabel_3_3_1);
 		
-		textField_2 = new JTextField();
-		textField_2.setColumns(10);
-		textField_2.setBounds(408, 373, 132, 20);
-		panel_1.add(textField_2);
+		txtPrepay = new JTextField();
+		txtPrepay.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusGained(FocusEvent arg0) {
+				txtPrepay.setText("");
+			}
+		});
+		txtPrepay.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent arg0) {
+				
+				if(arg0.getKeyCode() == KeyEvent.VK_ENTER) {
+					setDebut();
+				}
+			}
+		});
+		txtPrepay.setText("0");
+		txtPrepay.setFont(new Font("Times New Roman", Font.BOLD, 15));
+		txtPrepay.setColumns(10);
+		txtPrepay.setBounds(408, 373, 132, 20);
+		panel_1.add(txtPrepay);
 		
-		textField_3 = new JTextField();
-		textField_3.setColumns(10);
-		textField_3.setBounds(408, 404, 132, 20);
-		panel_1.add(textField_3);
+		txtDebut = new JTextField();
+		txtDebut.setText("0");
+		txtDebut.setFont(new Font("Times New Roman", Font.BOLD, 15));
+		txtDebut.setColumns(10);
+		txtDebut.setBounds(408, 404, 132, 20);
+		txtDebut.setEditable(false);
+		panel_1.add(txtDebut);
 		
 		JLabel lblNewLabel_3_3_1_1 = new JLabel("က်န္ေင​ြ :");
 		lblNewLabel_3_3_1_1.setFont(new Font("Zawgyi-One", Font.PLAIN, 12));
@@ -355,7 +479,7 @@ public class invoice extends JFrame {
 		lblImage.setIcon(new ImageIcon("C:\\Users\\User\\eclipse-workspace\\Tomato Green Grocery\\Images\\tomato.jpg"));
 		lblImage.setBounds(0, 0, 570, 625);
 		mainPanel.add(lblImage);
-		updateTable();		
+		//refreshTable();		
 		fillNameBox();
 	}
 }
