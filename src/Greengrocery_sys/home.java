@@ -58,13 +58,23 @@ public class home {
 		btnNewButton.setBounds(122, 90, 203, 81);
 		frame.getContentPane().add(btnNewButton);
 		
-		JButton btnNewButton_1 = new JButton("အဝယ္စာရင္း");
+		JButton btnNewButton_1 = new JButton("အေရာင္း စာရင္း");
+		btnNewButton_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				new product_D().setVisible(true);
+			}
+		});
 		btnNewButton_1.setFont(new Font("Zawgyi-One", Font.BOLD, 21));
 		btnNewButton_1.setBackground(SystemColor.info);
 		btnNewButton_1.setBounds(451, 90, 203, 81);
 		frame.getContentPane().add(btnNewButton_1);
 		
-		JButton btnNewButton_1_1 = new JButton("ေန႔စဥ္မွတ္တမ္း");
+		JButton btnNewButton_1_1 = new JButton("Order စာရင္း");
+		btnNewButton_1_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				new Order_D().setVisible(true);
+			}
+		});
 		btnNewButton_1_1.setFont(new Font("Zawgyi-One", Font.BOLD, 21));
 		btnNewButton_1_1.setBackground(SystemColor.info);
 		btnNewButton_1_1.setBounds(122, 253, 203, 81);

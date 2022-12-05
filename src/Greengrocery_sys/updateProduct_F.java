@@ -1,9 +1,11 @@
 package Greengrocery_sys;
 
+import java.awt.Font;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
 import Greengrocery_sys.Database.DbConnection;
@@ -29,9 +31,15 @@ public class updateProduct_F {
 			pStatement.setInt(4, boxPrice);
 			pStatement.setInt(5, cardPrice);
 			
-			pStatement.executeUpdate();
+			int result = pStatement.executeUpdate();
 			
-			JOptionPane.showMessageDialog(null, "Updated successfully!");
+			if(result != -1) {
+				String updateString = "လက္ရွိ  Order ကို ျပင္ဆင္ၿပီးပါၿပီ။";
+				JLabel textJLabel = new JLabel(updateString);
+				textJLabel.setFont(new Font("Zawgyi-One",Font.BOLD,20));
+				JOptionPane.showMessageDialog(null, textJLabel, "Update Information", JOptionPane.PLAIN_MESSAGE);
+			}
+			
 			
 			//if(result>0)
 		} catch (SQLException e) {
