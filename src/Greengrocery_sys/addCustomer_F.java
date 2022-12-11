@@ -38,7 +38,6 @@ public class addCustomer_F {
 			textJLabel.setFont(new Font("Zawgyi-One", Font.PLAIN,22));
 			JOptionPane.showMessageDialog(null,textJLabel,"Adding Customer", JOptionPane.PLAIN_MESSAGE);
 			
-			JOptionPane.showMessageDialog(null,"Added New Customer Successfully!");
 			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block

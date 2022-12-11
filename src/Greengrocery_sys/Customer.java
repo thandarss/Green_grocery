@@ -209,7 +209,10 @@ public class Customer {
 					String idString = tbCustomer.getModel().getValueAt(row, 0).toString();
 					int id = Integer.parseInt(idString);
 					
-					int confirm = JOptionPane.showConfirmDialog(null, "Are you sure you want to delete this?","Confirm Dialog",JOptionPane.YES_NO_OPTION);
+					String textString = "ဖ်က္မွာ ေသခ်ာပါသလား? ";
+					JLabel label = new JLabel(textString);
+					label.setFont(new Font("Zawgyi-One", Font.PLAIN,22));
+					int confirm = JOptionPane.showConfirmDialog(null, label,"Confirm Dialog",JOptionPane.YES_NO_OPTION);
 					
 					if(confirm == 0) {
 						new addCustomer_Backup().backupCus(id);
@@ -217,7 +220,7 @@ public class Customer {
 						
 						DefaultTableModel model= (DefaultTableModel) tbCustomer.getModel();
 						model.removeRow(tbCustomer.getSelectedRow());
-						JOptionPane.showMessageDialog(null, "Remove row successfully!");
+						//JOptionPane.showMessageDialog(null, "");
 					}
 													
 					refreshCustomer();

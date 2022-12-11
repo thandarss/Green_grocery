@@ -441,7 +441,11 @@ public class Order_D extends JFrame {
 		scrollPane.setBounds(10, 67, 824, 390);
 		contentPane.add(scrollPane);
 		
-		tbOrder = new JTable();
+		tbOrder = new JTable() {
+			public boolean isEditable(int row, int column) {
+				return false;
+			}
+		};
 		tbOrder.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
