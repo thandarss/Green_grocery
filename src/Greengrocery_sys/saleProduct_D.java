@@ -136,7 +136,7 @@ public class saleProduct_D extends JFrame {
 	 */	
 	public void refreshTable() {
 		Connection connection = new DbConnection().connect();
-		String sqlString = "select * from product_price;";
+		String sqlString = "select * from sale_price;";
 		try {
 			PreparedStatement pStatement = connection.prepareStatement(sqlString);
 			ResultSet rSet = pStatement.executeQuery();
@@ -352,7 +352,7 @@ public class saleProduct_D extends JFrame {
 				txtVissPrice.setText("");
 			}
 		});
-		txtVissPrice.setText("0.00");
+		txtVissPrice.setText("0");
 		txtVissPrice.setBackground(new Color(254, 251, 245));
 		txtVissPrice.addKeyListener(new KeyAdapter() {
 			@Override
@@ -403,6 +403,8 @@ public class saleProduct_D extends JFrame {
 		btnAdd.setForeground(new Color(128, 64, 0));
 		btnAdd.setBackground(new Color(254, 251, 245));
 		btnAdd.addActionListener(new ActionListener() {
+			
+			
 			public void actionPerformed(ActionEvent arg0) {
 				String typeString= cBoxSize.getSelectedItem().toString();
 				int bucketPrice = Integer.parseInt(txtBucketPrice.getText());
