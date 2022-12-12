@@ -42,7 +42,7 @@ import java.awt.SystemColor;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 
-public class product_D extends JFrame {
+public class saleProduct_D extends JFrame {
 
 	private JPanel contentPane;
 	private JTable tbProduct;
@@ -60,7 +60,7 @@ public class product_D extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					product_D frame = new product_D();
+					saleProduct_D frame = new saleProduct_D();
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -111,7 +111,7 @@ public class product_D extends JFrame {
 		public void mousePressed(MouseEvent e) {
 			// TODO Auto-generated method stub
 			this.pressPoint = e.getPoint();
-			this.frameBounds = new product_D().getBounds();
+			this.frameBounds = new saleProduct_D().getBounds();
 			
 		}
 
@@ -154,7 +154,7 @@ public class product_D extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public product_D() {
+	public saleProduct_D() {
 		setUndecorated(true);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1187, 495);
@@ -174,14 +174,14 @@ public class product_D extends JFrame {
 		JButton btnClose = new JButton("X");
 		btnClose.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				product_D.this.setVisible(false);
+				saleProduct_D.this.setVisible(false);
 			}
 		});
 		
 		JButton btnClose_1 = new JButton("-");
 		btnClose_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				product_D.this.setExtendedState(JFrame.ICONIFIED);
+				saleProduct_D.this.setExtendedState(JFrame.ICONIFIED);
 			}
 		});
 		
@@ -207,8 +207,8 @@ public class product_D extends JFrame {
 			}
 		});
 		
-		JButton btnUpdate_1 = new JButton("ဖ်က္မည္");
-		btnUpdate_1.addActionListener(new ActionListener() {
+		JButton btnDelete = new JButton("ဖ်က္မည္");
+		btnDelete.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				int row = tbProduct.getSelectedRow();
 				
@@ -225,11 +225,11 @@ public class product_D extends JFrame {
 				}
 			}
 		});
-		btnUpdate_1.setForeground(new Color(128, 64, 0));
-		btnUpdate_1.setFont(new Font("Zawgyi-One", Font.BOLD, 15));
-		btnUpdate_1.setBackground(new Color(254, 251, 245));
-		btnUpdate_1.setBounds(1050, 356, 118, 34);
-		contentPane.add(btnUpdate_1);
+		btnDelete.setForeground(new Color(128, 64, 0));
+		btnDelete.setFont(new Font("Zawgyi-One", Font.BOLD, 15));
+		btnDelete.setBackground(new Color(254, 251, 245));
+		btnDelete.setBounds(1050, 356, 118, 34);
+		contentPane.add(btnDelete);
 		txtCardPrice.setFont(new Font("Times New Roman", Font.BOLD, 16));
 		txtCardPrice.setColumns(10);
 		txtCardPrice.setBackground(new Color(254, 251, 245));

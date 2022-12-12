@@ -61,7 +61,7 @@ public class home {
 		JButton btnNewButton_1 = new JButton("အေရာင္းေစ်း စာရင္း");
 		btnNewButton_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				new product_D().setVisible(true);
+				new saleProduct_D().setVisible(true);
 			}
 		});
 		btnNewButton_1.setFont(new Font("Zawgyi-One", Font.BOLD, 19));
