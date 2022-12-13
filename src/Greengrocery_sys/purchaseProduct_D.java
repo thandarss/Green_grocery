@@ -192,6 +192,22 @@ public class purchaseProduct_D extends JFrame {
 		panel.add(btnClose);
 		
 		JButton btnDelete = new JButton("ဖ်က္မည္");
+		btnDelete.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				int row = tbPurchase.getSelectedRow();
+				String idString = tbPurchase.getModel().getValueAt(row, 0).toString();
+				int id = Integer.parseInt(idString);
+				
+				String labelString = "ဖ်က္မွာေသခ်ာပါသလား";
+				JLabel textLabel = new JLabel(labelString);
+				textLabel.setFont(new Font("Zawgyi-One", Font.PLAIN, 25));
+				int confirm = JOptionPane.showConfirmDialog(null, textLabel,"Confirm Dialog",JOptionPane.YES_NO_OPTION);
+				if(confirm == 0) {
+					new deletePurchase_F().deletePurchase(id);
+				}
+				refreshTable();
+			}
+		});
 		btnDelete.setForeground(new Color(128, 64, 0));
 		btnDelete.setFont(new Font("Zawgyi-One", Font.BOLD, 15));
 		btnDelete.setBackground(new Color(254, 251, 245));
