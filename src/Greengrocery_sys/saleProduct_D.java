@@ -272,7 +272,7 @@ public class saleProduct_D extends JFrame {
 				int row = tbProduct.getSelectedRow();
 				String idString = tbProduct.getModel().getValueAt(row, 0).toString();
 				int id = Integer.parseInt(idString);
-				System.out.println("mouse selected id : " +id);
+				//System.out.println("mouse selected id : " +id);
 				
 					Connection connection = new DbConnection().connect();
 					String sqlString = "select * from product_price where Id_product = "+ id +";";
