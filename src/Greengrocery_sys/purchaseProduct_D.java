@@ -8,6 +8,7 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.TableColumnModel;
 
+import Greengrocery_sys.Order_D.frameMouseListener;
 import Greengrocery_sys.Database.DbConnection;
 import net.proteanit.sql.DbUtils;
 
@@ -19,6 +20,9 @@ import javax.swing.JTable;
 import javax.swing.JScrollPane;
 import java.awt.SystemColor;
 import java.awt.Font;
+import java.awt.Point;
+import java.awt.Rectangle;
+
 import javax.swing.JComboBox;
 import javax.swing.JTextField;
 import javax.swing.JButton;
@@ -34,6 +38,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 
 public class purchaseProduct_D extends JFrame {
 
@@ -59,6 +65,69 @@ public class purchaseProduct_D extends JFrame {
 				}
 			}
 		});
+	}
+	
+	/*
+	 * Frame mouse listener
+	 */
+	
+	private class FrameMouseListener implements MouseListener, MouseMotionListener{
+
+		private Point pressPoint;
+		private Rectangle framebounds;
+		@Override
+		public void mouseDragged(MouseEvent e) {
+			// TODO Auto-generated method stub
+			mouseFrame(e);
+		}
+
+		@Override
+		public void mouseMoved(MouseEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void mouseClicked(MouseEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void mouseEntered(MouseEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void mouseExited(MouseEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void mousePressed(MouseEvent e) {
+			// TODO Auto-generated method stub
+			this.pressPoint = e.getPoint();
+			this.framebounds = new purchaseProduct_D().getBounds();
+		}
+
+		@Override
+		public void mouseReleased(MouseEvent e) {
+			// TODO Auto-generated method stub
+			mouseFrame(e);
+		}
+		
+		public void mouseFrame(MouseEvent e) {
+			Point endPoint = e.getPoint();
+			int xDiff = endPoint.x -pressPoint.x;
+			int yDiff = endPoint.y - pressPoint.y;
+			
+			framebounds.x += xDiff;
+			framebounds.y += yDiff;
+			setBounds(framebounds);
+		}
+		
 	}
 	
 	/*
@@ -383,5 +452,9 @@ public class purchaseProduct_D extends JFrame {
 		panel.add(lblNewLabel);
 		
 		refreshTable();
+		
+		FrameMouseListener listener = new FrameMouseListener();
+		addMouseListener(listener);
+		addMouseMotionListener(listener);
 	}
 }
