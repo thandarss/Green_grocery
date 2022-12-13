@@ -73,7 +73,7 @@ public class saleProduct_D extends JFrame {
 	/*
 	 * FrameMouseListener
 	 */
-	public class FrameMouseListener implements MouseListener,MouseMotionListener{
+	private class FrameMouseListener implements MouseListener,MouseMotionListener{
 
 		private Point pressPoint;
 		private Rectangle frameBounds;
