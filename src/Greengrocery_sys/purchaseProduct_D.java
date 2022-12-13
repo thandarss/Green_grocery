@@ -32,6 +32,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class purchaseProduct_D extends JFrame {
 
@@ -154,6 +156,25 @@ public class purchaseProduct_D extends JFrame {
 		panel.add(btnClear);
 		
 		JButton btnUpdate = new JButton("ျပင္မည္");
+		btnUpdate.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				String typeString = cBoxSize.getSelectedItem().toString();
+				int bucketP = Integer.parseInt(txtBacketPrice.getText());
+				int boxP = Integer.parseInt(txtBoxPrice.getText());
+				int cardP = Integer.parseInt(txtCardPrice.getText());
+				int vissP = Integer.parseInt(txtVissPrice.getText());
+				
+				int row = tbPurchase.getSelectedRow();
+				
+				if(row != -1) {
+					String idString = tbPurchase.getModel().getValueAt(row,0).toString();
+					int id = Integer.parseInt(idString);
+					
+					new updatePurchase_F().updatePurchase(id, typeString, bucketP, boxP, cardP, vissP);
+					refreshTable();
+				}
+			}
+		});
 		btnUpdate.setForeground(new Color(128, 64, 0));
 		btnUpdate.setFont(new Font("Zawgyi-One", Font.BOLD, 15));
 		btnUpdate.setBackground(new Color(254, 251, 245));
@@ -320,6 +341,32 @@ public class purchaseProduct_D extends JFrame {
 				return false;
 			}
 		};
+		tbPurchase.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				int row = tbPurchase.getSelectedRow();
+				String idString = tbPurchase.getModel().getValueAt(row, 0).toString();
+				int id = Integer.parseInt(idString);
+				
+				Connection connection = new DbConnection().connect();
+				String sqlString = "select * from purchase_price where Id_purchase = " + id + ";";
+				try {
+					PreparedStatement pStatement = connection.prepareStatement(sqlString);
+					ResultSet rSet = pStatement.executeQuery();
+					
+					if(rSet.next()) {
+						cBoxSize.setSelectedItem(rSet.getString("Type"));
+						txtBacketPrice.setText(rSet.getString("Bucket_Price"));
+						txtBoxPrice.setText(rSet.getString("Box_Price"));
+						txtVissPrice.setText(rSet.getString("Viss_Price"));
+						txtCardPrice.setText(rSet.getString("Viss_Price"));
+					}
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		});
 		tbPurchase.setFont(new Font("Zawgyi-One", Font.PLAIN, 12));
 		tbPurchase.setRowHeight(30);
 		tbPurchase.getTableHeader().setFont(new Font("Verdana", Font.BOLD, 15));
