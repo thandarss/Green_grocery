@@ -581,7 +581,10 @@ public class Order_D extends JFrame {
 					int customerId = Integer.parseInt(customerIdString);
 					int productId = Integer.parseInt(productIdString);
 					
-					int confirm = JOptionPane.showConfirmDialog(null, "Are you sure you want to delete this?","Confirm Dialog",JOptionPane.YES_NO_OPTION);
+					String labelString = "ဖ်က္မွာေသခ်ာပါသလား";
+					JLabel textLabel = new JLabel(labelString);
+					textLabel.setFont(new Font("Zawgyi-One", Font.PLAIN, 25));
+					int confirm = JOptionPane.showConfirmDialog(null, textLabel,"Confirm Dialog",JOptionPane.YES_NO_OPTION);
 					
 					if(confirm == 0 ) {
 						new addOrder_Backup().addOrderBackup(id, namString, typeString, bucket, box, card, viss, price, total, dateString, customerId, productId);

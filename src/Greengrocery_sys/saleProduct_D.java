@@ -216,7 +216,10 @@ public class saleProduct_D extends JFrame {
 					String idString = tbProduct.getModel().getValueAt(row, 0).toString();
 					int id = Integer.parseInt(idString);
 					
-					int confirm = JOptionPane.showConfirmDialog(null, "Are you sure you want to delete this row?","Confirm Dialog",JOptionPane.YES_NO_OPTION);
+					String labelString = "ဖ်က္မွာေသခ်ာပါသလား";
+					JLabel textLabel = new JLabel(labelString);
+					textLabel.setFont(new Font("Zawgyi-One", Font.PLAIN, 25));
+					int confirm = JOptionPane.showConfirmDialog(null, textLabel,"Confirm Dialog",JOptionPane.YES_NO_OPTION);
 					if(confirm == 0) {
 						new deleteProduct_F().deleteProduct(id);
 					}
