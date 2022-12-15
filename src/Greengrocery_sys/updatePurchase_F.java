@@ -33,7 +33,7 @@ public class updatePurchase_F {
 			int result = pStatement.executeUpdate();
 			
 			if(result != -1) {
-				String updateString = "လက္ရွိ  Order ကို ျပင္ဆင္ၿပီးပါၿပီ။";
+				String updateString = "လက္ရွိစာရင္းကို ျပင္ၿပီးပါၿပီ";
 				JLabel textJLabel = new JLabel(updateString);
 				textJLabel.setFont(new Font("Zawgyi-One",Font.BOLD,20));
 				JOptionPane.showMessageDialog(null, textJLabel, "Update Information", JOptionPane.PLAIN_MESSAGE);

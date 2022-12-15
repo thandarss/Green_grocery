@@ -32,7 +32,7 @@ public class addPurchase_F {
 			pStatement.setInt(5, vissPrice);
 			pStatement.executeUpdate();
 			
-			String textString = "အဝယ္စာရင္းျဖည့္သြင္းၿပီးပါၿပီ";
+			String textString = typeString + " စာရင္းျဖည့္သြင္းၿပီးပါၿပီ";
 			JLabel textJLabel = new JLabel(textString);
 			textJLabel.setFont(new Font("Zawgyi-One",Font.PLAIN, 22));
 			

@@ -278,7 +278,7 @@ public class saleProduct_D extends JFrame {
 				//System.out.println("mouse selected id : " +id);
 				
 					Connection connection = new DbConnection().connect();
-					String sqlString = "select * from product_price where Id_product = "+ id +";";
+					String sqlString = "select * from sale_price where Id_product = "+ id +";";
 					try {
 						PreparedStatement pStatement = connection.prepareStatement(sqlString);
 						ResultSet rSet = pStatement.executeQuery();

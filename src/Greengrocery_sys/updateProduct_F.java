@@ -22,7 +22,7 @@ public class updateProduct_F {
 		int cardPrice = cardP;
 		
 		Connection connection = new DbConnection().connect();
-		String sqString = "update product_price set Type=?, Bucket_Price = ?, Viss_Price = ?, Box_Price = ?, Card_Price = ? where Id_Product = " + idProduct + ";";
+		String sqString = "update sale_price set Type=?, Bucket_Price = ?, Viss_Price = ?, Box_Price = ?, Card_Price = ? where Id_Product = " + idProduct + ";";
 		try {
 			PreparedStatement pStatement = connection.prepareStatement(sqString);
 			pStatement.setString(1, typeString);
@@ -34,7 +34,7 @@ public class updateProduct_F {
 			int result = pStatement.executeUpdate();
 			
 			if(result != -1) {
-				String updateString = "လက္ရွိ  Order ကို ျပင္ဆင္ၿပီးပါၿပီ။";
+				String updateString = "လက္ရွိစာရင္းကို ျပင္ၿပီးပါၿပီ";
 				JLabel textJLabel = new JLabel(updateString);
 				textJLabel.setFont(new Font("Zawgyi-One",Font.BOLD,20));
 				JOptionPane.showMessageDialog(null, textJLabel, "Update Information", JOptionPane.PLAIN_MESSAGE);

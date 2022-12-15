@@ -42,7 +42,7 @@ public class home {
 	 */
 	private void initialize() {
 		frame = new JFrame();
-		frame.setBounds(350, 100, 817, 506);
+		frame.setBounds(350, 100, 747, 506);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		frame.setResizable(false);
@@ -55,10 +55,10 @@ public class home {
 		});
 		btnNewButton.setBackground(SystemColor.info);
 		btnNewButton.setFont(new Font("Zawgyi-One", Font.BOLD, 21));
-		btnNewButton.setBounds(122, 90, 203, 81);
+		btnNewButton.setBounds(99, 39, 203, 81);
 		frame.getContentPane().add(btnNewButton);
 		
-		JButton btnNewButton_1 = new JButton("အေရာင္းေစ်း စာရင္း");
+		JButton btnNewButton_1 = new JButton("အေရာင္း စာရင္း");
 		btnNewButton_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				new saleProduct_D().setVisible(true);
@@ -66,7 +66,7 @@ public class home {
 		});
 		btnNewButton_1.setFont(new Font("Zawgyi-One", Font.BOLD, 19));
 		btnNewButton_1.setBackground(SystemColor.info);
-		btnNewButton_1.setBounds(451, 90, 203, 81);
+		btnNewButton_1.setBounds(428, 39, 203, 81);
 		frame.getContentPane().add(btnNewButton_1);
 		
 		JButton btnNewButton_1_1 = new JButton("Order စာရင္း");
@@ -77,17 +77,24 @@ public class home {
 		});
 		btnNewButton_1_1.setFont(new Font("Zawgyi-One", Font.BOLD, 21));
 		btnNewButton_1_1.setBackground(SystemColor.info);
-		btnNewButton_1_1.setBounds(122, 253, 203, 81);
+		btnNewButton_1_1.setBounds(99, 202, 203, 81);
 		frame.getContentPane().add(btnNewButton_1_1);
 		
 		JButton btnNewButton_1_1_1 = new JButton("အဝယ္ စာရင္း");
 		btnNewButton_1_1_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				new purchaseProduct_D().setVisible(true);
 			}
 		});
 		btnNewButton_1_1_1.setFont(new Font("Zawgyi-One", Font.BOLD, 21));
 		btnNewButton_1_1_1.setBackground(SystemColor.info);
-		btnNewButton_1_1_1.setBounds(451, 253, 203, 81);
+		btnNewButton_1_1_1.setBounds(428, 202, 203, 81);
 		frame.getContentPane().add(btnNewButton_1_1_1);
+		
+		JButton btnNewButton_1_1_1_1 = new JButton("အႏွစ္ခ်ဳပ္ စာရင္း");
+		btnNewButton_1_1_1_1.setFont(new Font("Zawgyi-One", Font.BOLD, 21));
+		btnNewButton_1_1_1_1.setBackground(SystemColor.info);
+		btnNewButton_1_1_1_1.setBounds(260, 324, 203, 81);
+		frame.getContentPane().add(btnNewButton_1_1_1_1);
 	}
 }
