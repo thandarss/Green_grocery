@@ -29,11 +29,15 @@ import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JButton;
 import java.awt.FlowLayout;
+import javax.swing.JComboBox;
+import javax.swing.event.PopupMenuListener;
+import javax.swing.event.PopupMenuEvent;
 
 public class report_D extends JFrame {
 
 	private JPanel contentPane;
 	private JTable tbOrderDetail;
+	private JComboBox cboxName, cboxType;
 
 	/**
 	 * Launch the application.
@@ -88,6 +92,26 @@ public class report_D extends JFrame {
 		}
 	}
 	
+	/*
+	 * Fill the Name box
+	 */
+	public void fillNameBox() {
+		Connection connection = new DbConnection().connect();
+		String sqlString = "select * from customer;";
+		
+		try {
+			PreparedStatement pStatement = connection.prepareStatement(sqlString);
+			ResultSet rSet = pStatement.executeQuery();
+			
+			cboxName.addItem("All");
+			while(rSet.next()) {
+				cboxName.addItem(rSet.getString("Name"));
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 
 	/**
 	 * Create the frame.
@@ -116,7 +140,7 @@ public class report_D extends JFrame {
 		showOrder.setLayout(null);
 		
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(10, 11, 1107, 375);
+		scrollPane.setBounds(10, 58, 1107, 375);
 		showOrder.add(scrollPane);
 		
 		tbOrderDetail = new JTable() {
@@ -127,6 +151,64 @@ public class report_D extends JFrame {
 		tbOrderDetail.setFont(new Font("Zawgyi-One", Font.PLAIN, 12));
 		tbOrderDetail.setRowHeight(30);
 		scrollPane.setViewportView(tbOrderDetail);
+		
+		JLabel lblNewLabel_1_2 = new JLabel("Customer : ");
+		lblNewLabel_1_2.setForeground(Color.BLACK);
+		lblNewLabel_1_2.setFont(new Font("Zawgyi-One", Font.BOLD, 19));
+		lblNewLabel_1_2.setBounds(10, 11, 123, 32);
+		showOrder.add(lblNewLabel_1_2);
+		
+		cboxName = new JComboBox();
+		cboxName.addPopupMenuListener(new PopupMenuListener() {
+			public void popupMenuCanceled(PopupMenuEvent arg0) {
+			}
+			public void popupMenuWillBecomeInvisible(PopupMenuEvent arg0) {
+				String nameString = cboxName.getSelectedItem().toString();
+				String sql = "select * from customer_order where Customer = '" + nameString + "';";
+				
+				Connection connection= new DbConnection().connect();
+				try {
+					PreparedStatement pStatement = connection.prepareStatement(sql);
+					ResultSet rSet = pStatement.executeQuery();
+					
+					if(nameString.equals("All")) {
+						refreshOrder();
+					}
+					
+					else {
+					
+						tbOrderDetail.setModel(DbUtils.resultSetToTableModel(rSet));
+						TableColumnModel columnModel = tbOrderDetail.getColumnModel();
+						columnModel.removeColumn(columnModel.getColumn(11));
+						columnModel.removeColumn(columnModel.getColumn(10));
+						columnModel.removeColumn(columnModel.getColumn(0));
+										
+						DefaultTableCellRenderer renderer =new DefaultTableCellRenderer();
+						renderer.setBackground(new Color(210,251,250));
+						TableColumn priceColumn = tbOrderDetail.getColumnModel().getColumn(6);
+						priceColumn.setCellRenderer(renderer);
+						
+						DefaultTableCellRenderer renderer2 = new DefaultTableCellRenderer();
+						renderer2.setBackground(new Color(196,186,252));
+						tbOrderDetail.getColumnModel().getColumn(7).setCellRenderer(renderer2);
+						
+						DefaultTableCellRenderer renderer3 = new DefaultTableCellRenderer();
+						renderer3.setBackground(new Color(251,237,159));
+						tbOrderDetail.getColumnModel().getColumn(5).setCellRenderer(renderer3);
+						
+						columnModel.setColumnMargin(11);
+					}
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			public void popupMenuWillBecomeVisible(PopupMenuEvent arg0) {
+			}
+		});
+		cboxName.setFont(new Font("Times New Roman", Font.BOLD, 17));
+		cboxName.setBounds(123, 11, 157, 36);
+		showOrder.add(cboxName);
 		
 		JButton btnSearch = new JButton("စစ္ေဆးမည္");
 		btnSearch.setBackground(new Color(255, 248, 220));
@@ -163,5 +245,6 @@ public class report_D extends JFrame {
 		panel.add(lblNewLabel);
 		
 		refreshOrder();
+		fillNameBox();
 	}
 }
