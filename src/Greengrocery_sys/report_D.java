@@ -18,6 +18,8 @@ import Greengrocery_sys.Database.DbConnection;
 import net.proteanit.sql.DbUtils;
 
 import java.awt.Font;
+import java.awt.Point;
+import java.awt.Rectangle;
 import java.awt.SystemColor;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -32,6 +34,11 @@ import java.awt.FlowLayout;
 import javax.swing.JComboBox;
 import javax.swing.event.PopupMenuListener;
 import javax.swing.event.PopupMenuEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
+import java.awt.event.ActionEvent;
 
 public class report_D extends JFrame {
 
@@ -53,6 +60,67 @@ public class report_D extends JFrame {
 				}
 			}
 		});
+	}
+	
+	/*
+	 * add frame MouseListener
+	 */
+	
+	public class frameMouseListener implements MouseListener, MouseMotionListener {
+
+		private Point pressedPoint;
+		private Rectangle framebounds;
+		@Override
+		public void mouseDragged(MouseEvent arg0) {
+			// TODO Auto-generated method stub
+			mouseFrame(arg0);
+		}
+
+		@Override
+		public void mouseMoved(MouseEvent arg0) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void mouseClicked(MouseEvent arg0) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void mouseEntered(MouseEvent arg0) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void mouseExited(MouseEvent arg0) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void mousePressed(MouseEvent arg0) {
+			// TODO Auto-generated method stub
+			this.pressedPoint = arg0.getPoint();
+			this.framebounds = report_D.this.getBounds();
+		}
+
+		@Override
+		public void mouseReleased(MouseEvent arg0) {
+			// TODO Auto-generated method stub
+			mouseFrame(arg0);
+		}
+		
+		public void mouseFrame(MouseEvent e) {
+			Point endPoint = e.getPoint();
+			int xDiff = endPoint.x - pressedPoint.x;
+			int yDiff = endPoint.y - pressedPoint.y;
+			framebounds.x += xDiff;
+			framebounds.y += yDiff;
+			setBounds(framebounds);}
+		
 	}
 	/*
 	 * refresh the order table
@@ -139,25 +207,53 @@ public class report_D extends JFrame {
 	 * Create the frame.
 	 */
 	public report_D() {
+		setUndecorated(true);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 1156, 602);
+		setBounds(100, 100, 1157, 602);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
+		frameMouseListener  listener = new frameMouseListener();
+		addMouseListener(listener);
+		addMouseMotionListener(listener);
+		
 		JPanel panel = new JPanel();
-		panel.setBounds(0, 0, 1140, 576);
+		panel.setBounds(0, 0, 1157, 666);
 		contentPane.add(panel);
 		panel.setLayout(null);
 		
+		JButton btnMinimize = new JButton("-");
+		btnMinimize.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				report_D.this.setExtendedState(JFrame.ICONIFIED);
+			}
+		});
+		btnMinimize.setFont(new Font("Times New Roman", Font.BOLD, 25));
+		btnMinimize.setBackground(Color.RED);
+		btnMinimize.setBounds(1072, 0, 43, 31);
+		panel.add(btnMinimize);
+		
+		JButton btnClose = new JButton("X");
+		btnClose.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				report_D.this.setVisible(false);
+			}
+		});
+		btnClose.setFont(new Font("Times New Roman", Font.BOLD, 13));
+		btnClose.setBackground(Color.RED);
+		btnClose.setBounds(1114, 0, 43, 31);
+		panel.add(btnClose);
+		
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		tabbedPane.setFont(new Font("Zawgyi-One", Font.PLAIN, 19));
-		tabbedPane.setBounds(10, 50, 1132, 515);
+		tabbedPane.setBounds(10, 86, 1132, 515);
 		panel.add(tabbedPane);
 		
 		JPanel showOrder = new JPanel();
+		showOrder.setBackground(new Color(255, 222, 173));
 		tabbedPane.addTab("ေအာ္ဒါစာရင္း", null, showOrder, null);
 		showOrder.setLayout(null);
 		
@@ -170,6 +266,7 @@ public class report_D extends JFrame {
 				return false;
 			}
 		};
+		tbOrderDetail.getTableHeader().setFont(new Font("Verdana", Font.BOLD, 15));
 		tbOrderDetail.setFont(new Font("Zawgyi-One", Font.PLAIN, 12));
 		tbOrderDetail.setRowHeight(30);
 		scrollPane.setViewportView(tbOrderDetail);
@@ -292,27 +389,27 @@ public class report_D extends JFrame {
 		JButton btnSearch = new JButton("စစ္ေဆးမည္");
 		btnSearch.setBackground(new Color(255, 248, 220));
 		btnSearch.setFont(new Font("Zawgyi-One", Font.PLAIN, 19));
-		btnSearch.setBounds(927, 11, 149, 32);
+		btnSearch.setBounds(923, 43, 149, 32);
 		panel.add(btnSearch);
 		
 		JLabel lblNewLabel_1_1 = new JLabel("End Date :");
 		lblNewLabel_1_1.setForeground(SystemColor.info);
 		lblNewLabel_1_1.setFont(new Font("Zawgyi-One", Font.BOLD, 19));
-		lblNewLabel_1_1.setBounds(491, 11, 116, 32);
+		lblNewLabel_1_1.setBounds(487, 43, 116, 32);
 		panel.add(lblNewLabel_1_1);
 		
 		JDateChooser dateChooser_1 = new JDateChooser();
-		dateChooser_1.setBounds(617, 11, 188, 32);
+		dateChooser_1.setBounds(613, 43, 188, 32);
 		panel.add(dateChooser_1);
 		
 		JLabel lblNewLabel_1 = new JLabel("Start Date : ");
 		lblNewLabel_1.setForeground(SystemColor.info);
 		lblNewLabel_1.setFont(new Font("Zawgyi-One", Font.BOLD, 19));
-		lblNewLabel_1.setBounds(147, 11, 121, 32);
+		lblNewLabel_1.setBounds(143, 43, 121, 32);
 		panel.add(lblNewLabel_1);
 		
 		JDateChooser dateChooser = new JDateChooser();
-		dateChooser.setBounds(268, 11, 188, 32);
+		dateChooser.setBounds(264, 43, 188, 32);
 		panel.add(dateChooser);
 		
 		JLabel lblNewLabel = new JLabel("");
@@ -320,7 +417,7 @@ public class report_D extends JFrame {
 		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		lblNewLabel.setBackground(new Color(0,24,0));
 		lblNewLabel.setIcon(new ImageIcon("C:\\Users\\User\\git\\Green_grocery\\Images\\tomato.jpg"));
-		lblNewLabel.setBounds(0, 0, 1142, 565);
+		lblNewLabel.setBounds(0, 0, 1157, 655);
 		panel.add(lblNewLabel);
 		
 		refreshOrder();
