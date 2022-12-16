@@ -112,6 +112,28 @@ public class report_D extends JFrame {
 			e.printStackTrace();
 		}
 	}
+	
+	/*
+	 * Fill the Type Box
+	 */
+	public void fillTypeBox() {
+		Connection connection = new DbConnection().connect();
+		String sqlString = "select * from sale_price;";
+		try {
+			PreparedStatement pStatement = connection.prepareStatement(sqlString);
+			ResultSet rSet = pStatement.executeQuery();
+			
+			cboxType.addItem("All");
+			
+			while(rSet.next()) {
+				cboxType.addItem(rSet.getString("Type"));
+			}
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 
 	/**
 	 * Create the frame.
@@ -198,6 +220,7 @@ public class report_D extends JFrame {
 						
 						columnModel.setColumnMargin(11);
 					}
+					
 				} catch (SQLException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -209,6 +232,62 @@ public class report_D extends JFrame {
 		cboxName.setFont(new Font("Times New Roman", Font.BOLD, 17));
 		cboxName.setBounds(123, 11, 157, 36);
 		showOrder.add(cboxName);
+		
+		JLabel lblNewLabel_1_2_1 = new JLabel("Type : ");
+		lblNewLabel_1_2_1.setForeground(Color.BLACK);
+		lblNewLabel_1_2_1.setFont(new Font("Zawgyi-One", Font.BOLD, 19));
+		lblNewLabel_1_2_1.setBounds(357, 11, 76, 32);
+		showOrder.add(lblNewLabel_1_2_1);
+		
+		cboxType = new JComboBox();
+		cboxType.addPopupMenuListener(new PopupMenuListener() {
+			public void popupMenuCanceled(PopupMenuEvent arg0) {
+			}
+			public void popupMenuWillBecomeInvisible(PopupMenuEvent arg0) {
+				String typeString = cboxType.getSelectedItem().toString();
+				String sqlString = "select * from customer_order where Type = '" + typeString + "';";
+				
+				Connection connection = new DbConnection().connect();
+				try {
+					PreparedStatement pStatement = connection.prepareStatement(sqlString);
+					ResultSet rSet = pStatement.executeQuery();
+					
+					if(typeString.equals("All")){
+						refreshOrder();
+					}
+					else {
+						tbOrderDetail.setModel(DbUtils.resultSetToTableModel(rSet));
+						TableColumnModel columnModel = tbOrderDetail.getColumnModel();
+						columnModel.removeColumn(columnModel.getColumn(11));
+						columnModel.removeColumn(columnModel.getColumn(10));
+						columnModel.removeColumn(columnModel.getColumn(0));
+										
+						DefaultTableCellRenderer renderer =new DefaultTableCellRenderer();
+						renderer.setBackground(new Color(210,251,250));
+						TableColumn priceColumn = tbOrderDetail.getColumnModel().getColumn(6);
+						priceColumn.setCellRenderer(renderer);
+						
+						DefaultTableCellRenderer renderer2 = new DefaultTableCellRenderer();
+						renderer2.setBackground(new Color(196,186,252));
+						tbOrderDetail.getColumnModel().getColumn(7).setCellRenderer(renderer2);
+						
+						DefaultTableCellRenderer renderer3 = new DefaultTableCellRenderer();
+						renderer3.setBackground(new Color(251,237,159));
+						tbOrderDetail.getColumnModel().getColumn(5).setCellRenderer(renderer3);
+						
+						columnModel.setColumnMargin(11);
+					}
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			public void popupMenuWillBecomeVisible(PopupMenuEvent arg0) {
+			}
+		});
+		cboxType.setFont(new Font("Zawgyi-One", Font.BOLD, 15));
+		cboxType.setBounds(429, 8, 157, 36);
+		showOrder.add(cboxType);
 		
 		JButton btnSearch = new JButton("စစ္ေဆးမည္");
 		btnSearch.setBackground(new Color(255, 248, 220));
@@ -246,5 +325,6 @@ public class report_D extends JFrame {
 		
 		refreshOrder();
 		fillNameBox();
+		fillTypeBox();
 	}
 }
