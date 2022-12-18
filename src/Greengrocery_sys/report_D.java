@@ -25,8 +25,10 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Date;
 
 import javax.swing.JTable;
+import javax.swing.JTextField;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JButton;
@@ -45,6 +47,7 @@ public class report_D extends JFrame {
 	private JPanel contentPane;
 	private JTable tbOrderDetail;
 	private JComboBox cboxName, cboxType;
+	private JDateChooser endDate, startDate;
 
 	/**
 	 * Launch the application.
@@ -387,9 +390,56 @@ public class report_D extends JFrame {
 		showOrder.add(cboxType);
 		
 		JButton btnSearch = new JButton("စစ္ေဆးမည္");
+		btnSearch.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				//String startString = ((JTextField)startDate.getDateEditor().getUiComponent()).getText();
+				//String endString = ((JTextField)endDate.getDateEditor().getUiComponent()).getText();
+
+				Date startString = startDate.getDate();
+				java.sql.Date sDate = new java.sql.Date(startString.getTime());
+				
+				Date endString = endDate.getDate();
+				java.util.Date eDate = new java.sql.Date(endString.getTime());
+				
+				System.out.println(startString + " end " + endString);
+				System.out.println(" sql " + sDate + " sqlend " + eDate);
+				String sqlString = "select * from customer_order where Date Between '" + sDate + "' and '" + eDate + "';";
+				
+				Connection connection = new DbConnection().connect();
+				try {
+					PreparedStatement pStatement = connection.prepareStatement(sqlString);
+					ResultSet rSet = pStatement.executeQuery();
+					
+					tbOrderDetail.setModel(DbUtils.resultSetToTableModel(rSet));
+					TableColumnModel columnModel = tbOrderDetail.getColumnModel();
+					columnModel.removeColumn(columnModel.getColumn(11));
+					columnModel.removeColumn(columnModel.getColumn(10));
+					columnModel.removeColumn(columnModel.getColumn(0));
+									
+					DefaultTableCellRenderer renderer =new DefaultTableCellRenderer();
+					renderer.setBackground(new Color(210,251,250));
+					TableColumn priceColumn = tbOrderDetail.getColumnModel().getColumn(6);
+					priceColumn.setCellRenderer(renderer);
+					
+					DefaultTableCellRenderer renderer2 = new DefaultTableCellRenderer();
+					renderer2.setBackground(new Color(196,186,252));
+					tbOrderDetail.getColumnModel().getColumn(7).setCellRenderer(renderer2);
+					
+					DefaultTableCellRenderer renderer3 = new DefaultTableCellRenderer();
+					renderer3.setBackground(new Color(251,237,159));
+					tbOrderDetail.getColumnModel().getColumn(5).setCellRenderer(renderer3);
+					
+					columnModel.setColumnMargin(11);
+					
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
+		});
 		btnSearch.setBackground(new Color(255, 248, 220));
 		btnSearch.setFont(new Font("Zawgyi-One", Font.PLAIN, 19));
-		btnSearch.setBounds(923, 43, 149, 32);
+		btnSearch.setBounds(858, 43, 149, 32);
 		panel.add(btnSearch);
 		
 		JLabel lblNewLabel_1_1 = new JLabel("End Date :");
@@ -398,9 +448,12 @@ public class report_D extends JFrame {
 		lblNewLabel_1_1.setBounds(487, 43, 116, 32);
 		panel.add(lblNewLabel_1_1);
 		
-		JDateChooser dateChooser_1 = new JDateChooser();
-		dateChooser_1.setBounds(613, 43, 188, 32);
-		panel.add(dateChooser_1);
+		endDate = new JDateChooser();
+		Date date = new Date();
+		endDate.setDate(date);
+		endDate.setFont(new Font("Verdana",Font.BOLD,15));
+		endDate.setBounds(613, 43, 188, 32);
+		panel.add(endDate);
 		
 		JLabel lblNewLabel_1 = new JLabel("Start Date : ");
 		lblNewLabel_1.setForeground(SystemColor.info);
@@ -408,9 +461,12 @@ public class report_D extends JFrame {
 		lblNewLabel_1.setBounds(143, 43, 121, 32);
 		panel.add(lblNewLabel_1);
 		
-		JDateChooser dateChooser = new JDateChooser();
-		dateChooser.setBounds(264, 43, 188, 32);
-		panel.add(dateChooser);
+		startDate = new JDateChooser();
+		Date date1 = new Date();
+		startDate.setDate(date1);
+		startDate.setBounds(264, 43, 188, 32);
+		startDate.setFont(new Font("Verdana", Font.BOLD, 15) );
+		panel.add(startDate);
 		
 		JLabel lblNewLabel = new JLabel("");
 		lblNewLabel.setOpaque(true);

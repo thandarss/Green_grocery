@@ -442,7 +442,7 @@ public class Order_D extends JFrame {
 		contentPane.add(scrollPane);
 		
 		tbOrder = new JTable() {
-			public boolean isEditable(int row, int column) {
+			public boolean isCellEditable(int row, int column) {
 				return false;
 			}
 		};
@@ -469,6 +469,7 @@ public class Order_D extends JFrame {
 						txtBucketNum.setText(rSet.getString("Box"));
 						txtVissNum.setText(rSet.getString("Viss"));
 						txtCardNum.setText(rSet.getString("Card"));	
+						dateChooser.setDate(rSet.getDate("Date"));
 					}
 					
 					PreparedStatement pStatement2 = connection.prepareStatement(sqlString2);
@@ -478,7 +479,9 @@ public class Order_D extends JFrame {
 						cboxName.setSelectedItem(rSet2.getString("Name"));
 					}
 					
-					//set date to Jdatechooser
+					/*
+					 * set date to Jdatechooser
+					 
 					
 					DefaultTableModel model = (DefaultTableModel)tbOrder.getModel();
 					try {
@@ -488,6 +491,7 @@ public class Order_D extends JFrame {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
+					*/
 				} catch (SQLException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -516,7 +520,8 @@ public class Order_D extends JFrame {
 				vissString = txtVissNum.getText();
 				
 				
-				String dateString = ((JTextField)dateChooser.getDateEditor().getUiComponent()).getText();
+				//String dateString = ((JTextField)dateChooser.getDateEditor().getUiComponent()).getText();
+				Date dateString = dateChooser.getDate();
 				
 					if (bucketString.equals("")) {
 						bucketNum = 0;
