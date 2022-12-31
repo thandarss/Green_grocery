@@ -217,10 +217,10 @@ public class report_D extends JFrame {
 	}
 	
 	/*
-	 * Fill total box (int)
+	 * Calculate total box (int)
 	 */
 	
-	public int setTotalInteger(int col) {
+	private int setTotalInteger(int col) {
 		//calculate total value
 		
 		int row = tbOrderDetail.getModel().getRowCount();
@@ -243,6 +243,26 @@ public class report_D extends JFrame {
 		return sum;
 	}
 	
+	/*
+	 * Calculate total box (BigDecimal)
+	 */
+	private BigDecimal setTotalBigDecimal(int col) {
+		int row = tbOrderDetail.getModel().getRowCount();
+		int column = col;
+		BigDecimal sum = BigDecimal.ZERO;
+		
+		listDecimals = new ArrayList<>();
+		
+		for(int i=0; i<row; i++) {
+			listDecimals.add((BigDecimal) tbOrderDetail.getModel().getValueAt(i, column));
+		}
+		
+		for(int j=0; j<listDecimals.size(); j++) {
+			sum = sum.add(listDecimals.get(j));
+		}
+		
+		return sum;
+	}
 	
 
 	/**
@@ -428,7 +448,7 @@ public class report_D extends JFrame {
 		cboxType.setBounds(429, 8, 157, 36);
 		showOrder.add(cboxType);
 		
-		JLabel lblNewLabel_1_2_2 = new JLabel("Customer : ");
+		JLabel lblNewLabel_1_2_2 = new JLabel("Total : ");
 		lblNewLabel_1_2_2.setForeground(Color.BLACK);
 		lblNewLabel_1_2_2.setFont(new Font("Zawgyi-One", Font.BOLD, 19));
 		lblNewLabel_1_2_2.setBounds(123, 444, 123, 32);
@@ -467,7 +487,7 @@ public class report_D extends JFrame {
 		txtAllTotal = new JTextField();
 		txtAllTotal.setFont(new Font("Times New Roman", Font.BOLD, 21));
 		txtAllTotal.setColumns(10);
-		txtAllTotal.setBounds(886, 444, 117, 30);
+		txtAllTotal.setBounds(886, 444, 168, 30);
 		showOrder.add(txtAllTotal);
 		
 		JButton btnSearch = new JButton("စစ္ေဆးမည္");
@@ -562,5 +582,11 @@ public class report_D extends JFrame {
 		fillTypeBox();
 		
 		txtBucketTotal.setText(String.valueOf(setTotalInteger(3)));
+		txtBoxTotal.setText(String.valueOf(setTotalInteger(4)));
+		txtCardTotal.setText(String.valueOf(setTotalInteger(5)));
+		txtPriceTotal.setText(String.valueOf(setTotalInteger(7)));
+		
+		txtVissTotal.setText(String.valueOf(setTotalBigDecimal(6)));
+		txtAllTotal.setText(String.valueOf(setTotalBigDecimal(8)));
 	}
 }
