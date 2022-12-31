@@ -25,6 +25,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Date;
 
 import javax.swing.JTable;
@@ -40,6 +41,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.math.BigDecimal;
 import java.awt.event.ActionEvent;
 
 public class report_D extends JFrame {
@@ -48,6 +50,14 @@ public class report_D extends JFrame {
 	private JTable tbOrderDetail;
 	private JComboBox cboxName, cboxType;
 	private JDateChooser endDate, startDate;
+	private JTextField txtBucketTotal;
+	private JTextField txtBoxTotal;
+	private JTextField txtCardTotal;
+	private JTextField txtVissTotal;
+	private JTextField txtPriceTotal;
+	private JTextField txtAllTotal;
+	private ArrayList<Integer> listIntegers;
+	private ArrayList<BigDecimal> listDecimals;
 
 	/**
 	 * Launch the application.
@@ -205,6 +215,35 @@ public class report_D extends JFrame {
 			e.printStackTrace();
 		}
 	}
+	
+	/*
+	 * Fill total box (int)
+	 */
+	
+	public int setTotalInteger(int col) {
+		//calculate total value
+		
+		int row = tbOrderDetail.getModel().getRowCount();
+		int column = col;
+		int sum =0;
+		
+		listIntegers = new ArrayList();
+						
+		for(int i=0; i<row; i++) {
+			
+			listIntegers.add((Integer) tbOrderDetail.getModel().getValueAt(i, column));
+		}
+		
+		for(int j=0; j<listIntegers.size(); j++ ) {
+			sum = sum + listIntegers.get(j);
+		}
+		
+		listIntegers.clear();
+		
+		return sum;
+	}
+	
+	
 
 	/**
 	 * Create the frame.
@@ -212,7 +251,7 @@ public class report_D extends JFrame {
 	public report_D() {
 		setUndecorated(true);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 1157, 602);
+		setBounds(100, 100, 1157, 624);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 
@@ -224,7 +263,7 @@ public class report_D extends JFrame {
 		addMouseMotionListener(listener);
 		
 		JPanel panel = new JPanel();
-		panel.setBounds(0, 0, 1157, 666);
+		panel.setBounds(0, 0, 1157, 624);
 		contentPane.add(panel);
 		panel.setLayout(null);
 		
@@ -252,7 +291,7 @@ public class report_D extends JFrame {
 		
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		tabbedPane.setFont(new Font("Zawgyi-One", Font.PLAIN, 19));
-		tabbedPane.setBounds(10, 86, 1132, 515);
+		tabbedPane.setBounds(10, 86, 1132, 527);
 		panel.add(tabbedPane);
 		
 		JPanel showOrder = new JPanel();
@@ -389,6 +428,48 @@ public class report_D extends JFrame {
 		cboxType.setBounds(429, 8, 157, 36);
 		showOrder.add(cboxType);
 		
+		JLabel lblNewLabel_1_2_2 = new JLabel("Customer : ");
+		lblNewLabel_1_2_2.setForeground(Color.BLACK);
+		lblNewLabel_1_2_2.setFont(new Font("Zawgyi-One", Font.BOLD, 19));
+		lblNewLabel_1_2_2.setBounds(123, 444, 123, 32);
+		showOrder.add(lblNewLabel_1_2_2);
+		
+		txtBucketTotal = new JTextField();
+		txtBucketTotal.setFont(new Font("Times New Roman", Font.BOLD, 21));
+		txtBucketTotal.setBounds(256, 444, 105, 30);
+		showOrder.add(txtBucketTotal);
+		txtBucketTotal.setColumns(10);
+		
+		txtBoxTotal = new JTextField();
+		txtBoxTotal.setFont(new Font("Times New Roman", Font.BOLD, 21));
+		txtBoxTotal.setColumns(10);
+		txtBoxTotal.setBounds(382, 444, 105, 30);
+		showOrder.add(txtBoxTotal);
+		
+		txtCardTotal = new JTextField();
+		txtCardTotal.setFont(new Font("Times New Roman", Font.BOLD, 21));
+		txtCardTotal.setColumns(10);
+		txtCardTotal.setBounds(508, 444, 105, 30);
+		showOrder.add(txtCardTotal);
+		
+		txtVissTotal = new JTextField();
+		txtVissTotal.setFont(new Font("Times New Roman", Font.BOLD, 21));
+		txtVissTotal.setColumns(10);
+		txtVissTotal.setBounds(636, 444, 105, 30);
+		showOrder.add(txtVissTotal);
+		
+		txtPriceTotal = new JTextField();
+		txtPriceTotal.setFont(new Font("Times New Roman", Font.BOLD, 21));
+		txtPriceTotal.setColumns(10);
+		txtPriceTotal.setBounds(761, 444, 105, 30);
+		showOrder.add(txtPriceTotal);
+		
+		txtAllTotal = new JTextField();
+		txtAllTotal.setFont(new Font("Times New Roman", Font.BOLD, 21));
+		txtAllTotal.setColumns(10);
+		txtAllTotal.setBounds(886, 444, 117, 30);
+		showOrder.add(txtAllTotal);
+		
 		JButton btnSearch = new JButton("စစ္ေဆးမည္");
 		btnSearch.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -479,5 +560,7 @@ public class report_D extends JFrame {
 		refreshOrder();
 		fillNameBox();
 		fillTypeBox();
+		
+		txtBucketTotal.setText(String.valueOf(setTotalInteger(3)));
 	}
 }
