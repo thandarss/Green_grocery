@@ -43,13 +43,13 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.math.BigDecimal;
 import java.awt.event.ActionEvent;
+import javax.swing.DefaultComboBoxModel;
 
 public class report_D extends JFrame {
 
 	private JPanel contentPane;
 	private JTable tbOrderDetail;
-	private JComboBox cboxName, cboxType;
-	private JDateChooser endDate, startDate;
+	private JComboBox cboxName, cboxType, cboxType_P;
 	private JTextField txtBucketTotal;
 	private JTextField txtBoxTotal;
 	private JTextField txtCardTotal;
@@ -65,6 +65,16 @@ public class report_D extends JFrame {
 	private JTextField txtPVissTol;
 	private JTextField txtPpriceTol;
 	private JTextField txtPAllTotal;
+	private JLabel lblNewLabel_1;
+	private JDateChooser startDate;
+	private JLabel lblNewLabel_1_1;
+	private JDateChooser endDate;
+	private JButton btnSearch;
+	private JLabel lblNewLabel_2;
+	private JLabel lblNewLabel_1_3;
+	private JDateChooser startDate_1;
+	private JDateChooser endDate_1;
+	private JButton btnSearch_1;
 
 	/**
 	 * Launch the application.
@@ -181,6 +191,41 @@ public class report_D extends JFrame {
 	}
 	
 	/*
+	 * refresh the order table
+	 */
+	public void refreshPurchase() {
+		Connection connection = new DbConnection().connect();
+		String sqlString = "select * from purchase_order;";
+		
+		try {
+			PreparedStatement pStatement = connection.prepareStatement(sqlString);
+			ResultSet rSet = pStatement.executeQuery();
+			
+			tbPurchaseDetail.setModel(DbUtils.resultSetToTableModel(rSet));
+			TableColumnModel columnModel = tbPurchaseDetail.getColumnModel();
+			columnModel.removeColumn(columnModel.getColumn(0));
+							
+			DefaultTableCellRenderer renderer =new DefaultTableCellRenderer();
+			renderer.setBackground(new Color(210,251,250));
+			TableColumn priceColumn = tbPurchaseDetail.getColumnModel().getColumn(5);
+			priceColumn.setCellRenderer(renderer);
+			
+			DefaultTableCellRenderer renderer2 = new DefaultTableCellRenderer();
+			renderer2.setBackground(new Color(196,186,252));
+			tbPurchaseDetail.getColumnModel().getColumn(6).setCellRenderer(renderer2);
+			
+			DefaultTableCellRenderer renderer3 = new DefaultTableCellRenderer();
+			renderer3.setBackground(new Color(251,237,159));
+			tbPurchaseDetail.getColumnModel().getColumn(7).setCellRenderer(renderer3);
+			
+			columnModel.setColumnMargin(11);
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	/*
 	 * Fill the Name box
 	 */
 	public void fillNameBox() {
@@ -224,6 +269,28 @@ public class report_D extends JFrame {
 	}
 	
 	/*
+	 * Fill the Purchase Type Box
+	 */
+	public void fillPurchaseTypeBox() {
+		Connection connection = new DbConnection().connect();
+		String sqlString = "select * from sale_price;";
+		try {
+			PreparedStatement pStatement = connection.prepareStatement(sqlString);
+			ResultSet rSet = pStatement.executeQuery();
+			
+			cboxType_P.addItem("All");
+			
+			while(rSet.next()) {
+				cboxType_P.addItem(rSet.getString("Type"));
+			}
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	/*
 	 * Calculate total box (int)
 	 */
 	
@@ -239,6 +306,33 @@ public class report_D extends JFrame {
 		for(int i=0; i<row; i++) {
 			
 			listIntegers.add((Integer) tbOrderDetail.getModel().getValueAt(i, column));
+		}
+		
+		for(int j=0; j<listIntegers.size(); j++ ) {
+			sum = sum + listIntegers.get(j);
+		}
+		
+		listIntegers.clear();
+		
+		return sum;
+	}
+	
+	/*
+	 * Calculate Purchase total box (int)
+	 */
+	
+	private int setPurchaseTolInt(int col) {
+		//calculate total value
+		
+		int row = tbPurchaseDetail.getModel().getRowCount();
+		int column = col;
+		int sum =0;
+		
+		listIntegers = new ArrayList();
+						
+		for(int i=0; i<row; i++) {
+			
+			listIntegers.add((Integer) tbPurchaseDetail.getModel().getValueAt(i, column));
 		}
 		
 		for(int j=0; j<listIntegers.size(); j++ ) {
@@ -271,6 +365,26 @@ public class report_D extends JFrame {
 		return sum;
 	}
 	
+	/*
+	 * Calculate Purchase total box (BigDecimal)
+	 */
+	private BigDecimal setPurchaseTolDecimal(int col) {
+		int row = tbPurchaseDetail.getModel().getRowCount();
+		int column = col;
+		BigDecimal sum = BigDecimal.ZERO;
+		
+		listDecimals = new ArrayList<>();
+		
+		for(int i=0; i<row; i++) {
+			listDecimals.add((BigDecimal) tbPurchaseDetail.getModel().getValueAt(i, column));
+		}
+		
+		for(int j=0; j<listDecimals.size(); j++) {
+			sum = sum.add(listDecimals.get(j));
+		}
+		
+		return sum;
+	}
 
 	/**
 	 * Create the frame.
@@ -318,7 +432,7 @@ public class report_D extends JFrame {
 		
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		tabbedPane.setFont(new Font("Zawgyi-One", Font.PLAIN, 19));
-		tabbedPane.setBounds(10, 86, 1132, 527);
+		tabbedPane.setBounds(0, 11, 1132, 602);
 		panel.add(tabbedPane);
 		
 		JPanel showOrder = new JPanel();
@@ -327,7 +441,7 @@ public class report_D extends JFrame {
 		showOrder.setLayout(null);
 		
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(10, 58, 1107, 375);
+		scrollPane.setBounds(10, 125, 1107, 381);
 		showOrder.add(scrollPane);
 		
 		tbOrderDetail = new JTable() {
@@ -343,7 +457,7 @@ public class report_D extends JFrame {
 		JLabel lblNewLabel_1_2 = new JLabel("Customer : ");
 		lblNewLabel_1_2.setForeground(Color.BLACK);
 		lblNewLabel_1_2.setFont(new Font("Zawgyi-One", Font.BOLD, 19));
-		lblNewLabel_1_2.setBounds(10, 11, 123, 32);
+		lblNewLabel_1_2.setBounds(10, 78, 123, 32);
 		showOrder.add(lblNewLabel_1_2);
 		
 		cboxName = new JComboBox();
@@ -396,13 +510,13 @@ public class report_D extends JFrame {
 			}
 		});
 		cboxName.setFont(new Font("Times New Roman", Font.BOLD, 17));
-		cboxName.setBounds(123, 11, 157, 36);
+		cboxName.setBounds(123, 78, 157, 36);
 		showOrder.add(cboxName);
 		
 		JLabel lblNewLabel_1_2_1 = new JLabel("Type : ");
 		lblNewLabel_1_2_1.setForeground(Color.BLACK);
 		lblNewLabel_1_2_1.setFont(new Font("Zawgyi-One", Font.BOLD, 19));
-		lblNewLabel_1_2_1.setBounds(357, 11, 76, 32);
+		lblNewLabel_1_2_1.setBounds(357, 78, 76, 32);
 		showOrder.add(lblNewLabel_1_2_1);
 		
 		cboxType = new JComboBox();
@@ -452,18 +566,18 @@ public class report_D extends JFrame {
 			}
 		});
 		cboxType.setFont(new Font("Zawgyi-One", Font.BOLD, 15));
-		cboxType.setBounds(429, 8, 157, 36);
+		cboxType.setBounds(429, 75, 157, 36);
 		showOrder.add(cboxType);
 		
 		JLabel lblNewLabel_1_2_2 = new JLabel("Total : ");
 		lblNewLabel_1_2_2.setForeground(Color.BLACK);
 		lblNewLabel_1_2_2.setFont(new Font("Zawgyi-One", Font.BOLD, 19));
-		lblNewLabel_1_2_2.setBounds(123, 444, 123, 32);
+		lblNewLabel_1_2_2.setBounds(123, 517, 123, 32);
 		showOrder.add(lblNewLabel_1_2_2);
 		
 		txtBucketTotal = new JTextField();
 		txtBucketTotal.setFont(new Font("Times New Roman", Font.BOLD, 21));
-		txtBucketTotal.setBounds(256, 444, 105, 30);
+		txtBucketTotal.setBounds(256, 517, 105, 30);
 		txtBucketTotal.setEditable(false);
 		showOrder.add(txtBucketTotal);
 		txtBucketTotal.setColumns(10);
@@ -471,39 +585,83 @@ public class report_D extends JFrame {
 		txtBoxTotal = new JTextField();
 		txtBoxTotal.setFont(new Font("Times New Roman", Font.BOLD, 21));
 		txtBoxTotal.setColumns(10);
-		txtBoxTotal.setBounds(382, 444, 105, 30);
+		txtBoxTotal.setBounds(382, 517, 105, 30);
 		txtBoxTotal.setEditable(false);
 		showOrder.add(txtBoxTotal);
 		
 		txtCardTotal = new JTextField();
 		txtCardTotal.setFont(new Font("Times New Roman", Font.BOLD, 21));
 		txtCardTotal.setColumns(10);
-		txtCardTotal.setBounds(508, 444, 105, 30);
+		txtCardTotal.setBounds(508, 517, 105, 30);
 		txtCardTotal.setEditable(false);
 		showOrder.add(txtCardTotal);
 		
 		txtVissTotal = new JTextField();
 		txtVissTotal.setFont(new Font("Times New Roman", Font.BOLD, 21));
 		txtVissTotal.setColumns(10);
-		txtVissTotal.setBounds(636, 444, 105, 30);
+		txtVissTotal.setBounds(636, 517, 105, 30);
 		txtVissTotal.setEditable(false);
 		showOrder.add(txtVissTotal);
 		
 		txtPriceTotal = new JTextField();
 		txtPriceTotal.setFont(new Font("Times New Roman", Font.BOLD, 21));
 		txtPriceTotal.setColumns(10);
-		txtPriceTotal.setBounds(761, 444, 105, 30);
+		txtPriceTotal.setBounds(761, 517, 105, 30);
 		txtPriceTotal.setEditable(false);
 		showOrder.add(txtPriceTotal);
 		
 		txtAllTotal = new JTextField();
 		txtAllTotal.setFont(new Font("Times New Roman", Font.BOLD, 21));
 		txtAllTotal.setColumns(10);
-		txtAllTotal.setBounds(886, 444, 168, 30);
+		txtAllTotal.setBounds(886, 517, 168, 30);
 		txtAllTotal.setEditable(false);
 		showOrder.add(txtAllTotal);
+		Date date = new Date();
+		Date date1 = new Date();
 		
-		JButton btnSearch = new JButton("စစ္ေဆးမည္");
+		JLabel lblNewLabel = new JLabel("");
+		lblNewLabel.setOpaque(true);
+		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		lblNewLabel.setBackground(new Color(0,24,0));
+		lblNewLabel.setIcon(new ImageIcon("C:\\Users\\User\\git\\Green_grocery\\Images\\tomato.jpg"));
+		lblNewLabel.setBounds(0, 0, 1147, 655);
+		panel.add(lblNewLabel);
+		
+		refreshOrder();
+		fillNameBox();
+		fillTypeBox();
+		
+		txtBucketTotal.setText(String.valueOf(setTotalInteger(3)));
+		txtBoxTotal.setText(String.valueOf(setTotalInteger(4)));
+		txtCardTotal.setText(String.valueOf(setTotalInteger(5)));
+		txtPriceTotal.setText(String.valueOf(setTotalInteger(7)));
+		
+		txtVissTotal.setText(String.valueOf(setTotalBigDecimal(6)));
+		txtAllTotal.setText(String.valueOf(setTotalBigDecimal(8)));
+		
+		lblNewLabel_1 = new JLabel("Start Date : ");
+		lblNewLabel_1.setForeground(new Color(0, 0, 0));
+		lblNewLabel_1.setFont(new Font("Zawgyi-One", Font.BOLD, 19));
+		lblNewLabel_1.setBounds(131, 11, 121, 32);
+		showOrder.add(lblNewLabel_1);
+		
+		startDate = new JDateChooser();
+		startDate.setFont(new Font("Verdana", Font.BOLD, 15));
+		startDate.setBounds(252, 11, 188, 32);
+		showOrder.add(startDate);
+		
+		lblNewLabel_1_1 = new JLabel("End Date :");
+		lblNewLabel_1_1.setForeground(new Color(0, 0, 0));
+		lblNewLabel_1_1.setFont(new Font("Zawgyi-One", Font.BOLD, 19));
+		lblNewLabel_1_1.setBounds(475, 11, 116, 32);
+		showOrder.add(lblNewLabel_1_1);
+		
+		endDate = new JDateChooser();
+		endDate.setFont(new Font("Verdana", Font.BOLD, 15));
+		endDate.setBounds(601, 11, 188, 32);
+		showOrder.add(endDate);
+		
+		btnSearch = new JButton("စစ္ေဆးမည္");
 		btnSearch.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				//String startString = ((JTextField)startDate.getDateEditor().getUiComponent()).getText();
@@ -549,139 +707,129 @@ public class report_D extends JFrame {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
+		
 			}
 		});
-		btnSearch.setBackground(new Color(255, 248, 220));
 		btnSearch.setFont(new Font("Zawgyi-One", Font.PLAIN, 19));
-		btnSearch.setBounds(858, 43, 149, 32);
-		panel.add(btnSearch);
-		
-		JLabel lblNewLabel_1_1 = new JLabel("End Date :");
-		lblNewLabel_1_1.setForeground(SystemColor.info);
-		lblNewLabel_1_1.setFont(new Font("Zawgyi-One", Font.BOLD, 19));
-		lblNewLabel_1_1.setBounds(487, 43, 116, 32);
-		panel.add(lblNewLabel_1_1);
-		
-		endDate = new JDateChooser();
-		Date date = new Date();
-		endDate.setDate(date);
-		endDate.setFont(new Font("Verdana",Font.BOLD,15));
-		endDate.setBounds(613, 43, 188, 32);
-		panel.add(endDate);
-		
-		JLabel lblNewLabel_1 = new JLabel("Start Date : ");
-		lblNewLabel_1.setForeground(SystemColor.info);
-		lblNewLabel_1.setFont(new Font("Zawgyi-One", Font.BOLD, 19));
-		lblNewLabel_1.setBounds(143, 43, 121, 32);
-		panel.add(lblNewLabel_1);
-		
-		startDate = new JDateChooser();
-		Date date1 = new Date();
-		startDate.setDate(date1);
-		startDate.setBounds(264, 43, 188, 32);
-		startDate.setFont(new Font("Verdana", Font.BOLD, 15) );
-		panel.add(startDate);
-		
-		JLabel lblNewLabel = new JLabel("");
-		lblNewLabel.setOpaque(true);
-		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		lblNewLabel.setBackground(new Color(0,24,0));
-		lblNewLabel.setIcon(new ImageIcon("C:\\Users\\User\\git\\Green_grocery\\Images\\tomato.jpg"));
-		lblNewLabel.setBounds(0, 0, 1157, 655);
-		panel.add(lblNewLabel);
-		
-		refreshOrder();
-		fillNameBox();
-		fillTypeBox();
-		
-		txtBucketTotal.setText(String.valueOf(setTotalInteger(3)));
-		txtBoxTotal.setText(String.valueOf(setTotalInteger(4)));
-		txtCardTotal.setText(String.valueOf(setTotalInteger(5)));
-		txtPriceTotal.setText(String.valueOf(setTotalInteger(7)));
-		
-		txtVissTotal.setText(String.valueOf(setTotalBigDecimal(6)));
-		txtAllTotal.setText(String.valueOf(setTotalBigDecimal(8)));
+		btnSearch.setBackground(new Color(255, 248, 220));
+		btnSearch.setBounds(846, 11, 149, 32);
+		showOrder.add(btnSearch);
 		
 		JPanel showPurchase = new JPanel();
 		tabbedPane.addTab("အဝယ္စာရင္း", null, showPurchase, null);
 		showPurchase.setLayout(null);
 		showPurchase.setBackground(new Color(255, 222, 173));
 		
-		JLabel lblNewLabel_1_2_3 = new JLabel("Customer : ");
-		lblNewLabel_1_2_3.setForeground(Color.BLACK);
-		lblNewLabel_1_2_3.setFont(new Font("Zawgyi-One", Font.BOLD, 19));
-		lblNewLabel_1_2_3.setBounds(10, 11, 123, 32);
-		showPurchase.add(lblNewLabel_1_2_3);
-		
 		JLabel lblNewLabel_1_2_1_1 = new JLabel("Type : ");
 		lblNewLabel_1_2_1_1.setForeground(Color.BLACK);
 		lblNewLabel_1_2_1_1.setFont(new Font("Zawgyi-One", Font.BOLD, 19));
-		lblNewLabel_1_2_1_1.setBounds(357, 11, 76, 32);
+		lblNewLabel_1_2_1_1.setBounds(20, 70, 76, 32);
 		showPurchase.add(lblNewLabel_1_2_1_1);
 		
-		JComboBox cboxType_P = new JComboBox();
+		cboxType_P = new JComboBox();
 		cboxType_P.setFont(new Font("Zawgyi-One", Font.BOLD, 15));
-		cboxType_P.setBounds(426, 11, 157, 36);
+		cboxType_P.setBounds(87, 69, 157, 36);
 		showPurchase.add(cboxType_P);
 		
-		JComboBox cboxName_P = new JComboBox();
-		cboxName_P.setFont(new Font("Times New Roman", Font.BOLD, 17));
-		cboxName_P.setBounds(120, 14, 157, 36);
-		showPurchase.add(cboxName_P);
-		
 		JScrollPane scrollPane_1 = new JScrollPane();
-		scrollPane_1.setBounds(10, 58, 1089, 380);
+		scrollPane_1.setBounds(10, 113, 1107, 393);
 		showPurchase.add(scrollPane_1);
 		
-		tbPurchaseDetail = new JTable();
+		tbPurchaseDetail = new JTable() {
+			public boolean isCellEditable(int row, int column) {
+				return false;
+			}
+		};
+		tbPurchaseDetail.getTableHeader().setFont(new Font("Verdana", Font.BOLD, 15));
+		tbPurchaseDetail.setFont(new Font("Zawgyi-One", Font.PLAIN, 12));
+		tbPurchaseDetail.setRowHeight(30);
 		scrollPane_1.setViewportView(tbPurchaseDetail);
 		
 		JLabel lblNewLabel_1_2_2_1 = new JLabel("Total : ");
 		lblNewLabel_1_2_2_1.setForeground(Color.BLACK);
 		lblNewLabel_1_2_2_1.setFont(new Font("Zawgyi-One", Font.BOLD, 19));
-		lblNewLabel_1_2_2_1.setBounds(105, 442, 123, 32);
+		lblNewLabel_1_2_2_1.setBounds(20, 517, 123, 32);
 		showPurchase.add(lblNewLabel_1_2_2_1);
 		
 		txtPBucketTol = new JTextField();
 		txtPBucketTol.setText("0");
 		txtPBucketTol.setFont(new Font("Times New Roman", Font.BOLD, 21));
 		txtPBucketTol.setColumns(10);
-		txtPBucketTol.setBounds(238, 442, 105, 30);
+		txtPBucketTol.setBounds(141, 516, 105, 30);
 		showPurchase.add(txtPBucketTol);
 		
 		txtPBoxTotal = new JTextField();
 		txtPBoxTotal.setText("0");
 		txtPBoxTotal.setFont(new Font("Times New Roman", Font.BOLD, 21));
 		txtPBoxTotal.setColumns(10);
-		txtPBoxTotal.setBounds(364, 442, 105, 30);
+		txtPBoxTotal.setBounds(284, 517, 105, 30);
 		showPurchase.add(txtPBoxTotal);
 		
 		txtPCardTol = new JTextField();
 		txtPCardTol.setText("0");
 		txtPCardTol.setFont(new Font("Times New Roman", Font.BOLD, 21));
 		txtPCardTol.setColumns(10);
-		txtPCardTol.setBounds(490, 442, 105, 30);
+		txtPCardTol.setBounds(426, 517, 105, 30);
 		showPurchase.add(txtPCardTol);
 		
 		txtPVissTol = new JTextField();
 		txtPVissTol.setText("null");
 		txtPVissTol.setFont(new Font("Times New Roman", Font.BOLD, 21));
 		txtPVissTol.setColumns(10);
-		txtPVissTol.setBounds(618, 442, 105, 30);
+		txtPVissTol.setBounds(565, 517, 105, 30);
 		showPurchase.add(txtPVissTol);
 		
 		txtPpriceTol = new JTextField();
 		txtPpriceTol.setText("0");
 		txtPpriceTol.setFont(new Font("Times New Roman", Font.BOLD, 21));
 		txtPpriceTol.setColumns(10);
-		txtPpriceTol.setBounds(743, 442, 105, 30);
+		txtPpriceTol.setBounds(703, 517, 105, 30);
 		showPurchase.add(txtPpriceTol);
 		
 		txtPAllTotal = new JTextField();
 		txtPAllTotal.setText("null");
 		txtPAllTotal.setFont(new Font("Times New Roman", Font.BOLD, 21));
 		txtPAllTotal.setColumns(10);
-		txtPAllTotal.setBounds(868, 442, 168, 30);
+		txtPAllTotal.setBounds(839, 516, 145, 30);
 		showPurchase.add(txtPAllTotal);
+		
+		refreshPurchase();
+		fillPurchaseTypeBox();
+		
+		txtPBucketTol.setText(String.valueOf(setPurchaseTolInt(2)));
+		txtPBoxTotal.setText(String.valueOf(setPurchaseTolInt(3)));
+		txtPCardTol.setText(String.valueOf(setPurchaseTolInt(4)));
+		txtPpriceTol.setText(String.valueOf(setPurchaseTolInt(6)));
+		
+		txtPVissTol.setText(String.valueOf(setPurchaseTolDecimal(5)));
+		txtPAllTotal.setText(String.valueOf(setPurchaseTolDecimal(7)));
+		
+		lblNewLabel_2 = new JLabel("Start Date : ");
+		lblNewLabel_2.setForeground(Color.BLACK);
+		lblNewLabel_2.setFont(new Font("Zawgyi-One", Font.BOLD, 19));
+		lblNewLabel_2.setBounds(140, 11, 121, 32);
+		showPurchase.add(lblNewLabel_2);
+		
+		lblNewLabel_1_3 = new JLabel("End Date :");
+		lblNewLabel_1_3.setForeground(Color.BLACK);
+		lblNewLabel_1_3.setFont(new Font("Zawgyi-One", Font.BOLD, 19));
+		lblNewLabel_1_3.setBounds(484, 11, 116, 32);
+		showPurchase.add(lblNewLabel_1_3);
+		
+		startDate_1 = new JDateChooser();
+		startDate_1.setFont(new Font("Verdana", Font.BOLD, 15));
+		startDate_1.setBounds(261, 11, 188, 32);
+		showPurchase.add(startDate_1);
+		
+		endDate_1 = new JDateChooser();
+		endDate_1.setFont(new Font("Verdana", Font.BOLD, 15));
+		endDate_1.setBounds(610, 11, 188, 32);
+		showPurchase.add(endDate_1);
+		
+		btnSearch_1 = new JButton("စစ္ေဆးမည္");
+		btnSearch_1.setFont(new Font("Zawgyi-One", Font.PLAIN, 19));
+		btnSearch_1.setBackground(new Color(255, 248, 220));
+		btnSearch_1.setBounds(855, 11, 149, 32);
+		showPurchase.add(btnSearch_1);
 	}
 }
