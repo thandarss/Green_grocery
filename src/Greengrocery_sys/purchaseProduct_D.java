@@ -160,7 +160,7 @@ public class purchaseProduct_D extends JFrame {
 		setUndecorated(true);
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 1106, 476);
+		setBounds(100, 100, 1105, 476);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 
