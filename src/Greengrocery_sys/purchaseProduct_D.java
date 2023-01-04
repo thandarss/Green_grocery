@@ -187,6 +187,30 @@ public class purchaseProduct_D extends JFrame {
 		panel.add(dateChooser);
 		
 		JButton btnSearch = new JButton("Search");
+		btnSearch.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				String dateString = ((JTextField)dateChooser.getDateEditor().getUiComponent()).getText();
+				
+				String sqlString = "select * from purchase_order where Date = '" + dateString + "';";
+				
+				Connection connection = new DbConnection().connect();
+				try {
+					PreparedStatement pStatement = connection.prepareStatement(sqlString);
+					ResultSet rSet = pStatement.executeQuery();
+					
+					tbPurchase.setModel(DbUtils.resultSetToTableModel(rSet));
+					
+					TableColumnModel columnModel = tbPurchase.getColumnModel();
+					columnModel.removeColumn(columnModel.getColumn(0));
+					
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+				
+			}
+		});
 		btnSearch.setFont(new Font("Times New Roman", Font.PLAIN, 15));
 		btnSearch.setBackground(SystemColor.info);
 		btnSearch.setBounds(686, 22, 83, 33);
@@ -197,13 +221,13 @@ public class purchaseProduct_D extends JFrame {
 		txtPrice.setFont(new Font("Times New Roman", Font.BOLD, 16));
 		txtPrice.setColumns(10);
 		txtPrice.setBackground(new Color(254, 251, 245));
-		txtPrice.setBounds(865, 305, 111, 27);
+		txtPrice.setBounds(875, 303, 111, 27);
 		panel.add(txtPrice);
 		
-		JLabel lblTitle_1_1_1_2 = new JLabel("၁ ပိႆာ ေစ်း :");
+		JLabel lblTitle_1_1_1_2 = new JLabel("၁ ပိႆာ ေစ်း");
 		lblTitle_1_1_1_2.setForeground(SystemColor.info);
 		lblTitle_1_1_1_2.setFont(new Font("Zawgyi-One", Font.BOLD, 16));
-		lblTitle_1_1_1_2.setBounds(865, 269, 118, 44);
+		lblTitle_1_1_1_2.setBounds(875, 264, 106, 44);
 		panel.add(lblTitle_1_1_1_2);
 		btnMinimize.setFont(new Font("Tahoma", Font.BOLD, 23));
 		btnMinimize.setBackground(new Color(214, 54, 31));
@@ -403,13 +427,13 @@ public class purchaseProduct_D extends JFrame {
 		JLabel lblTitle_1_1_1_1_1 = new JLabel("ကဒ္");
 		lblTitle_1_1_1_1_1.setForeground(SystemColor.info);
 		lblTitle_1_1_1_1_1.setFont(new Font("Zawgyi-One", Font.BOLD, 16));
-		lblTitle_1_1_1_1_1.setBounds(976, 110, 90, 44);
+		lblTitle_1_1_1_1_1.setBounds(960, 110, 90, 44);
 		panel.add(lblTitle_1_1_1_1_1);
 		
 		JLabel lblTitle_1_1_1 = new JLabel("ပိႆာ");
 		lblTitle_1_1_1.setForeground(SystemColor.info);
 		lblTitle_1_1_1.setFont(new Font("Zawgyi-One", Font.BOLD, 16));
-		lblTitle_1_1_1.setBounds(971, 191, 90, 44);
+		lblTitle_1_1_1.setBounds(960, 191, 90, 44);
 		panel.add(lblTitle_1_1_1);
 		
 		JLabel lblTitle_1_1 = new JLabel("ေတာင္း/ျခင္း‌");
@@ -421,7 +445,7 @@ public class purchaseProduct_D extends JFrame {
 		JLabel lblTitle_1_1_1_1 = new JLabel("ေသတၱာ");
 		lblTitle_1_1_1_1.setForeground(SystemColor.info);
 		lblTitle_1_1_1_1.setFont(new Font("Zawgyi-One", Font.BOLD, 16));
-		lblTitle_1_1_1_1.setBounds(804, 191, 129, 44);
+		lblTitle_1_1_1_1.setBounds(794, 191, 129, 44);
 		panel.add(lblTitle_1_1_1_1);
 		
 		JLabel lblTitle_1_2 = new JLabel("အမ်ိဳးအစား");
@@ -444,7 +468,7 @@ public class purchaseProduct_D extends JFrame {
 		JLabel lblNewLabel_1 = new JLabel("အဝယ္ စာရင္း");
 		lblNewLabel_1.setFont(new Font("Zawgyi-One", Font.BOLD, 23));
 		lblNewLabel_1.setForeground(SystemColor.info);
-		lblNewLabel_1.setBounds(20, 18, 166, 37);
+		lblNewLabel_1.setBounds(20, 18, 175, 37);
 		panel.add(lblNewLabel_1);
 		
 		JScrollPane scrollPane = new JScrollPane();
