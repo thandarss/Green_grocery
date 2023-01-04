@@ -393,7 +393,7 @@ public class report_D extends JFrame {
 	public report_D() {
 		setUndecorated(true);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 1157, 624);
+		setBounds(100, 100, 1149, 624);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 
@@ -440,7 +440,7 @@ public class report_D extends JFrame {
 		
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		tabbedPane.setFont(new Font("Zawgyi-One", Font.PLAIN, 19));
-		tabbedPane.setBounds(0, 50, 1132, 574);
+		tabbedPane.setBounds(10, 50, 1122, 574);
 		panel.add(tabbedPane);
 		
 		JPanel showOrder = new JPanel();
