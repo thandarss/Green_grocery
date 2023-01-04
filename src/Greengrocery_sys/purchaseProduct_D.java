@@ -34,12 +34,14 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Date;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import com.toedter.calendar.JDateChooser;
 
 public class purchaseProduct_D extends JFrame {
 
@@ -50,6 +52,7 @@ public class purchaseProduct_D extends JFrame {
 	private JTextField txtBoxPrice;
 	private JTextField txtVissPrice;
 	private JComboBox cBoxSize;
+	private JTextField txtPrice;
 
 	/**
 	 * Launch the application.
@@ -135,7 +138,7 @@ public class purchaseProduct_D extends JFrame {
 	 */
 	private void refreshTable() {
 		Connection connection = new DbConnection().connect();
-		String sqlString = "select * from purchase_price";
+		String sqlString = "select * from purchase_order";
 		try {
 			PreparedStatement pStatement = connection.prepareStatement(sqlString);
 			ResultSet rSet = pStatement.executeQuery();
@@ -175,6 +178,33 @@ public class purchaseProduct_D extends JFrame {
 				purchaseProduct_D.this.setExtendedState(JFrame.ICONIFIED);
 			}
 		});
+		
+		JDateChooser dateChooser = new JDateChooser();
+		dateChooser.setFont(new Font("Zawgyi-One", Font.BOLD, 17));
+		dateChooser.setBounds(519, 18, 149, 40);
+		Date date = new Date();
+		dateChooser.setDate(date);
+		panel.add(dateChooser);
+		
+		JButton btnSearch = new JButton("Search");
+		btnSearch.setFont(new Font("Times New Roman", Font.PLAIN, 15));
+		btnSearch.setBackground(SystemColor.info);
+		btnSearch.setBounds(686, 22, 83, 33);
+		panel.add(btnSearch);
+		
+		txtPrice = new JTextField();
+		txtPrice.setText("0");
+		txtPrice.setFont(new Font("Times New Roman", Font.BOLD, 16));
+		txtPrice.setColumns(10);
+		txtPrice.setBackground(new Color(254, 251, 245));
+		txtPrice.setBounds(865, 305, 111, 27);
+		panel.add(txtPrice);
+		
+		JLabel lblTitle_1_1_1_2 = new JLabel("၁ ပိႆာ ေစ်း :");
+		lblTitle_1_1_1_2.setForeground(SystemColor.info);
+		lblTitle_1_1_1_2.setFont(new Font("Zawgyi-One", Font.BOLD, 16));
+		lblTitle_1_1_1_2.setBounds(865, 269, 118, 44);
+		panel.add(lblTitle_1_1_1_2);
 		btnMinimize.setFont(new Font("Tahoma", Font.BOLD, 23));
 		btnMinimize.setBackground(new Color(214, 54, 31));
 		btnMinimize.setBounds(1022, 0, 44, 34);
@@ -211,7 +241,7 @@ public class purchaseProduct_D extends JFrame {
 		btnDelete.setForeground(new Color(128, 64, 0));
 		btnDelete.setFont(new Font("Zawgyi-One", Font.BOLD, 15));
 		btnDelete.setBackground(new Color(254, 251, 245));
-		btnDelete.setBounds(948, 330, 118, 34);
+		btnDelete.setBounds(945, 361, 118, 34);
 		panel.add(btnDelete);
 		
 		JButton btnAdd = new JButton("ထည့္မည္");
@@ -230,14 +260,14 @@ public class purchaseProduct_D extends JFrame {
 		btnAdd.setForeground(new Color(128, 64, 0));
 		btnAdd.setFont(new Font("Zawgyi-One", Font.BOLD, 15));
 		btnAdd.setBackground(new Color(254, 251, 245));
-		btnAdd.setBounds(782, 330, 118, 34);
+		btnAdd.setBounds(779, 361, 118, 34);
 		panel.add(btnAdd);
 		
 		JButton btnClear = new JButton("Clear");
 		btnClear.setForeground(new Color(128, 64, 0));
 		btnClear.setFont(new Font("Zawgyi-One", Font.BOLD, 15));
 		btnClear.setBackground(new Color(254, 251, 245));
-		btnClear.setBounds(948, 398, 118, 34);
+		btnClear.setBounds(945, 418, 118, 34);
 		panel.add(btnClear);
 		
 		JButton btnUpdate = new JButton("ျပင္မည္");
@@ -263,7 +293,7 @@ public class purchaseProduct_D extends JFrame {
 		btnUpdate.setForeground(new Color(128, 64, 0));
 		btnUpdate.setFont(new Font("Zawgyi-One", Font.BOLD, 15));
 		btnUpdate.setBackground(new Color(254, 251, 245));
-		btnUpdate.setBounds(782, 398, 118, 34);
+		btnUpdate.setBounds(779, 418, 118, 34);
 		panel.add(btnUpdate);
 		
 		txtVissPrice = new JTextField();
@@ -289,7 +319,7 @@ public class purchaseProduct_D extends JFrame {
 		txtVissPrice.setFont(new Font("Times New Roman", Font.BOLD, 16));
 		txtVissPrice.setColumns(10);
 		txtVissPrice.setBackground(new Color(254, 251, 245));
-		txtVissPrice.setBounds(960, 265, 106, 27);
+		txtVissPrice.setBounds(960, 231, 106, 27);
 		panel.add(txtVissPrice);
 		
 		txtBoxPrice = new JTextField();
@@ -315,7 +345,7 @@ public class purchaseProduct_D extends JFrame {
 		txtBoxPrice.setFont(new Font("Times New Roman", Font.BOLD, 16));
 		txtBoxPrice.setColumns(10);
 		txtBoxPrice.setBackground(new Color(254, 251, 245));
-		txtBoxPrice.setBounds(794, 265, 106, 27);
+		txtBoxPrice.setBounds(794, 231, 106, 27);
 		panel.add(txtBoxPrice);
 		
 		txtCardPrice = new JTextField();
@@ -341,7 +371,7 @@ public class purchaseProduct_D extends JFrame {
 		txtCardPrice.setFont(new Font("Times New Roman", Font.BOLD, 16));
 		txtCardPrice.setColumns(10);
 		txtCardPrice.setBackground(new Color(254, 251, 245));
-		txtCardPrice.setBounds(960, 165, 106, 27);
+		txtCardPrice.setBounds(960, 153, 106, 27);
 		panel.add(txtCardPrice);
 		
 		txtBacketPrice = new JTextField();
@@ -367,31 +397,31 @@ public class purchaseProduct_D extends JFrame {
 		txtBacketPrice.setFont(new Font("Times New Roman", Font.BOLD, 16));
 		txtBacketPrice.setColumns(10);
 		txtBacketPrice.setBackground(new Color(254, 251, 245));
-		txtBacketPrice.setBounds(794, 165, 106, 27);
+		txtBacketPrice.setBounds(794, 153, 106, 27);
 		panel.add(txtBacketPrice);
 		
-		JLabel lblTitle_1_1_1_1_1 = new JLabel("ကဒ္ေစ်း");
+		JLabel lblTitle_1_1_1_1_1 = new JLabel("ကဒ္");
 		lblTitle_1_1_1_1_1.setForeground(SystemColor.info);
 		lblTitle_1_1_1_1_1.setFont(new Font("Zawgyi-One", Font.BOLD, 16));
-		lblTitle_1_1_1_1_1.setBounds(976, 122, 90, 44);
+		lblTitle_1_1_1_1_1.setBounds(976, 110, 90, 44);
 		panel.add(lblTitle_1_1_1_1_1);
 		
-		JLabel lblTitle_1_1_1 = new JLabel("ပိႆာေစ်း       ");
+		JLabel lblTitle_1_1_1 = new JLabel("ပိႆာ");
 		lblTitle_1_1_1.setForeground(SystemColor.info);
 		lblTitle_1_1_1.setFont(new Font("Zawgyi-One", Font.BOLD, 16));
-		lblTitle_1_1_1.setBounds(971, 225, 90, 44);
+		lblTitle_1_1_1.setBounds(971, 191, 90, 44);
 		panel.add(lblTitle_1_1_1);
 		
-		JLabel lblTitle_1_1 = new JLabel("ေတာင္း/ျခင္း‌ေဈး");
+		JLabel lblTitle_1_1 = new JLabel("ေတာင္း/ျခင္း‌");
 		lblTitle_1_1.setForeground(SystemColor.info);
 		lblTitle_1_1.setFont(new Font("Zawgyi-One", Font.BOLD, 15));
-		lblTitle_1_1.setBounds(794, 122, 111, 44);
+		lblTitle_1_1.setBounds(794, 110, 111, 44);
 		panel.add(lblTitle_1_1);
 		
-		JLabel lblTitle_1_1_1_1 = new JLabel("ေသတၱာေစ်း     ");
+		JLabel lblTitle_1_1_1_1 = new JLabel("ေသတၱာ");
 		lblTitle_1_1_1_1.setForeground(SystemColor.info);
 		lblTitle_1_1_1_1.setFont(new Font("Zawgyi-One", Font.BOLD, 16));
-		lblTitle_1_1_1_1.setBounds(804, 225, 129, 44);
+		lblTitle_1_1_1_1.setBounds(804, 191, 129, 44);
 		panel.add(lblTitle_1_1_1_1);
 		
 		JLabel lblTitle_1_2 = new JLabel("အမ်ိဳးအစား");
@@ -414,11 +444,11 @@ public class purchaseProduct_D extends JFrame {
 		JLabel lblNewLabel_1 = new JLabel("အဝယ္ စာရင္း");
 		lblNewLabel_1.setFont(new Font("Zawgyi-One", Font.BOLD, 23));
 		lblNewLabel_1.setForeground(SystemColor.info);
-		lblNewLabel_1.setBounds(603, 11, 166, 37);
+		lblNewLabel_1.setBounds(20, 18, 166, 37);
 		panel.add(lblNewLabel_1);
 		
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(20, 66, 749, 366);
+		scrollPane.setBounds(20, 66, 749, 399);
 		panel.add(scrollPane);
 		
 		tbPurchase = new JTable() {
