@@ -674,15 +674,17 @@ public class Order_D extends JFrame {
 		JButton btnSearch = new JButton("Search");
 		btnSearch.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				String dateString = ((JTextField)dateChooser.getDateEditor().getUiComponent()).getText();
+				//String dateString = ((JTextField)dateChooser.getDateEditor().getUiComponent()).getText();
 				
+				Date dateString = dateChooser.getDate();
+				java.sql.Date searchDate = new java.sql.Date(dateString.getTime());
 				System.out.println(dateString);
 				//filter(dateString);
 				connection = new DbConnection().connect();
 				
 				
 					
-				String sqlString1 = "select * from customer_order where Date = '"+ dateString + "';";
+				String sqlString1 = "select * from customer_order where Date = '"+ searchDate + "';";
 					
 					try {
 						PreparedStatement pStatement = connection.prepareStatement(sqlString1);

@@ -189,9 +189,11 @@ public class purchaseProduct_D extends JFrame {
 		JButton btnSearch = new JButton("Search");
 		btnSearch.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				String dateString = ((JTextField)dateChooser.getDateEditor().getUiComponent()).getText();
+				//String dateString = ((JTextField)dateChooser.getDateEditor().getUiComponent()).getText();
 				
-				String sqlString = "select * from purchase_order where Date = '" + dateString + "';";
+				Date dateString = dateChooser.getDate();
+				java.sql.Date searchDate = new java.sql.Date(dateString.getTime());
+				String sqlString = "select * from purchase_order where Date = '" + searchDate + "';";
 				
 				Connection connection = new DbConnection().connect();
 				try {
