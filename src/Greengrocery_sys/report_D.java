@@ -58,6 +58,13 @@ public class report_D extends JFrame {
 	private JTextField txtAllTotal;
 	private ArrayList<Integer> listIntegers;
 	private ArrayList<BigDecimal> listDecimals;
+	private JTable tbPurchaseDetail;
+	private JTextField txtPBucketTol;
+	private JTextField txtPBoxTotal;
+	private JTextField txtPCardTol;
+	private JTextField txtPVissTol;
+	private JTextField txtPpriceTol;
+	private JTextField txtPAllTotal;
 
 	/**
 	 * Launch the application.
@@ -457,6 +464,7 @@ public class report_D extends JFrame {
 		txtBucketTotal = new JTextField();
 		txtBucketTotal.setFont(new Font("Times New Roman", Font.BOLD, 21));
 		txtBucketTotal.setBounds(256, 444, 105, 30);
+		txtBucketTotal.setEditable(false);
 		showOrder.add(txtBucketTotal);
 		txtBucketTotal.setColumns(10);
 		
@@ -464,30 +472,35 @@ public class report_D extends JFrame {
 		txtBoxTotal.setFont(new Font("Times New Roman", Font.BOLD, 21));
 		txtBoxTotal.setColumns(10);
 		txtBoxTotal.setBounds(382, 444, 105, 30);
+		txtBoxTotal.setEditable(false);
 		showOrder.add(txtBoxTotal);
 		
 		txtCardTotal = new JTextField();
 		txtCardTotal.setFont(new Font("Times New Roman", Font.BOLD, 21));
 		txtCardTotal.setColumns(10);
 		txtCardTotal.setBounds(508, 444, 105, 30);
+		txtCardTotal.setEditable(false);
 		showOrder.add(txtCardTotal);
 		
 		txtVissTotal = new JTextField();
 		txtVissTotal.setFont(new Font("Times New Roman", Font.BOLD, 21));
 		txtVissTotal.setColumns(10);
 		txtVissTotal.setBounds(636, 444, 105, 30);
+		txtVissTotal.setEditable(false);
 		showOrder.add(txtVissTotal);
 		
 		txtPriceTotal = new JTextField();
 		txtPriceTotal.setFont(new Font("Times New Roman", Font.BOLD, 21));
 		txtPriceTotal.setColumns(10);
 		txtPriceTotal.setBounds(761, 444, 105, 30);
+		txtPriceTotal.setEditable(false);
 		showOrder.add(txtPriceTotal);
 		
 		txtAllTotal = new JTextField();
 		txtAllTotal.setFont(new Font("Times New Roman", Font.BOLD, 21));
 		txtAllTotal.setColumns(10);
 		txtAllTotal.setBounds(886, 444, 168, 30);
+		txtAllTotal.setEditable(false);
 		showOrder.add(txtAllTotal);
 		
 		JButton btnSearch = new JButton("စစ္ေဆးမည္");
@@ -588,5 +601,87 @@ public class report_D extends JFrame {
 		
 		txtVissTotal.setText(String.valueOf(setTotalBigDecimal(6)));
 		txtAllTotal.setText(String.valueOf(setTotalBigDecimal(8)));
+		
+		JPanel showPurchase = new JPanel();
+		tabbedPane.addTab("အဝယ္စာရင္း", null, showPurchase, null);
+		showPurchase.setLayout(null);
+		showPurchase.setBackground(new Color(255, 222, 173));
+		
+		JLabel lblNewLabel_1_2_3 = new JLabel("Customer : ");
+		lblNewLabel_1_2_3.setForeground(Color.BLACK);
+		lblNewLabel_1_2_3.setFont(new Font("Zawgyi-One", Font.BOLD, 19));
+		lblNewLabel_1_2_3.setBounds(10, 11, 123, 32);
+		showPurchase.add(lblNewLabel_1_2_3);
+		
+		JLabel lblNewLabel_1_2_1_1 = new JLabel("Type : ");
+		lblNewLabel_1_2_1_1.setForeground(Color.BLACK);
+		lblNewLabel_1_2_1_1.setFont(new Font("Zawgyi-One", Font.BOLD, 19));
+		lblNewLabel_1_2_1_1.setBounds(357, 11, 76, 32);
+		showPurchase.add(lblNewLabel_1_2_1_1);
+		
+		JComboBox cboxType_P = new JComboBox();
+		cboxType_P.setFont(new Font("Zawgyi-One", Font.BOLD, 15));
+		cboxType_P.setBounds(426, 11, 157, 36);
+		showPurchase.add(cboxType_P);
+		
+		JComboBox cboxName_P = new JComboBox();
+		cboxName_P.setFont(new Font("Times New Roman", Font.BOLD, 17));
+		cboxName_P.setBounds(120, 14, 157, 36);
+		showPurchase.add(cboxName_P);
+		
+		JScrollPane scrollPane_1 = new JScrollPane();
+		scrollPane_1.setBounds(10, 58, 1089, 380);
+		showPurchase.add(scrollPane_1);
+		
+		tbPurchaseDetail = new JTable();
+		scrollPane_1.setViewportView(tbPurchaseDetail);
+		
+		JLabel lblNewLabel_1_2_2_1 = new JLabel("Total : ");
+		lblNewLabel_1_2_2_1.setForeground(Color.BLACK);
+		lblNewLabel_1_2_2_1.setFont(new Font("Zawgyi-One", Font.BOLD, 19));
+		lblNewLabel_1_2_2_1.setBounds(105, 442, 123, 32);
+		showPurchase.add(lblNewLabel_1_2_2_1);
+		
+		txtPBucketTol = new JTextField();
+		txtPBucketTol.setText("0");
+		txtPBucketTol.setFont(new Font("Times New Roman", Font.BOLD, 21));
+		txtPBucketTol.setColumns(10);
+		txtPBucketTol.setBounds(238, 442, 105, 30);
+		showPurchase.add(txtPBucketTol);
+		
+		txtPBoxTotal = new JTextField();
+		txtPBoxTotal.setText("0");
+		txtPBoxTotal.setFont(new Font("Times New Roman", Font.BOLD, 21));
+		txtPBoxTotal.setColumns(10);
+		txtPBoxTotal.setBounds(364, 442, 105, 30);
+		showPurchase.add(txtPBoxTotal);
+		
+		txtPCardTol = new JTextField();
+		txtPCardTol.setText("0");
+		txtPCardTol.setFont(new Font("Times New Roman", Font.BOLD, 21));
+		txtPCardTol.setColumns(10);
+		txtPCardTol.setBounds(490, 442, 105, 30);
+		showPurchase.add(txtPCardTol);
+		
+		txtPVissTol = new JTextField();
+		txtPVissTol.setText("null");
+		txtPVissTol.setFont(new Font("Times New Roman", Font.BOLD, 21));
+		txtPVissTol.setColumns(10);
+		txtPVissTol.setBounds(618, 442, 105, 30);
+		showPurchase.add(txtPVissTol);
+		
+		txtPpriceTol = new JTextField();
+		txtPpriceTol.setText("0");
+		txtPpriceTol.setFont(new Font("Times New Roman", Font.BOLD, 21));
+		txtPpriceTol.setColumns(10);
+		txtPpriceTol.setBounds(743, 442, 105, 30);
+		showPurchase.add(txtPpriceTol);
+		
+		txtPAllTotal = new JTextField();
+		txtPAllTotal.setText("null");
+		txtPAllTotal.setFont(new Font("Times New Roman", Font.BOLD, 21));
+		txtPAllTotal.setColumns(10);
+		txtPAllTotal.setBounds(868, 442, 168, 30);
+		showPurchase.add(txtPAllTotal);
 	}
 }

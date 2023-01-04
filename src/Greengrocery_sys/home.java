@@ -92,6 +92,11 @@ public class home {
 		frame.getContentPane().add(btnNewButton_1_1_1);
 		
 		JButton btnNewButton_1_1_1_1 = new JButton("အႏွစ္ခ်ဳပ္ စာရင္း");
+		btnNewButton_1_1_1_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				new report_D().setVisible(true);
+			}
+		});
 		btnNewButton_1_1_1_1.setFont(new Font("Zawgyi-One", Font.BOLD, 21));
 		btnNewButton_1_1_1_1.setBackground(SystemColor.info);
 		btnNewButton_1_1_1_1.setBounds(260, 324, 203, 81);
