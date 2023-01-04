@@ -8,7 +8,7 @@ import Greengrocery_sys.Database.DbConnection;
 
 public class deletePurchase_F {
 	public void deletePurchase(int id) {
-		String sqlString = "delete from purchase_price where Id_purchase = " + id + ";";
+		String sqlString = "delete from purchase_order where Id_Purchase = " + id + ";";
 		
 		Connection connection = new DbConnection().connect();
 		try {

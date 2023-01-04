@@ -2,6 +2,7 @@ package Greengrocery_sys;
 
 import java.awt.Font;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -14,7 +15,7 @@ import Greengrocery_sys.Database.DbConnection;
 
 public class updateOrder_F {
 
-	public void updateOrder(int id_order, String name, String type, int bucket, int box, double viss, int card, String date, int id_customer, int id_product) {
+	public void updateOrder(int id_order, String name, String type, int bucket, int box, double viss, int card, java.util.Date date, int id_customer, int id_product) {
 		
 		int orderId = id_order;
 		String nameString = name;
@@ -23,7 +24,7 @@ public class updateOrder_F {
 		int boxNum = box;
 		double vissNum = viss;
 		int cardNum = card;
-		String dateString = date;
+		Date orderDate = new java.sql.Date(date.getTime());
 		int customerId = id_customer, productId = id_product;
 		int vissPrice = 0;
 		double totalPrice = 0;
@@ -106,7 +107,7 @@ public class updateOrder_F {
 			pStatement.setDouble(5, vissNum);
 			pStatement.setInt(6,vissPrice);
 			pStatement.setDouble(7, totalPrice);
-			pStatement.setString(8, dateString);
+			pStatement.setDate(8, orderDate);
 			pStatement.setInt(9, customerId);
 			pStatement.setInt(10, productId);
 			pStatement.setString(11, nameString);

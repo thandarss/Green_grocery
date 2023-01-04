@@ -47,11 +47,11 @@ public class purchaseProduct_D extends JFrame {
 
 	private JPanel contentPane;
 	private JTable tbPurchase;
-	private JTextField txtBacketPrice;
-	private JTextField txtCardPrice;
-	private JTextField txtBoxPrice;
-	private JTextField txtVissPrice;
-	private JComboBox cBoxSize;
+	private JTextField txtBucketNum;
+	private JTextField txtCardNum;
+	private JTextField txtBoxNum;
+	private JTextField txtVissNum;
+	private JComboBox cboxType;
 	private JTextField txtPrice;
 
 	/**
@@ -217,6 +217,24 @@ public class purchaseProduct_D extends JFrame {
 		panel.add(btnSearch);
 		
 		txtPrice = new JTextField();
+		txtPrice.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusGained(FocusEvent arg0) {
+				txtPrice.setText("");
+			}
+		});
+		txtPrice.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				char c = e.getKeyChar();
+				if(Character.isLetter(c)) {
+					JOptionPane.showMessageDialog(null, "Please enter the NUMBER (1,2,3,...) only.", "Warning!",JOptionPane.INFORMATION_MESSAGE);
+				}
+				if(e.getKeyCode() == KeyEvent.VK_ENTER) {
+					txtBucketNum.requestFocus();
+				}
+			}
+		});
 		txtPrice.setText("0");
 		txtPrice.setFont(new Font("Times New Roman", Font.BOLD, 16));
 		txtPrice.setColumns(10);
@@ -258,8 +276,9 @@ public class purchaseProduct_D extends JFrame {
 				int confirm = JOptionPane.showConfirmDialog(null, textLabel,"Confirm Dialog",JOptionPane.YES_NO_OPTION);
 				if(confirm == 0) {
 					new deletePurchase_F().deletePurchase(id);
+					refreshTable();
 				}
-				refreshTable();
+				
 			}
 		});
 		btnDelete.setForeground(new Color(128, 64, 0));
@@ -271,13 +290,51 @@ public class purchaseProduct_D extends JFrame {
 		JButton btnAdd = new JButton("ထည့္မည္");
 		btnAdd.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				String typeString = cBoxSize.getSelectedItem().toString();
-				int bucketP = Integer.parseInt(txtBacketPrice.getText());
-				int boxP = Integer.parseInt(txtBoxPrice.getText());
-				int cardP = Integer.parseInt(txtCardPrice.getText());
-				int vissP = Integer.parseInt(txtVissPrice.getText());
+				String bucketString, boxString, cardString, vissString, typeString, priceString;
+				int bucketNum, boxNum, cardNum, price;
+				double vissNum;
 				
-				new addPurchase_F().addPurchase(typeString, bucketP, boxP, cardP, vissP);
+				typeString = cboxType.getSelectedItem().toString();
+				bucketString = txtBucketNum.getText();
+				boxString = txtBoxNum.getText();
+				cardString = txtCardNum.getText();
+				vissString = txtVissNum.getText();
+				priceString = txtPrice.getText();
+				
+				Date dateString = dateChooser.getDate();
+				
+					if (bucketString.equals("")) {
+						bucketNum = 0;
+					}
+					else {
+						bucketNum = Integer.parseInt(txtBucketNum.getText());
+					}
+					if(boxString.isEmpty()) {
+						boxNum = 0;
+					}
+					else {
+						boxNum = Integer.parseInt(txtBoxNum.getText());
+					}
+					if(vissString.isEmpty()) {
+						vissNum = 0;
+					}
+					else {
+						vissNum = Double.parseDouble(txtVissNum.getText());
+					}
+					if(cardString.isEmpty()) {
+						cardNum = 0;
+					}
+					else {
+						cardNum = Integer.parseInt(txtCardNum.getText());
+					}
+					if(priceString.isEmpty()) {
+						price = 0;
+					}
+					else {
+						price = Integer.parseInt(txtPrice.getText());
+					}
+				
+				new addPurchase_F().addPurchase(typeString, bucketNum, boxNum, vissNum, cardNum, price, dateString);
 				refreshTable();
 			}
 		});
@@ -288,6 +345,16 @@ public class purchaseProduct_D extends JFrame {
 		panel.add(btnAdd);
 		
 		JButton btnClear = new JButton("Clear");
+		btnClear.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				txtBucketNum.setText("0");
+				txtBoxNum.setText("0");
+				txtCardNum.setText("0");
+				txtVissNum.setText("0.00");
+				txtPrice.setText("");
+				cboxType.setSelectedIndex(0);
+			}
+		});
 		btnClear.setForeground(new Color(128, 64, 0));
 		btnClear.setFont(new Font("Zawgyi-One", Font.BOLD, 15));
 		btnClear.setBackground(new Color(254, 251, 245));
@@ -297,19 +364,21 @@ public class purchaseProduct_D extends JFrame {
 		JButton btnUpdate = new JButton("ျပင္မည္");
 		btnUpdate.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				String typeString = cBoxSize.getSelectedItem().toString();
-				int bucketP = Integer.parseInt(txtBacketPrice.getText());
-				int boxP = Integer.parseInt(txtBoxPrice.getText());
-				int cardP = Integer.parseInt(txtCardPrice.getText());
-				int vissP = Integer.parseInt(txtVissPrice.getText());
-				
 				int row = tbPurchase.getSelectedRow();
+				String idString = tbPurchase.getModel().getValueAt(row, 0).toString();
 				
-				if(row != -1) {
-					String idString = tbPurchase.getModel().getValueAt(row,0).toString();
-					int id = Integer.parseInt(idString);
-					
-					new updatePurchase_F().updatePurchase(id, typeString, bucketP, boxP, cardP, vissP);
+				int purchaseId = Integer.parseInt(idString);			
+				String typeString = cboxType.getSelectedItem().toString();
+				int bucketNum = Integer.parseInt(txtBucketNum.getText());
+				int boxNum = Integer.parseInt(txtBoxNum.getText());
+				double vissNum = Double.parseDouble(txtVissNum.getText());
+				int cardNum = Integer.parseInt(txtCardNum.getText());
+				int vissPrice = Integer.parseInt(txtPrice.getText());
+				//String dateString = ((JTextField)dateChooser.getDateEditor().getUiComponent()).getText();
+				Date dateString = dateChooser.getDate();
+								
+				if(row != -1) {					
+					new updatePurchase_F().updatePurchase(purchaseId, typeString, bucketNum, boxNum, cardNum, vissNum, vissPrice, dateString);
 					refreshTable();
 				}
 			}
@@ -320,8 +389,8 @@ public class purchaseProduct_D extends JFrame {
 		btnUpdate.setBounds(779, 418, 118, 34);
 		panel.add(btnUpdate);
 		
-		txtVissPrice = new JTextField();
-		txtVissPrice.addKeyListener(new KeyAdapter() {
+		txtVissNum = new JTextField();
+		txtVissNum.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent e) {
 				char c = e.getKeyChar();
@@ -329,25 +398,25 @@ public class purchaseProduct_D extends JFrame {
 					JOptionPane.showMessageDialog(null, "Please enter the NUMBER (1,2,3,...) only.", "Warning!",JOptionPane.INFORMATION_MESSAGE);
 				}
 				if(e.getKeyCode() == KeyEvent.VK_ENTER) {
-					txtBacketPrice.requestFocus();
+					txtBucketNum.requestFocus();
 				}
 			}
 		});
-		txtVissPrice.addFocusListener(new FocusAdapter() {
+		txtVissNum.addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusGained(FocusEvent e) {
-				txtVissPrice.setText("");
+				txtVissNum.setText("");
 			}
 		});
-		txtVissPrice.setText("0");
-		txtVissPrice.setFont(new Font("Times New Roman", Font.BOLD, 16));
-		txtVissPrice.setColumns(10);
-		txtVissPrice.setBackground(new Color(254, 251, 245));
-		txtVissPrice.setBounds(960, 231, 106, 27);
-		panel.add(txtVissPrice);
+		txtVissNum.setText("0");
+		txtVissNum.setFont(new Font("Times New Roman", Font.BOLD, 16));
+		txtVissNum.setColumns(10);
+		txtVissNum.setBackground(new Color(254, 251, 245));
+		txtVissNum.setBounds(960, 231, 106, 27);
+		panel.add(txtVissNum);
 		
-		txtBoxPrice = new JTextField();
-		txtBoxPrice.addKeyListener(new KeyAdapter() {
+		txtBoxNum = new JTextField();
+		txtBoxNum.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent e) {
 				char c = e.getKeyChar();
@@ -355,25 +424,25 @@ public class purchaseProduct_D extends JFrame {
 					JOptionPane.showMessageDialog(null, "Please enter the NUMBER (1,2,3,...) only.", "Warning!",JOptionPane.INFORMATION_MESSAGE);
 				}
 				if(e.getKeyCode() == KeyEvent.VK_ENTER) {
-					txtCardPrice.requestFocus();
+					txtCardNum.requestFocus();
 				}
 			}
 		});
-		txtBoxPrice.addFocusListener(new FocusAdapter() {
+		txtBoxNum.addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusGained(FocusEvent e) {
-				txtBoxPrice.setText("");
+				txtBoxNum.setText("");
 			}
 		});
-		txtBoxPrice.setText("0");
-		txtBoxPrice.setFont(new Font("Times New Roman", Font.BOLD, 16));
-		txtBoxPrice.setColumns(10);
-		txtBoxPrice.setBackground(new Color(254, 251, 245));
-		txtBoxPrice.setBounds(794, 231, 106, 27);
-		panel.add(txtBoxPrice);
+		txtBoxNum.setText("0");
+		txtBoxNum.setFont(new Font("Times New Roman", Font.BOLD, 16));
+		txtBoxNum.setColumns(10);
+		txtBoxNum.setBackground(new Color(254, 251, 245));
+		txtBoxNum.setBounds(794, 231, 106, 27);
+		panel.add(txtBoxNum);
 		
-		txtCardPrice = new JTextField();
-		txtCardPrice.addKeyListener(new KeyAdapter() {
+		txtCardNum = new JTextField();
+		txtCardNum.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent arg0) {
 				char c = arg0.getKeyChar();
@@ -381,25 +450,25 @@ public class purchaseProduct_D extends JFrame {
 					JOptionPane.showMessageDialog(null, "Please enter the NUMBER (1,2,3,...) only.", "Warning!",JOptionPane.INFORMATION_MESSAGE);
 				}
 				if(arg0.getKeyCode() == KeyEvent.VK_ENTER) {
-					txtVissPrice.requestFocus();
+					txtVissNum.requestFocus();
 				}
 			}
 		});
-		txtCardPrice.addFocusListener(new FocusAdapter() {
+		txtCardNum.addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusGained(FocusEvent e) {
-				txtCardPrice.setText("");
+				txtCardNum.setText("");
 			}
 		});
-		txtCardPrice.setText("0");
-		txtCardPrice.setFont(new Font("Times New Roman", Font.BOLD, 16));
-		txtCardPrice.setColumns(10);
-		txtCardPrice.setBackground(new Color(254, 251, 245));
-		txtCardPrice.setBounds(960, 153, 106, 27);
-		panel.add(txtCardPrice);
+		txtCardNum.setText("0");
+		txtCardNum.setFont(new Font("Times New Roman", Font.BOLD, 16));
+		txtCardNum.setColumns(10);
+		txtCardNum.setBackground(new Color(254, 251, 245));
+		txtCardNum.setBounds(960, 153, 106, 27);
+		panel.add(txtCardNum);
 		
-		txtBacketPrice = new JTextField();
-		txtBacketPrice.addKeyListener(new KeyAdapter() {
+		txtBucketNum = new JTextField();
+		txtBucketNum.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent arg0) {
 				char c=arg0.getKeyChar();
@@ -407,22 +476,22 @@ public class purchaseProduct_D extends JFrame {
 					JOptionPane.showMessageDialog(null, "Please enter the NUMBER (1,2,3,...) only.", "Warning!",JOptionPane.INFORMATION_MESSAGE);
 				}
 				if(arg0.getKeyCode() == KeyEvent.VK_ENTER) {
-					txtBoxPrice.requestFocus();
+					txtBoxNum.requestFocus();
 				}
 			}
 		});
-		txtBacketPrice.addFocusListener(new FocusAdapter() {
+		txtBucketNum.addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusGained(FocusEvent arg0) {
-				txtBacketPrice.setText("");
+				txtBucketNum.setText("");
 			}
 		});
-		txtBacketPrice.setText("0");
-		txtBacketPrice.setFont(new Font("Times New Roman", Font.BOLD, 16));
-		txtBacketPrice.setColumns(10);
-		txtBacketPrice.setBackground(new Color(254, 251, 245));
-		txtBacketPrice.setBounds(794, 153, 106, 27);
-		panel.add(txtBacketPrice);
+		txtBucketNum.setText("0");
+		txtBucketNum.setFont(new Font("Times New Roman", Font.BOLD, 16));
+		txtBucketNum.setColumns(10);
+		txtBucketNum.setBackground(new Color(254, 251, 245));
+		txtBucketNum.setBounds(794, 153, 106, 27);
+		panel.add(txtBucketNum);
 		
 		JLabel lblTitle_1_1_1_1_1 = new JLabel("ကဒ္");
 		lblTitle_1_1_1_1_1.setForeground(SystemColor.info);
@@ -459,11 +528,11 @@ public class purchaseProduct_D extends JFrame {
 		 */
 		
 		String item[]= {"ထူးရွယ္", "ေအာက္ခံသီး", "အလတ္သီး", "အလုပ္သမားခ"};
-		cBoxSize = new JComboBox(item);
-		cBoxSize.setFont(new Font("Zawgyi-One", Font.BOLD, 16));
-		cBoxSize.setBackground(new Color(253, 248, 236));
-		cBoxSize.setBounds(921, 62, 145, 27);
-		panel.add(cBoxSize);
+		cboxType = new JComboBox(item);
+		cboxType.setFont(new Font("Zawgyi-One", Font.BOLD, 16));
+		cboxType.setBackground(new Color(253, 248, 236));
+		cboxType.setBounds(921, 62, 145, 27);
+		panel.add(cboxType);
 		
 		JLabel lblNewLabel_1 = new JLabel("အဝယ္ စာရင္း");
 		lblNewLabel_1.setFont(new Font("Zawgyi-One", Font.BOLD, 23));
@@ -488,17 +557,19 @@ public class purchaseProduct_D extends JFrame {
 				int id = Integer.parseInt(idString);
 				
 				Connection connection = new DbConnection().connect();
-				String sqlString = "select * from purchase_price where Id_purchase = " + id + ";";
+				String sqlString = "select * from purchase_order where Id_purchase = " + id + ";";
 				try {
 					PreparedStatement pStatement = connection.prepareStatement(sqlString);
 					ResultSet rSet = pStatement.executeQuery();
 					
 					if(rSet.next()) {
-						cBoxSize.setSelectedItem(rSet.getString("Type"));
-						txtBacketPrice.setText(rSet.getString("Bucket_Price"));
-						txtBoxPrice.setText(rSet.getString("Box_Price"));
-						txtVissPrice.setText(rSet.getString("Viss_Price"));
-						txtCardPrice.setText(rSet.getString("Viss_Price"));
+						cboxType.setSelectedItem(rSet.getString("Type"));
+						txtBucketNum.setText(rSet.getString("Bucket"));
+						txtBoxNum.setText(rSet.getString("Box"));
+						txtVissNum.setText(rSet.getString("Viss"));
+						txtCardNum.setText(rSet.getString("Card"));
+						txtCardNum.setText(rSet.getString("Price"));
+						txtPrice.setText(rSet.getString("Price"));
 					}
 				} catch (SQLException e) {
 					// TODO Auto-generated catch block

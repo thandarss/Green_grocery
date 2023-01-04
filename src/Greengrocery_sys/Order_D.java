@@ -623,7 +623,8 @@ public class Order_D extends JFrame {
 				int boxNum = Integer.parseInt(txtBoxNum.getText());
 				double vissNum = Double.parseDouble(txtVissNum.getText());
 				int cardNum = Integer.parseInt(txtCardNum.getText());
-				String dateString = ((JTextField)dateChooser.getDateEditor().getUiComponent()).getText();
+				//String dateString = ((JTextField)dateChooser.getDateEditor().getUiComponent()).getText();
+				Date dateString = dateChooser.getDate();
 				
 				new updateOrder_F().updateOrder(orderId, nameString, typeString, bucketNum, boxNum, vissNum, cardNum, dateString, customerId, productId);
 				
