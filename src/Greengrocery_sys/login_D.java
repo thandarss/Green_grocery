@@ -22,12 +22,13 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.ImageIcon;
+import javax.swing.JPasswordField;
 
 public class login_D extends JFrame {
 
 	private JPanel contentPane;
 	private JTextField txtName;
-	private JTextField txtPassword;
+	private JPasswordField txtPassword;
 
 	/**
 	 * Launch the application.
@@ -133,6 +134,10 @@ public class login_D extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
+		txtPassword = new JPasswordField();
+		txtPassword.setBounds(195, 195, 141, 31);
+		contentPane.add(txtPassword);
+		
 		JLabel lblNewLabel = new JLabel("အေကာင့္ဝင္မည္");
 		lblNewLabel.setForeground(new Color(245, 255, 250));
 		lblNewLabel.setFont(new Font("Zawgyi-One", Font.BOLD, 25));
@@ -157,21 +162,17 @@ public class login_D extends JFrame {
 		contentPane.add(txtName);
 		txtName.setColumns(10);
 		
-		txtPassword = new JTextField();
-		txtPassword.setColumns(10);
-		txtPassword.setBounds(195, 190, 141, 31);
-		contentPane.add(txtPassword);
-		
 		JButton btnNewButton = new JButton("Login");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				String nameString = txtName.getText();
 				String passString = txtPassword.getText();
 				
-				new login_F().checkLogin(nameString, passString);
+				Boolean confirm = new login_F().checkLogin(nameString, passString);
+				if(confirm) {
 				new home().frame.setVisible(true);
 				login_D.this.setVisible(false);
-				
+				}
 			}
 		});
 		btnNewButton.setBackground(new Color(224, 255, 255));

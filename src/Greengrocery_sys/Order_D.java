@@ -244,7 +244,7 @@ public class Order_D extends JFrame {
 	public Order_D() {
 		setUndecorated(true);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 1155, 525);
+		setBounds(100, 100, 1139, 487);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 
@@ -465,8 +465,8 @@ public class Order_D extends JFrame {
 					
 					if(rSet.next()) {
 						cboxType.setSelectedItem(rSet.getString("Type"));
-						txtBoxNum.setText(rSet.getString("Bucket"));
-						txtBucketNum.setText(rSet.getString("Box"));
+						txtBoxNum.setText(rSet.getString("Box"));
+						txtBucketNum.setText(rSet.getString("Bucket"));
 						txtVissNum.setText(rSet.getString("Viss"));
 						txtCardNum.setText(rSet.getString("Card"));	
 						dateChooser.setDate(rSet.getDate("Date"));
@@ -615,19 +615,48 @@ public class Order_D extends JFrame {
 				String proIdString = tbOrder.getModel().getValueAt(row, 11).toString();
 				
 				int orderId = Integer.parseInt(idString);
-				customerId = Integer.parseInt(cusIdString);
-				productId = Integer.parseInt(proIdString);				
+				String bucketString, boxString, cardString, vissString;
+				int bucketNum, boxNum, cardNum;
+				double vissNum;
+				
 				nameString = cboxName.getSelectedItem().toString();
 				typeString = cboxType.getSelectedItem().toString();
-				int bucketNum = Integer.parseInt(txtBucketNum.getText());
-				int boxNum = Integer.parseInt(txtBoxNum.getText());
-				double vissNum = Double.parseDouble(txtVissNum.getText());
-				int cardNum = Integer.parseInt(txtCardNum.getText());
+				bucketString = txtBucketNum.getText();
+				boxString = txtBoxNum.getText();
+				cardString = txtCardNum.getText();
+				vissString = txtVissNum.getText();
+				
+				
 				//String dateString = ((JTextField)dateChooser.getDateEditor().getUiComponent()).getText();
 				Date dateString = dateChooser.getDate();
 				
+					if (bucketString.equals("")) {
+						bucketNum = 0;
+					}
+					else {
+						bucketNum = Integer.parseInt(txtBucketNum.getText());
+					}
+					if(boxString.isEmpty()) {
+						boxNum = 0;
+					}
+					else {
+						boxNum = Integer.parseInt(txtBoxNum.getText());
+					}
+					if(vissString.isEmpty()) {
+						vissNum = 0;
+					}
+					else {
+						vissNum = Double.parseDouble(txtVissNum.getText());
+					}
+					if(cardString.isEmpty()) {
+						cardNum = 0;
+					}
+					else {
+						cardNum = Integer.parseInt(txtCardNum.getText());
+					}					
+				//System.out.println("bucket : " + bucketNum + " viss : " + vissNum + " card : " + cardNum + " Box : " + boxNum);
 				new updateOrder_F().updateOrder(orderId, nameString, typeString, bucketNum, boxNum, vissNum, cardNum, dateString, customerId, productId);
-				
+				refreshTable();
 			}
 		});
 		btnUpdate.setForeground(new Color(128, 64, 0));

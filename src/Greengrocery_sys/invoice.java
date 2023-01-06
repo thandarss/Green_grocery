@@ -8,11 +8,14 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 import java.awt.Font;
+import java.awt.Graphics;
 import java.awt.Point;
+import java.awt.PrintJob;
 import java.awt.Rectangle;
 
 import javax.swing.UIManager;
 import java.awt.SystemColor;
+import java.awt.Toolkit;
 import java.awt.Color;
 import java.awt.Dimension;
 
@@ -247,6 +250,18 @@ public class invoice extends JFrame {
 		}
 		
 	}
+	
+	//print invoice
+	 private void btnPrintActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPrintActionPerformed
+	        // TODO add your handling code here:
+	        Toolkit tkp=mainPanel.getToolkit();
+	        PrintJob pjp=tkp.getPrintJob(this, null, null);
+	        Graphics g=pjp.getGraphics();
+	        mainPanel.print(g);
+	        g.dispose();
+	        pjp.end();
+	        
+	    }
 
 	/**
 	 * Create the frame.
@@ -404,7 +419,7 @@ public class invoice extends JFrame {
 			}
 		));
 		tbInvoice.getTableHeader().setFont(new Font("Zawgyi-One",Font.PLAIN,10));
-		tbInvoice.setFont(new Font("Zawgyi-One", Font.PLAIN, 13));
+		tbInvoice.setFont(new Font("Zawgyi-One", Font.PLAIN, 12));
 		tbInvoice.setRowHeight(30);
 		scrollPane.setViewportView(tbInvoice);
 		
@@ -473,6 +488,19 @@ public class invoice extends JFrame {
 		lblNewLabel_3_3_2.setFont(new Font("Zawgyi-One", Font.PLAIN, 12));
 		lblNewLabel_3_3_2.setBounds(10, 399, 56, 33);
 		panel_1.add(lblNewLabel_3_3_2);
+		
+		
+		JButton btnPrint = new JButton("Print");
+		btnPrint.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				btnPrintActionPerformed(e);
+			}
+		});
+		btnPrint.setForeground(new Color(240, 255, 240));
+		btnPrint.setBackground(new Color(0, 128, 0));
+		btnPrint.setFont(new Font("Verdana", Font.BOLD, 13));
+		btnPrint.setBounds(209, 409, 89, 23);
+		panel_1.add(btnPrint);
 		
 		JLabel lblImage = new JLabel("");
 		lblImage.setVerticalAlignment(SwingConstants.TOP);

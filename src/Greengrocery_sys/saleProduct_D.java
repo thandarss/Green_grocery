@@ -241,7 +241,7 @@ public class saleProduct_D extends JFrame {
 		
 		JLabel lblTitle_1_1_1_1_1 = new JLabel("ကဒ္ေစ်း");
 		lblTitle_1_1_1_1_1.setForeground(SystemColor.info);
-		lblTitle_1_1_1_1_1.setFont(new Font("Zawgyi-One", Font.BOLD, 16));
+		lblTitle_1_1_1_1_1.setFont(new Font("Zawgyi-One", Font.BOLD, 15));
 		lblTitle_1_1_1_1_1.setBounds(1066, 121, 90, 44);
 		contentPane.add(lblTitle_1_1_1_1_1);
 		btnClose_1.setFont(new Font("Tahoma", Font.BOLD, 23));
@@ -309,15 +309,15 @@ public class saleProduct_D extends JFrame {
 		lblTitle_1_1.setBounds(884, 121, 111, 44);
 		contentPane.add(lblTitle_1_1);
 		
-		JLabel lblTitle_1_1_1 = new JLabel("ပိႆာေစ်း       ");
+		JLabel lblTitle_1_1_1 = new JLabel("ပိႆာေစ်း");
 		lblTitle_1_1_1.setForeground(SystemColor.info);
-		lblTitle_1_1_1.setFont(new Font("Zawgyi-One", Font.BOLD, 16));
+		lblTitle_1_1_1.setFont(new Font("Zawgyi-One", Font.BOLD, 15));
 		lblTitle_1_1_1.setBounds(1061, 224, 90, 44);
 		contentPane.add(lblTitle_1_1_1);
 		
 		JLabel lblTitle_1_1_1_1 = new JLabel("ေသတၱာေစ်း     ");
 		lblTitle_1_1_1_1.setForeground(SystemColor.info);
-		lblTitle_1_1_1_1.setFont(new Font("Zawgyi-One", Font.BOLD, 16));
+		lblTitle_1_1_1_1.setFont(new Font("Zawgyi-One", Font.BOLD, 15));
 		lblTitle_1_1_1_1.setBounds(894, 224, 129, 44);
 		contentPane.add(lblTitle_1_1_1_1);
 		
@@ -393,7 +393,7 @@ public class saleProduct_D extends JFrame {
 					JOptionPane.showMessageDialog(null, "Please enter the NUMBER (1,2,3,...) only.", "Warning!",JOptionPane.INFORMATION_MESSAGE);
 				}
 				if(e.getKeyCode() == KeyEvent.VK_ENTER) {
-					txtVissPrice.requestFocus();
+					txtCardPrice.requestFocus();
 				}
 			}
 		});

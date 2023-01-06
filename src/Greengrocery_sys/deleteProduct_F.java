@@ -15,7 +15,7 @@ public class deleteProduct_F {
 	
 	public void deleteProduct(int id) {
 		Connection connection = new DbConnection().connect();
-		String sqlString = "delete from product_price where Id_product = " + id + ";";
+		String sqlString = "delete from sale_price where Id_product = " + id + ";";
 		
 		try {
 			PreparedStatement pStatement = connection.prepareStatement(sqlString);

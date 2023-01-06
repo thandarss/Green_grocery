@@ -507,6 +507,14 @@ public class report_D extends JFrame {
 						tbOrderDetail.getColumnModel().getColumn(5).setCellRenderer(renderer3);
 						
 						columnModel.setColumnMargin(11);
+						
+						txtBucketTotal.setText(String.valueOf(setTotalInteger(3)));
+						txtBoxTotal.setText(String.valueOf(setTotalInteger(4)));
+						txtCardTotal.setText(String.valueOf(setTotalInteger(5)));
+						txtPriceTotal.setText(String.valueOf(setTotalInteger(7)));
+						
+						txtVissTotal.setText(String.valueOf(setTotalBigDecimal(6)));
+						txtAllTotal.setText(String.valueOf(setTotalBigDecimal(8)));
 					}
 					
 				} catch (SQLException e) {
@@ -564,6 +572,14 @@ public class report_D extends JFrame {
 						tbOrderDetail.getColumnModel().getColumn(5).setCellRenderer(renderer3);
 						
 						columnModel.setColumnMargin(11);
+						
+						txtBucketTotal.setText(String.valueOf(setTotalInteger(3)));
+						txtBoxTotal.setText(String.valueOf(setTotalInteger(4)));
+						txtCardTotal.setText(String.valueOf(setTotalInteger(5)));
+						txtPriceTotal.setText(String.valueOf(setTotalInteger(7)));
+						
+						txtVissTotal.setText(String.valueOf(setTotalBigDecimal(6)));
+						txtAllTotal.setText(String.valueOf(setTotalBigDecimal(8)));
 					}
 				} catch (SQLException e) {
 					// TODO Auto-generated catch block
@@ -585,7 +601,7 @@ public class report_D extends JFrame {
 		
 		txtBucketTotal = new JTextField();
 		txtBucketTotal.setFont(new Font("Times New Roman", Font.BOLD, 21));
-		txtBucketTotal.setBounds(256, 480, 105, 30);
+		txtBucketTotal.setBounds(247, 479, 105, 30);
 		txtBucketTotal.setEditable(false);
 		showOrder.add(txtBucketTotal);
 		txtBucketTotal.setColumns(10);
@@ -593,35 +609,35 @@ public class report_D extends JFrame {
 		txtBoxTotal = new JTextField();
 		txtBoxTotal.setFont(new Font("Times New Roman", Font.BOLD, 21));
 		txtBoxTotal.setColumns(10);
-		txtBoxTotal.setBounds(382, 480, 105, 30);
+		txtBoxTotal.setBounds(373, 479, 97, 30);
 		txtBoxTotal.setEditable(false);
 		showOrder.add(txtBoxTotal);
 		
 		txtCardTotal = new JTextField();
 		txtCardTotal.setFont(new Font("Times New Roman", Font.BOLD, 21));
 		txtCardTotal.setColumns(10);
-		txtCardTotal.setBounds(508, 480, 105, 30);
+		txtCardTotal.setBounds(493, 479, 97, 30);
 		txtCardTotal.setEditable(false);
 		showOrder.add(txtCardTotal);
 		
 		txtVissTotal = new JTextField();
 		txtVissTotal.setFont(new Font("Times New Roman", Font.BOLD, 21));
 		txtVissTotal.setColumns(10);
-		txtVissTotal.setBounds(636, 480, 105, 30);
+		txtVissTotal.setBounds(614, 479, 97, 30);
 		txtVissTotal.setEditable(false);
 		showOrder.add(txtVissTotal);
 		
 		txtPriceTotal = new JTextField();
 		txtPriceTotal.setFont(new Font("Times New Roman", Font.BOLD, 21));
 		txtPriceTotal.setColumns(10);
-		txtPriceTotal.setBounds(761, 480, 105, 30);
+		txtPriceTotal.setBounds(740, 480, 97, 30);
 		txtPriceTotal.setEditable(false);
 		showOrder.add(txtPriceTotal);
 		
 		txtAllTotal = new JTextField();
 		txtAllTotal.setFont(new Font("Times New Roman", Font.BOLD, 21));
 		txtAllTotal.setColumns(10);
-		txtAllTotal.setBounds(886, 480, 168, 30);
+		txtAllTotal.setBounds(859, 480, 168, 30);
 		txtAllTotal.setEditable(false);
 		showOrder.add(txtAllTotal);
 		Date date = new Date();
@@ -744,6 +760,57 @@ public class report_D extends JFrame {
 		showPurchase.add(lblNewLabel_1_2_1_1);
 		
 		cboxType_P = new JComboBox();
+		cboxType_P.addPopupMenuListener(new PopupMenuListener() {
+			public void popupMenuCanceled(PopupMenuEvent arg0) {
+			}
+			public void popupMenuWillBecomeInvisible(PopupMenuEvent arg0) {
+				String typeString = cboxType_P.getSelectedItem().toString();
+				String sqlString = "select * from purchase_order where Type = '" + typeString + "';";
+				
+				Connection connection = new DbConnection().connect();
+				try {
+					PreparedStatement pStatement = connection.prepareStatement(sqlString);
+					ResultSet rSet = pStatement.executeQuery();
+					
+					if(typeString.equals("All")){
+						refreshPurchase();
+					}
+					else {
+						tbPurchaseDetail.setModel(DbUtils.resultSetToTableModel(rSet));
+						TableColumnModel columnModel = tbPurchaseDetail.getColumnModel();
+						columnModel.removeColumn(columnModel.getColumn(0));
+										
+						DefaultTableCellRenderer renderer =new DefaultTableCellRenderer();
+						renderer.setBackground(new Color(210,251,250));
+						TableColumn priceColumn = tbPurchaseDetail.getColumnModel().getColumn(6);
+						priceColumn.setCellRenderer(renderer);
+						
+						DefaultTableCellRenderer renderer2 = new DefaultTableCellRenderer();
+						renderer2.setBackground(new Color(196,186,252));
+						tbPurchaseDetail.getColumnModel().getColumn(7).setCellRenderer(renderer2);
+						
+						DefaultTableCellRenderer renderer3 = new DefaultTableCellRenderer();
+						renderer3.setBackground(new Color(251,237,159));
+						tbPurchaseDetail.getColumnModel().getColumn(5).setCellRenderer(renderer3);
+						
+						columnModel.setColumnMargin(11);
+						
+						txtPBucketTol.setText(String.valueOf(setPurchaseTolInt(2)));
+						txtPBoxTotal.setText(String.valueOf(setPurchaseTolInt(3)));
+						txtPCardTol.setText(String.valueOf(setPurchaseTolInt(4)));
+						txtPpriceTol.setText(String.valueOf(setPurchaseTolInt(6)));
+						
+						txtPVissTol.setText(String.valueOf(setPurchaseTolDecimal(5)));
+						txtPAllTotal.setText(String.valueOf(setPurchaseTolDecimal(7)));
+					}
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			public void popupMenuWillBecomeVisible(PopupMenuEvent arg0) {
+			}
+		});
 		cboxType_P.setFont(new Font("Zawgyi-One", Font.BOLD, 15));
 		cboxType_P.setBounds(87, 69, 157, 36);
 		showPurchase.add(cboxType_P);

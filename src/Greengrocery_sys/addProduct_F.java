@@ -20,7 +20,7 @@ public class addProduct_F {
 		int boxPrice = boxP;
 		int cardPrice = cardP;
 		Connection connection = new DbConnection().connect();
-		String sqString = "insert into product_price (Type, Bucket_Price, Viss_Price, Box_Price, Card_Price) values (?, ?, ?, ?, ?);";
+		String sqString = "insert into sale_price (Type, Bucket_Price, Viss_Price, Box_Price, Card_Price) values (?, ?, ?, ?, ?);";
 		try {
 			PreparedStatement pStatement = connection.prepareStatement(sqString);
 			pStatement.setString(1, typeString);

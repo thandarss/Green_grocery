@@ -42,6 +42,8 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import com.toedter.calendar.JDateChooser;
+import javax.swing.event.PopupMenuListener;
+import javax.swing.event.PopupMenuEvent;
 
 public class purchaseProduct_D extends JFrame {
 
@@ -183,6 +185,44 @@ public class purchaseProduct_D extends JFrame {
 		dateChooser.setFont(new Font("Zawgyi-One", Font.BOLD, 17));
 		dateChooser.setBounds(519, 18, 149, 40);
 		Date date = new Date();
+		
+		String typeString[] = {"All", "ထူးရွယ္", "ေအာက္ခံသီး", "အလတ္သီး", "အလုပ္သမားခ"};
+		JComboBox cboxSearchType = new JComboBox(typeString);
+		cboxSearchType.addPopupMenuListener(new PopupMenuListener() {
+			public void popupMenuCanceled(PopupMenuEvent arg0) {
+			}
+			public void popupMenuWillBecomeInvisible(PopupMenuEvent arg0) {
+				String typeString = cboxSearchType.getSelectedItem().toString();
+				String sqlString = "select * from purchase_order where Type = '" + typeString + "';";
+				
+				if(typeString.equals("All")) {
+					refreshTable();
+				}
+				
+				else {
+					try {
+						Connection connection = new DbConnection().connect();
+						PreparedStatement pStatement = connection.prepareStatement(sqlString);
+						ResultSet rSet = pStatement.executeQuery();
+						
+						tbPurchase.setModel(DbUtils.resultSetToTableModel(rSet));
+						TableColumnModel columnModel = tbPurchase.getColumnModel();
+						
+						tbPurchase.removeColumn(columnModel.getColumn(0));
+						
+					} catch (SQLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}	
+				}
+			}
+			public void popupMenuWillBecomeVisible(PopupMenuEvent arg0) {
+			}
+		});
+		cboxSearchType.setFont(new Font("Zawgyi-One", Font.BOLD, 16));
+		cboxSearchType.setBackground(new Color(253, 248, 236));
+		cboxSearchType.setBounds(172, 18, 145, 27);
+		panel.add(cboxSearchType);
 		dateChooser.setDate(date);
 		panel.add(dateChooser);
 		
@@ -570,8 +610,8 @@ public class purchaseProduct_D extends JFrame {
 						txtBoxNum.setText(rSet.getString("Box"));
 						txtVissNum.setText(rSet.getString("Viss"));
 						txtCardNum.setText(rSet.getString("Card"));
-						txtCardNum.setText(rSet.getString("Price"));
 						txtPrice.setText(rSet.getString("Price"));
+						dateChooser.setDate(rSet.getDate("Date"));
 					}
 				} catch (SQLException e) {
 					// TODO Auto-generated catch block

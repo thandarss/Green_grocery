@@ -99,7 +99,18 @@ public class home {
 		});
 		btnNewButton_1_1_1_1.setFont(new Font("Zawgyi-One", Font.BOLD, 21));
 		btnNewButton_1_1_1_1.setBackground(SystemColor.info);
-		btnNewButton_1_1_1_1.setBounds(260, 324, 203, 81);
+		btnNewButton_1_1_1_1.setBounds(99, 346, 203, 81);
 		frame.getContentPane().add(btnNewButton_1_1_1_1);
+		
+		JButton btnNewButton_1_1_1_1_1 = new JButton("ေဘာင္ခ်ာ");
+		btnNewButton_1_1_1_1_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+			 new invoice().setVisible(true);
+			}
+		});
+		btnNewButton_1_1_1_1_1.setFont(new Font("Zawgyi-One", Font.BOLD, 21));
+		btnNewButton_1_1_1_1_1.setBackground(SystemColor.info);
+		btnNewButton_1_1_1_1_1.setBounds(428, 346, 203, 81);
+		frame.getContentPane().add(btnNewButton_1_1_1_1_1);
 	}
 }

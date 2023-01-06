@@ -36,7 +36,7 @@ public class updateOrder_F {
 		 */
 		connection = new DbConnection().connect();
 		String sqlString = "select Id_customer from customer where Name = '" + nameString + "';";
-		String sqlString1 = "select Id_product, Viss_Price from product_price where Type = '" + typeString + "';";
+		String sqlString1 = "select Id_product, Viss_Price from sale_price where Type = '" + typeString + "';";
 		try {
 			PreparedStatement pStatement = connection.prepareStatement(sqlString);
 			ResultSet rSet = pStatement.executeQuery();
